@@ -436,12 +436,16 @@ footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-bet
       </div>
     </div>
     <div class="grid">
-      <article class="card" style="--c1:var(--lime);--c2:var(--cyan)"><div class="meta"><span class="tag l">6+</span><span class="tag">2 h</span></div><h3><span lang="nl">Tandenpoets-timer</span><span lang="en">Tooth-brushing timer</span></h3><p><span lang="nl">LED-ring die in twee minuten uitgaat, met een deuntje op het eind. Kind kiest kleuren en liedje.</span><span lang="en">LED ring that turns off over two minutes, with a tune at the end. The child picks colours and song.</span></p><div class="parts">ESP32-C3 · 16× WS2812B · piezo</div></article>
-      <article class="card" style="--c1:var(--cyan);--c2:var(--magenta)"><div class="meta"><span class="tag c">8+</span><span class="tag">Weekend</span></div><h3><span lang="nl">Wie-is-er-thuis-bord</span><span lang="en">Who-is-home board</span></h3><p><span lang="nl">Een lampje per gezinslid, aangestuurd door wie op de wifi zit. Niets verlaat het huis.</span><span lang="en">One light per family member, driven by who's on the Wi-Fi. Nothing leaves the house.</span></p><div class="parts">ESP32 · Home Assistant · plywood</div></article>
-      <article class="card" style="--c1:var(--orange);--c2:var(--lime)"><div class="meta"><span class="tag o">8+</span><span class="tag">3 h</span></div><h3><span lang="nl">Huisdier-voerautomaat</span><span lang="en">Pet feeder</span></h3><p><span lang="nl">Servo, trechter, knop op de telefoon. Kind programmeert de tijden, ouder regelt de voeding.</span><span lang="en">Servo, hopper, button on the phone. The child programs the times, the parent handles power.</span></p><div class="parts">MG996R · 3D auger · 5 V 2 A</div></article>
-      <article class="card" style="--c1:var(--magenta);--c2:var(--cyan)"><div class="meta"><span class="tag m">10+</span><span class="tag">Weekend</span></div><h3><span lang="nl">Weerstation op het balkon</span><span lang="en">Balcony weather station</span></h3><p><span lang="nl">Temperatuur, regen, wind; scherm in de keuken met grafiek van de week.</span><span lang="en">Temperature, rain, wind; display in the kitchen with the week's chart.</span></p><div class="parts">BME280 · rain gauge · e-paper 4.2"</div></article>
-      <article class="card" style="--c1:var(--cyan);--c2:var(--lime)"><div class="meta"><span class="tag c">10+ · LoRa</span><span class="tag">2 h</span></div><h3><span lang="nl">Slimme brievenbus</span><span lang="en">Smart letterbox</span></h3><p><span lang="nl">Sensor in de klep stuurt een berichtje als de post er is. Met LoRa ook ver van huis.</span><span lang="en">A sensor in the flap sends a message when post arrives. With LoRa even far from the house.</span></p><div class="parts">reed switch · Meshtastic node</div></article>
-      <article class="card" style="--c1:var(--lime);--c2:var(--orange)"><div class="meta"><span class="tag l">12+</span><span class="tag">Weekend</span></div><h3><span lang="nl">Energie-dashboard voor het gezin</span><span lang="en">Family energy dashboard</span></h3><p><span lang="nl">Welke kamer verbruikt het meest? Kind bouwt de pagina, ouder sluit de stekkers aan.</span><span lang="en">Which room uses the most? The child builds the page, the parent connects the plugs.</span></p><div class="parts">P1 · 4× Tasmota plugs · wall tablet</div></article>
+      <article class="card" data-p="timer" style="--c1:var(--lime);--c2:var(--cyan)"><div class="meta"><span class="tag l">6+</span><span class="tag">2 h</span></div><h3><span lang="nl">Tandenpoets-timer</span><span lang="en">Tooth-brushing timer</span></h3><p><span lang="nl">LED-ring die in twee minuten uitgaat, met een deuntje op het eind. Kind kiest kleuren en liedje.</span><span lang="en">LED ring that turns off over two minutes, with a tune at the end. The child picks colours and song.</span></p><div class="parts">ESP32-C3 · 16× WS2812B · piezo</div></article>
+      <article class="card" data-p="thuis" style="--c1:var(--cyan);--c2:var(--magenta)"><div class="meta"><span class="tag c">8+</span><span class="tag">Weekend</span></div><h3><span lang="nl">Wie-is-er-thuis-bord</span><span lang="en">Who-is-home board</span></h3><p><span lang="nl">Een lampje per gezinslid, aangestuurd door wie op de wifi zit. Niets verlaat het huis.</span><span lang="en">One light per family member, driven by who's on the Wi-Fi. Nothing leaves the house.</span></p><div class="parts">ESP32 · Home Assistant · plywood</div></article>
+      <article class="card" data-p="voer" style="--c1:var(--orange);--c2:var(--lime)"><div class="meta"><span class="tag o">8+</span><span class="tag">3 h</span></div><h3><span lang="nl">Huisdier-voerautomaat</span><span lang="en">Pet feeder</span></h3><p><span lang="nl">Servo, trechter, knop op de telefoon. Kind programmeert de tijden, ouder regelt de voeding.</span><span lang="en">Servo, hopper, button on the phone. The child programs the times, the parent handles power.</span></p><div class="parts">MG996R 360° · 3D auger · 5 V 3 A</div></article>
+      <article class="card" data-p="weer" style="--c1:var(--magenta);--c2:var(--cyan)"><div class="meta"><span class="tag m">10+</span><span class="tag">Weekend</span></div><h3><span lang="nl">Weerstation op het balkon</span><span lang="en">Balcony weather station</span></h3><p><span lang="nl">Temperatuur, regen, wind; scherm in de keuken met grafiek van de week.</span><span lang="en">Temperature, rain, wind; display in the kitchen with the week's chart.</span></p><div class="parts">BME280 · rain gauge · e-paper 4.2"</div></article>
+      <article class="card" data-p="post" style="--c1:var(--cyan);--c2:var(--lime)"><div class="meta"><span class="tag c">10+ · LoRa</span><span class="tag">2 h</span></div><h3><span lang="nl">Slimme brievenbus</span><span lang="en">Smart letterbox</span></h3><p><span lang="nl">Sensor in de klep stuurt een berichtje als de post er is. Met LoRa ook ver van huis.</span><span lang="en">A sensor in the flap sends a message when post arrives. With LoRa even far from the house.</span></p><div class="parts">reed switch · Meshtastic node</div></article>
+      <article class="card" data-p="energie" style="--c1:var(--lime);--c2:var(--orange)"><div class="meta"><span class="tag l">12+</span><span class="tag">Weekend</span></div><h3><span lang="nl">Energie-dashboard voor het gezin</span><span lang="en">Family energy dashboard</span></h3><p><span lang="nl">Welke kamer verbruikt het meest? Kind bouwt de pagina, ouder sluit de stekkers aan.</span><span lang="en">Which room uses the most? The child builds the page, the parent connects the plugs.</span></p><div class="parts">P1 · 4× Tasmota plugs · wall tablet</div></article>
+    </div>
+    <div class="fp-tools">
+      <b><span lang="nl">Starter-gereedschap, eenmalig ≈ € 80</span><span lang="en">Starter toolkit, one-off ≈ € 80</span></b>
+      <p><span lang="nl">Temperatuurgeregelde soldeerbout (€ 30–45), soldeertin (€ 8), multimeter (€ 15), zijkniptang (€ 6), derde hand (€ 8), veiligheidsbril (€ 4), eventueel hot-glue-pistool (€ 10). Zonder solderen kan het ook voor een eerste versie: breadboard en jumperdraden kosten ongeveer € 4.</span><span lang="en">Temperature-controlled soldering iron (€ 30–45), solder (€ 8), multimeter (€ 15), side cutters (€ 6), helping hands (€ 8), safety glasses (€ 4), optionally a hot-glue gun (€ 10). You can skip soldering for a first version: a breadboard and jumper wires cost about € 4.</span></p>
     </div>
   </div>
 </section>
@@ -1070,4 +1074,198 @@ footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-bet
 })();
 </script>
 
+<!-- FAMILY PROJECT DETAILS (dialog) -->
+<style>
+.card .pmore{justify-self:start;margin-top:.3rem;font-family:var(--display);font-weight:700;font-size:.78rem;letter-spacing:.02em;padding:.55rem 1rem;border-radius:999px;border:1.5px solid var(--c1,var(--cyan));background:#fff;color:var(--ink);cursor:pointer;transition:background .15s,color .15s}
+.card .pmore:hover{background:var(--c1,var(--cyan));color:#fff}
+.card .pmore:focus-visible{outline:2px solid var(--magenta);outline-offset:3px}
+.tag.pr{color:var(--violet);border-color:var(--violet)}
+dialog.pd{border:0;padding:0;border-radius:22px;width:min(900px,calc(100vw - 20px));max-height:calc(100dvh - 20px);background:#fff;color:var(--ink);box-shadow:0 40px 100px rgba(23,21,58,.4);overflow:hidden}
+dialog.pd[open]{display:flex;flex-direction:column}
+dialog.pd::backdrop{background:rgba(21,23,46,.6);backdrop-filter:blur(3px)}
+.pd-top{display:flex;gap:1rem;align-items:flex-start;justify-content:space-between;padding:1.2rem 1.4rem 1rem;border-bottom:1px solid var(--line);background:linear-gradient(120deg,rgba(26,143,224,.1),rgba(91,72,232,.08) 50%,rgba(238,106,60,.1))}
+.pd-top h3{font-size:clamp(1.25rem,3.4vw,1.8rem);margin:.5rem 0 0}
+.pd-meta{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
+.pd-x{flex:none;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:1.2rem;cursor:pointer;color:var(--ink)}
+.pd-x:hover{background:var(--bg2)}
+.pd-x:focus-visible,.pd-copy:focus-visible{outline:2px solid var(--magenta);outline-offset:2px}
+.pd-body{overflow:auto;padding:1.2rem 1.4rem 1.6rem;display:grid;gap:1.4rem;overscroll-behavior:contain}
+.pd-body h4{font-family:var(--mono);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--magenta);margin:0 0 .5rem}
+.pd-body p{color:var(--muted)}
+.pd-body ul,.pd-body ol{margin:0;padding-left:1.2rem;color:var(--muted);display:grid;gap:.3rem}
+.pd-body li::marker{color:var(--magenta);font-weight:700}
+.pd-two{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.pd-who{border:1px solid var(--line);border-radius:14px;padding:.9rem 1rem;background:var(--bg)}
+.pd-who.k{border-color:rgba(26,143,224,.5)}.pd-who.o{border-color:rgba(238,106,60,.55)}
+.pd-who h4{color:var(--ink)}
+.pd-bom{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.pd-row{display:grid;grid-template-columns:1fr auto;gap:.2rem .8rem;padding:.55rem .9rem;border-top:1px solid var(--line);font-size:.92rem;align-items:baseline}
+.pd-row:first-child{border-top:0}
+.pd-row b{font-weight:600}
+.pd-row .q{color:var(--muted);font-family:var(--mono);font-size:.74rem;margin-left:.4rem}
+.pd-row .pp{font-family:var(--mono);font-weight:600;text-align:right;white-space:nowrap}
+.pd-row.opt{background:rgba(242,169,0,.08);color:var(--muted)}
+.pd-row.opt .on{font-family:var(--mono);font-size:.64rem;color:var(--orange);border:1px solid var(--orange);border-radius:999px;padding:.05rem .45rem;margin-left:.4rem;white-space:nowrap}
+.pd-row small{grid-column:1/-1;color:var(--muted);font-size:.8rem}
+.pd-row.sum{background:var(--bg2);font-weight:700;font-size:1rem}
+.pd-copy{margin-top:.7rem;font-family:var(--display);font-weight:700;font-size:.8rem;padding:.6rem 1.1rem;border-radius:999px;border:1.5px solid var(--line);background:#fff;cursor:pointer;color:var(--ink)}
+.pd-copy:hover{background:var(--bg2)}
+.pd-note{font-size:.8rem;color:var(--muted);margin-top:.5rem}
+.pd-safe{border-left:4px solid var(--orange);background:rgba(238,106,60,.08);border-radius:0 12px 12px 0;padding:.8rem 1rem}
+.pd-safe h4{color:var(--orange)}
+.pd-dots{font-family:var(--mono);font-size:.74rem;color:var(--muted);letter-spacing:.1em}
+.pd-dots b{color:var(--magenta)}
+.fp-tools{margin-top:1.6rem;border:1px dashed var(--line);border-radius:16px;padding:1rem 1.2rem;background:rgba(255,255,255,.7)}
+.fp-tools b{font-family:var(--display)}
+.fp-tools p{color:var(--muted);font-size:.92rem;margin-top:.3rem}
+html.pd-lock{overflow:hidden}
+@media (max-width:640px){.pd-two{grid-template-columns:1fr}.pd-top,.pd-body{padding-left:1rem;padding-right:1rem}}
+</style>
+<dialog class="pd" id="pd" aria-labelledby="pd-title"><div class="pd-top"><div><div class="pd-meta" id="pd-meta"></div><h3 id="pd-title"></h3></div><button class="pd-x" id="pd-x" type="button" aria-label="Sluiten / Close">✕</button></div><div class="pd-body" id="pd-body"></div></dialog>
+<script>
+(function(){
+  var dlg=document.getElementById('pd');
+  if(!dlg||typeof dlg.showModal!=='function')return;
+  function t(p){return typeof p==='string'?p:'<span lang="nl">'+p[0]+'</span><span lang="en">'+p[1]+'</span>';}
+  function lang(){return document.documentElement.getAttribute('data-lang')==='en'?'en':'nl';}
+  function tx(p){return typeof p==='string'?p:p[lang()==='en'?1:0];}
+  var UI={
+    child:['Dit doet je kind','What your child does'],
+    parent:['Dit doe jij','What you do'],
+    learn:['Wat leert je kind?','What does your child learn?'],
+    steps:['Stappen','Steps'],
+    bom:['Onderdelen en indicatieve prijzen','Parts and indicative prices'],
+    safe:['Veiligheid','Safety'],
+    more:['Daarna uitbreiden','Extend it later'],
+    tools:['Gereedschap','Tools'],
+    opt:['optioneel','optional'],
+    total:['Totaal (zonder opties)','Total (without options)'],
+    totalo:['Totaal met alle opties','Total with all options'],
+    copy:['Kopieer boodschappenlijst','Copy shopping list'],
+    copied:['Gekopieerd ✓','Copied ✓'],
+    price:['Prijzen zijn schattingen op basis van gangbare Nederlandse webshops (incl. btw, 2026). Bij AliExpress is veel 30–50% goedkoper, maar levering duurt 2–4 weken. Controleer de actuele prijs vóór je bestelt.','Prices are estimates based on typical Dutch webshops (incl. VAT, 2026). On AliExpress many parts are 30–50% cheaper, but delivery takes 2–4 weeks. Check the current price before you order.'],
+    diff:['Moeilijkheid','Difficulty'],
+    age:['vanaf','from age']
+  };
+  var P={
+  timer:{lvl:1,
+   title:['Tandenpoets-timer','Tooth-brushing timer'],
+   intro:['Een LED-ring met 16 lampjes die tijdens het poetsen één voor één uitgaan. Na twee minuten klinkt een eigen deuntje. Je kind kiest de kleuren, het liedje en het ontwerp van het kastje; jij helpt met aansluiten en ophangen naast de wastafel. Het is een goed eerste project: alles werkt op veilige USB-spanning (5 V).','An LED ring with 16 lights that go out one by one while brushing. After two minutes a tune of their own plays. Your child picks the colours, the song and the design of the case; you help with wiring and hanging it by the sink. A good first project: everything runs on safe USB power (5 V).'],
+   learn:[['Tijd verdelen: 120 seconden ÷ 16 lampjes = 7,5 seconden per lampje','Splitting time: 120 seconds ÷ 16 lights = 7.5 seconds per light'],['Kleuren mengen met RGB-waarden (0–255)','Mixing colours with RGB values (0–255)'],['Een melodie maken met toonhoogtes en lengtes','Making a melody with pitches and note lengths'],['Een apparaat ontwerpen dat je elke dag gebruikt en daarna verbeteren','Designing something you use every day, then improving it']],
+   child:[['Kiest kleurenschema en liedje','Chooses the colour scheme and the song'],['Tekent en bouwt het kastje (karton, hout of 3D-print)','Draws and builds the case (cardboard, wood or 3D print)'],['Test een week en bedenkt verbeteringen','Tests for a week and thinks of improvements']],
+   parent:[['Sluit ring, knop en piezo aan (of soldeert 3 draden)','Connects ring, button and piezo (or solders 3 wires)'],['Zet de code op de ESP32-C3 via USB (Arduino IDE of MicroPython)','Puts the code on the ESP32-C3 over USB (Arduino IDE or MicroPython)'],['Hangt het kastje op met dubbelzijdig tape','Mounts the case with double-sided tape']],
+   steps:[['Ontwerp op papier: welke kleuren, welk liedje, waar komt het kastje?','Sketch on paper: which colours, which song, where does it go?'],['Sluit LED-ring, knop en piezo aan op een breadboard en test elk onderdeel apart.','Connect LED ring, button and piezo on a breadboard and test each part on its own.'],['Programmeer: knop start, elke 7,5 s gaat één LED uit, na 120 s speelt de piezo het liedje.','Program it: button starts, every 7.5 s one LED goes out, after 120 s the piezo plays the song.'],['Zet alles vast (solderen of Dupont-draden laten zitten) en bouw het kastje eromheen.','Fix everything in place (solder or keep the Dupont wires) and build the case around it.'],['Ophangen, een week samen poetsen en samen aanpassen.','Mount it, brush together for a week and tweak it together.']],
+   bom:[[['ESP32-C3 SuperMini bord','ESP32-C3 SuperMini board'],'1',4],[['WS2812B LED-ring, 16 LED’s, 5 V','WS2812B LED ring, 16 LEDs, 5 V'],'1',4],[['Piezo-buzzer (passief)','Piezo buzzer (passive)'],'1',1],[['Grote drukknop (arcade, 24 mm)','Large push button (arcade, 24 mm)'],'1',2],[['Perfboard of breadboard + jumperdraden','Perfboard or breadboard + jumper wires'],'1 set',3],[['Materiaal voor kastje (karton, multiplex of 3D-print)','Case material (cardboard, plywood or 3D print)'],'',3],[['USB-C kabel + 5 V-lader (meestal al in huis)','USB-C cable + 5 V charger (usually already at home)'],'1',6,1]],
+   safe:['Zet de helderheid van de LED’s op ongeveer 30%: op volle witte helderheid trekt de ring bijna 1 A. Gebruik uitsluitend USB-voeding, nooit netspanning in het kinderdeel. Houd het kastje uit de buurt van water.','Set the LED brightness to about 30%: at full white the ring draws almost 1 A. Use USB power only, never mains inside the child’s part. Keep the case away from water.'],
+   more:['Een tweede ring voor het avondritueel, een andere melodie per dag van de week, of een stickerbeloning na 7 dagen op rij.','A second ring for the bedtime routine, a different tune for each day of the week, or a sticker reward after 7 days in a row.']},
+
+  thuis:{lvl:2,
+   title:['Wie-is-er-thuis-bord','Who-is-home board'],
+   intro:['Een houten bord met een lampje voor elk gezinslid. Het lampje brandt zodra de telefoon van die persoon op het thuis-wifi zit. Niets gaat via een cloud: Home Assistant draait bij jullie thuis. Je kind ontwerpt het bord en bedenkt de regels (knipperen bij aankomst, dimmen na 22:00); jij regelt het netwerk en de koppeling met de telefoons.','A wooden board with a light for every family member. The light turns on as soon as that person’s phone joins the home Wi-Fi. Nothing goes through a cloud: Home Assistant runs in your own home. Your child designs the board and invents the rules (blink on arrival, dim after 22:00); you handle the network and linking the phones.'],
+   learn:[['Als-dan-regels: als telefoon thuis, dan lampje aan','If-then rules: if the phone is home, then light on'],['Hoe wifi, IP-adressen en apparaten in een netwerk werken','How Wi-Fi, IP addresses and devices in a network work'],['Een eenvoudige schakeling met LED en weerstand (wet van Ohm)','A simple circuit with an LED and resistor (Ohm’s law)'],['Privacy: wie mag weten wanneer ik thuis ben?','Privacy: who gets to know when I am home?']],
+   child:[['Tekent en zaagt of knipt het bord, kiest kleur en naam per persoon','Draws and cuts the board, picks a colour and name per person'],['Plaatst de LED’s en test elk lampje','Places the LEDs and tests each light'],['Bedenkt de regels in Home Assistant (met jouw hulp)','Invents the rules in Home Assistant (with your help)']],
+   parent:[['Installeert of gebruikt Home Assistant en koppelt de telefoons (Companion-app)','Installs or uses Home Assistant and links the phones (Companion app)'],['Flasht de ESP32 met ESPHome','Flashes the ESP32 with ESPHome'],['Spreekt met iedereen af dat aanwezigheid zichtbaar mag zijn','Agrees with everyone that presence may be shown']],
+   steps:[['Maak het ontwerp: één lampje en één naam per gezinslid.','Make the design: one light and one name per family member.'],['Breadboard: 4 LED’s met 220 Ω weerstanden op de ESP32. Test met ESPHome.','Breadboard: 4 LEDs with 220 Ω resistors on the ESP32. Test with ESPHome.'],['Koppel in Home Assistant elke telefoon aan een persoon.','In Home Assistant, link each phone to a person.'],['Maak een automatisering: persoon thuis → lampje aan. Kind voegt extra regels toe.','Create an automation: person home → light on. Child adds extra rules.'],['Monteer alles in het bord en hang het bij de voordeur.','Mount everything in the board and hang it by the front door.']],
+   bom:[[['ESP32 DevKit (30 pins)','ESP32 DevKit (30 pins)'],'1',6],[['LED’s 5 mm in 4 kleuren + weerstanden 220 Ω (set)','5 mm LEDs in 4 colours + 220 Ω resistors (set)'],'1 set',3],[['Breadboard + jumperdraden','Breadboard + jumper wires'],'1 set',4],[['Multiplex 4 mm of dik karton voor het bord','4 mm plywood or thick cardboard for the board'],'',4],[['USB-voeding 5 V','USB power supply 5 V'],'1',6,1],[['Home Assistant-host: Raspberry Pi 4 (2 GB) met behuizing','Home Assistant host: Raspberry Pi 4 (2 GB) with case'],'1',55,1,['Alleen nodig als jullie nog geen Home Assistant hebben.','Only needed if you don’t have Home Assistant yet.']],[['microSD 32 GB + Pi-voeding','microSD 32 GB + Pi power supply'],'',17,1]],
+   safe:['Moderne telefoons gebruiken per netwerk een willekeurig MAC-adres, waardoor de aanwezigheidsdetectie kan haperen. Gebruik de Home Assistant Companion-app voor betrouwbare detectie. Bespreek vooraf met elk gezinslid of zijn of haar aanwezigheid zichtbaar mag zijn.','Modern phones use a random MAC address per network, which can make presence detection flaky. Use the Home Assistant Companion app for reliable detection. Agree beforehand whether each family member is happy to have their presence shown.'],
+   more:['Een lampje voor de schoolbus, knipperen als iemand bijna thuis is, of een scherm met de afvalkalender erbij.','A light for the school bus, blinking when someone is almost home, or a screen with the waste collection calendar.']},
+
+  voer:{lvl:3,
+   title:['Huisdier-voerautomaat','Pet feeder'],
+   intro:['Een trechter met een 3D-geprinte schroef (auger) die bij elke druk of tijd een kleine portie droogvoer uitgeeft. Je kind programmeert de tijden en kiest de portiegrootte; jij zorgt voor de voeding, de veilige montage en het voedselveilige deel. Voor kat of kleine hond.','A hopper with a 3D-printed auger that dispenses a small portion of dry food on a button press or at set times. Your child programs the times and picks the portion size; you take care of power, safe mounting and the food-safe parts. For a cat or small dog.'],
+   learn:[['Motoren aansturen: hoe lang draaien = hoeveel gram?','Driving motors: how long it turns = how many grams?'],['Tijdschema’s programmeren (klok, planning)','Programming schedules (clock, timing)'],['Kalibreren: meten, bijstellen en opnieuw meten','Calibrating: measure, adjust and measure again'],['Mechanisch ontwerp: schroef, trechter en uitlaat','Mechanical design: auger, hopper and outlet']],
+   child:[['Programmeert de voertijden en portiegrootte','Programs feeding times and portion size'],['Ontwerpt de uitlaat en test met rijst of linzen (niet met voer!)','Designs the outlet and tests with rice or lentils (not with pet food!)'],['Houdt een logboek: hoeveel gram per portie?','Keeps a log: how many grams per portion?']],
+   parent:[['Print of bestelt de auger (PETG) en maakt een voedselveilige trechter','Prints or orders the auger (PETG) and sets up a food-safe hopper'],['Sluit voeding en servo aan, flasht de ESP32','Wires power and servo, flashes the ESP32'],['Controleert de eerste weken dagelijks of het voer erin en eruit komt','Checks daily for the first weeks that food goes in and comes out']],
+   steps:[['Ontwerp of download een auger en print hem (±3 uur, ±80 g filament).','Design or download an auger and print it (about 3 h, about 80 g filament).'],['Monteer servo, auger en trechter op een plank of in een kistje.','Mount servo, auger and hopper on a board or in a box.'],['Programmeer: knop of tijd → servo draait X seconden → portie valt in het bakje.','Program it: button or time → servo turns X seconds → portion falls into the bowl.'],['Kalibreer met rijst: weeg 10 porties en bereken het gemiddelde.','Calibrate with rice: weigh 10 portions and calculate the average.'],['Pas op: begin met kleine porties en gebruik het eerste weken onder toezicht.','Careful: start with small portions and use it under supervision for the first weeks.']],
+   bom:[[['ESP32 DevKit','ESP32 DevKit'],'1',6],[['MG996R servo, 360° (continu draaiend)','MG996R servo, 360° (continuous rotation)'],'1',6],[['3D-print auger + buis (±80 g PETG)','3D-printed auger + tube (about 80 g PETG)'],'',3,0,['Zonder printer: printservice of FabLab, ca. €10–15.','No printer: print service or FabLab, about €10–15.']],[['Voedselveilige opbergpot of trechter','Food-safe storage jar or hopper'],'1',4],[['Voeding 5 V, 3 A (servo trekt tot 2,5 A bij blokkeren)','Power supply 5 V, 3 A (servo draws up to 2.5 A when stalled)'],'1',8],[['Drukknop','Push button'],'1',2],[['Schroeven, hout/kistje, kabels','Screws, wood/box, cables'],'',6],[['Klok-module DS3231 (houdt tijd bij stroomuitval)','DS3231 clock module (keeps time through power loss)'],'1',3,1],[['Weegcel + HX711 (geef een gewogen portie)','Load cell + HX711 (dispense a weighed portion)'],'1',6,1],[['OLED-scherm 0,96 inch','0.96 inch OLED display'],'1',4,1]],
+   safe:['Gebruik de automaat in de eerste weken alleen onder toezicht en nooit als enige voerbron bij afwezigheid van meer dan een dag. Laat het voer niet in direct contact komen met 3D-print: PLA/PETG is niet automatisch voedselveilig; gebruik een voedselveilige pot voor het voer. Houd het huisdier uit de buurt van de motor en bekabeling en laat jonge kinderen niet zonder jou aan de netvoeding zitten.','Use the feeder only under supervision for the first weeks and never as the only food source when away for more than a day. Don’t let food touch the 3D print directly: PLA/PETG is not automatically food-safe; use a food-safe jar for the food. Keep the pet away from the motor and wiring, and don’t let young children handle the power supply without you.'],
+   more:['Gewicht meten met een weegcel, een melding bij lege trechter, of een camera-loze ‘is de kat al gegeten’-lamp.','Weighing with a load cell, a notification when the hopper is empty, or a camera-free ‘has the cat eaten yet’ light.']},
+
+  weer:{lvl:3,
+   title:['Weerstation op het balkon','Balcony weather station'],
+   intro:['Een kleine sensorbox op het balkon meet temperatuur, luchtvochtigheid, luchtdruk, regen en (optioneel) wind. Een e-paper scherm in de keuken toont de waarden en een grafiek van de afgelopen week. Je kind doet eerst een eigen voorspelling en vergelijkt die met de metingen en de KNMI-verwachting; jij regelt de montage buiten en de batterij.','A small sensor box on the balcony measures temperature, humidity, air pressure, rain and (optionally) wind. An e-paper screen in the kitchen shows the values and a chart of the past week. Your child first makes a prediction and compares it with the measurements and the KNMI forecast; you handle outdoor mounting and the battery.'],
+   learn:[['Sensoren uitlezen en data omrekenen (druk in hPa, regen in mm)','Reading sensors and converting data (pressure in hPa, rain in mm)'],['Grafieken maken en lezen','Making and reading charts'],['Energie sparen: de sensor slaapt tussen metingen (deep sleep)','Saving energy: the sensor sleeps between readings (deep sleep)'],['Data vergelijken met een bron: klopt mijn station?','Comparing data to a reference: is my station right?']],
+   child:[['Bouwt het stralingsscherm (zodat de zon de temperatuur niet verpest)','Builds the radiation shield (so the sun doesn’t spoil the temperature)'],['Ontwerpt de weergave op het scherm in de keuken','Designs the display layout on the kitchen screen'],['Doet elke dag een eigen voorspelling en houdt de score bij','Makes a daily prediction and keeps score']],
+   parent:[['Soldeert de sensoren op het print en regelt de batterij','Solders the sensors and sets up the battery'],['Monteert de buitenbox en regenmeter (waterdicht, stabiel)','Mounts the outdoor box and rain gauge (waterproof, stable)'],['Zorgt voor de ESP-NOW/wifi-verbinding tussen buiten en keuken','Sets up the ESP-NOW/Wi-Fi link between outside and kitchen']],
+   steps:[['Test BME280 en regenmeter binnen op een breadboard.','Test the BME280 and rain gauge indoors on a breadboard.'],['Programmeer: elke 5 minuten wakker worden, meten, verzenden, weer slapen.','Program it: wake every 5 minutes, measure, send, sleep again.'],['Bouw het scherm: ESP32 + e-paper, dagwaarden en grafiek van 7 dagen.','Build the screen: ESP32 + e-paper with current values and a 7-day chart.'],['Plaats alles in een waterdichte doos met stralingsscherm en monteer op het balkon.','Put everything in a waterproof box with radiation shield and mount it on the balcony.'],['Vergelijk een week met de KNMI-meetwaarden van het dichtstbijzijnde station.','Compare for a week with the KNMI measurements of the nearest station.']],
+   bom:[[['ESP32 DevKit (buiten + keuken)','ESP32 DevKit (outside + kitchen)'],'2',12],[['BME280 sensor (temp, vocht, druk)','BME280 sensor (temp, humidity, pressure)'],'1',4],[['Kantelbak-regenmeter (tipping bucket) kit','Tipping-bucket rain gauge kit'],'1',15],[['E-paper 4,2 inch (zwart-wit)','4.2 inch e-paper (black and white)'],'1',25],[['18650-cel met beveiliging + houder + TP4056-lader','Protected 18650 cell + holder + TP4056 charger'],'1 set',8],[['Waterdichte doos IP65','IP65 waterproof box'],'1',6],[['Stralingsscherm (3D-print of plantenschotels)','Radiation shield (3D print or plant saucers)'],'1',3],[['Draden, connectors, schroeven','Wires, connectors, screws'],'',3],[['Windmeter (anemometer) met pulsuitgang','Anemometer with pulse output'],'1',18,1],[['Zonnepaneeltje 5 V + diode (laadt de 18650)','5 V solar panel + diode (charges the 18650)'],'1',8,1]],
+   safe:['Lithium-ioncellen (18650) alleen met beveiligingschip gebruiken, nooit kortsluiten of boven 60 °C laten komen. Laden doe je onder toezicht en niet op een brandbare ondergrond. Het buitenwerk (hoogte, balkonrand) is voor volwassenen: kinderen werken binnen.','Use lithium-ion cells (18650) only with a protection circuit, never short-circuit or heat above 60 °C. Charge under supervision and not on a flammable surface. The outdoor work (height, balcony edge) is for adults: children work indoors.'],
+   more:['Wind en richting, een zonnepaneel dat de batterij laadt, data naar Home Assistant of een eigen webpagina, of je gegevens delen met een hobbyisten-weernetwerk.','Wind and direction, a solar panel to charge the battery, data to Home Assistant or your own web page, or joining a community weather network.']},
+
+  post:{lvl:2,
+   title:['Slimme brievenbus','Smart letterbox'],
+   intro:['Een reed-schakelaar met magneet in de klep. Gaat de klep open, dan wordt de ESP32 wakker en stuurt een melding naar je telefoon (via ntfy of Home Assistant). Het ding slaapt de rest van de tijd en gaat maanden mee op drie AAA-batterijen. Met een LoRa-node (Meshtastic) werkt het ook bij een volkstuin of vakantiehuis zonder wifi.','A reed switch with a magnet in the flap. When the flap opens, the ESP32 wakes up and sends a notification to your phone (via ntfy or Home Assistant). The rest of the time it sleeps and lasts months on three AAA batteries. With a LoRa node (Meshtastic) it also works at an allotment or holiday home without Wi-Fi.'],
+   learn:[['Sensoren: een magneet sluit of opent een contact','Sensors: a magnet closes or opens a contact'],['Deep sleep: waarom een slapend apparaat maanden op batterijen werkt','Deep sleep: why sleeping makes batteries last months'],['Berichten sturen met een simpele push-dienst','Sending messages with a simple push service'],['Bij LoRa: hoe radio zonder internet werkt (afstand en antenne)','With LoRa: how radio works without internet (range and antenna)']],
+   child:[['Test de reed-schakelaar en vindt de beste plek voor de magneet','Tests the reed switch and finds the best spot for the magnet'],['Schrijft de melding (bijvoorbeeld: Post! 📬)','Writes the notification (e.g. You’ve got mail! 📬)'],['Houdt een logboek: hoe laat komt de post gemiddeld?','Keeps a log: what time does the post usually arrive?']],
+   parent:[['Monteert de sensor in de brievenbus (boren, kit, afdichten)','Mounts the sensor in the letterbox (drilling, sealing)'],['Zet ntfy of Home Assistant op en flasht de ESP32','Sets up ntfy or Home Assistant and flashes the ESP32'],['Wisselt de batterijen één of twee keer per jaar','Replaces the batteries once or twice a year']],
+   steps:[['Test reed-schakelaar en magneet aan tafel met een multimeter of LED.','Test the reed switch and magnet on the table with a multimeter or LED.'],['Programmeer: wake-up op de schakelaar → wifi → melding versturen → slapen.','Program it: wake on the switch → Wi-Fi → send notification → sleep.'],['Zet de ESP32 en batterijhouder in een kleine waterdichte doos.','Put the ESP32 and battery holder in a small waterproof box.'],['Plaats magneet op de klep en schakelaar op het huis; stel de afstand af (±5 mm).','Place the magnet on the flap and the switch on the housing; set the gap (about 5 mm).'],['Test een dag lang en pas de melding en de plek aan.','Test for a day and adjust the message and the position.']],
+   bom:[[['ESP32-C3 SuperMini','ESP32-C3 SuperMini'],'1',4],[['Reed-schakelaar + magneet (set van 5)','Reed switch + magnet (set of 5)'],'1 set',3],[['Batterijhouder 3× AAA + 3 AAA-batterijen','3× AAA battery holder + 3 AAA batteries'],'1 set',4],[['Kleine waterdichte doos (IP65)','Small waterproof box (IP65)'],'1',4],[['Dubbelzijdig tape, kit, schroefjes','Double-sided tape, sealant, screws'],'',2],[['LoRa-variant: 2× Heltec V3 met Meshtastic','LoRa variant: 2× Heltec V3 with Meshtastic'],'2',44,1,['Eén node in de brievenbus, één thuis (of je telefoon via Bluetooth). Vervangt de ESP32-C3.','One node in the letterbox, one at home (or your phone over Bluetooth). Replaces the ESP32-C3.']]],
+   safe:['Alleen laagspanning (3,3–4,5 V), geen netspanning. Hoort de brievenbus bij een appartementengebouw of VvE, vraag dan eerst toestemming voordat je boort. Zorg dat de sensor de klep niet blokkeert en post niet beschadigt. Er komt geen camera in; dat is bewust, voor de privacy van de bezorger en de buurt.','Low voltage only (3.3–4.5 V), no mains. If the letterbox belongs to an apartment building or owners’ association, ask permission before drilling. Make sure the sensor doesn’t block the flap or damage mail. There is no camera, on purpose, for the privacy of the delivery person and neighbours.'],
+   more:['Een melding bij pakketjes (gewicht), een lampje in de gang dat brandt als er post is, of de LoRa-variant bij een volkstuin.','A notification for parcels (weight), a hallway light that lights up when there is mail, or the LoRa variant at an allotment.']},
+
+  energie:{lvl:4,
+   title:['Energie-dashboard voor het gezin','Family energy dashboard'],
+   intro:['Welke kamer of welk apparaat verbruikt het meest? Met een P1-uitleser op de slimme meter zie je live het verbruik, het gas en de teruglevering van het hele huis. Vier meetstekkers laten zien wat bijvoorbeeld de wasdroger, de vriezer, de gaming-pc en de waterkoker doen. Je kind bouwt het dashboard in Home Assistant en kan vragen beantwoorden zoals: wat kost een uur gamen?','Which room or device uses the most? A P1 reader on the smart meter shows live consumption, gas and feed-in for the whole house. Four metering plugs show what the tumble dryer, freezer, gaming PC and kettle are doing. Your child builds the dashboard in Home Assistant and can answer questions like: what does an hour of gaming cost?'],
+   learn:[['Wat zijn watt, kilowattuur en kosten (€ per kWh)?','What are watts, kilowatt-hours and costs (€ per kWh)?'],['Data lezen en een dashboard met grafieken maken','Reading data and building a dashboard with charts'],['Rekenen met verbruik: ontdek wat stand-by per jaar kost','Calculating consumption: find out what standby costs per year'],['Een experiment plannen: wat verandert er als we de verwarming 1 °C lager zetten?','Planning an experiment: what changes if we turn the heating down 1 °C?']],
+   child:[['Bouwt het dashboard: grafieken, kleuren, dagkosten','Builds the dashboard: charts, colours, daily costs'],['Doet metingen en schrijft op wat opvalt','Takes measurements and writes down what stands out'],['Bedenkt een besparingsplan voor het gezin','Comes up with a saving plan for the family']],
+   parent:[['Sluit de P1-uitleser aan op de slimme meter (RJ12, veilig 5 V)','Connects the P1 reader to the smart meter (RJ12, safe 5 V)'],['Plaatst de meetstekkers in het stopcontact (netspanning: alleen volwassenen)','Plugs in the metering plugs (mains power: adults only)'],['Zet Home Assistant op en configureert de energietarieven','Sets up Home Assistant and configures energy tariffs']],
+   steps:[['Zet Home Assistant (of een eenvoudige webpagina) op en voeg het energiedashboard toe.','Set up Home Assistant (or a simple web page) and add the energy dashboard.'],['Bouw of koop de P1-uitleser en sluit hem aan op de P1-poort van de slimme meter.','Build or buy the P1 reader and connect it to the smart meter’s P1 port.'],['Plaats de meetstekkers bij vier grote verbruikers en voeg ze toe in Home Assistant.','Place the metering plugs at four big consumers and add them to Home Assistant.'],['Kind maakt een dashboard met live waarden, dagverbruik en kosten.','Child makes a dashboard with live values, daily use and cost.'],['Een week meten, ontdekken waar het meeste verbruik zit en samen een experiment doen.','Measure for a week, find where most energy goes and run an experiment together.']],
+   bom:[[['P1-uitleser: ESP32 + RJ12-kabel (DSMR5)','P1 reader: ESP32 + RJ12 cable (DSMR5)'],'1 set',9],[['Meetstekker met lokale API (voorgeflasht met Tasmota)','Metering plug with local API (pre-flashed with Tasmota)'],'4',52,0,['Controleer op het etiket dat de stekker 16 A / 3680 W aankan.','Check on the label that the plug is rated for 16 A / 3680 W.']],[['Wandtablet: oude tablet (gratis) of nieuwe 8 inch tablet','Wall tablet: an old tablet (free) or a new 8 inch tablet'],'1',80,1],[['Home Assistant-host: Raspberry Pi 4 (2 GB) + microSD + voeding','Home Assistant host: Raspberry Pi 4 (2 GB) + microSD + power supply'],'1 set',72,1,['Alleen nodig als jullie nog geen Home Assistant hebben.','Only needed if you don’t have Home Assistant yet.']]],
+   safe:['Dit is het enige project met netspanning (230 V). Alleen volwassenen plaatsen de meetstekkers. Maak een stekker nooit open, gebruik alleen gecertificeerde stekkers (CE) en let op het maximumvermogen (16 A / 3680 W); sluit er geen oven, boiler of verwarming op aan. De P1-poort is laagspanning (5 V); gebruik hem alleen voor een uitlezer. Houd de gegevens lokaal in huis.','This is the only project with mains voltage (230 V). Only adults place the metering plugs. Never open a plug, use only certified (CE) plugs and watch the maximum power (16 A / 3680 W); don’t connect an oven, boiler or heater. The P1 port is low voltage (5 V); use it only for a reader. Keep the data local at home.'],
+   more:['Zonnepanelen en teruglevering erbij, een lampje dat groen wordt als stroom goedkoop is (dynamisch tarief), of een weekrapport op de tablet.','Add solar panels and feed-in, a light that turns green when power is cheap (dynamic tariff), or a weekly report on the tablet.']}
+  };
+  var eur=function(n){return '€ '+n;};
+  function sums(p){var b=0,a=0;p.bom.forEach(function(r){a+=r[2];if(!r[3])b+=r[2];});return {b:b,a:a};}
+  function row(r){
+    var opt=r[3]?' opt':'';
+    return '<div class="pd-row'+opt+'"><span><b>'+t(r[0])+'</b>'+(r[1]?'<span class="q">× '+r[1]+'</span>':'')+(r[3]?'<span class="on">'+t(UI.opt)+'</span>':'')+'</span><span class="pp">'+eur(r[2])+'</span>'+(r[4]?'<small>'+t(r[4])+'</small>':'')+'</div>';
+  }
+  function list(a,tag){return '<'+tag+'>'+a.map(function(x){return '<li>'+t(x)+'</li>';}).join('')+'</'+tag+'>';}
+  function dots(n){var s='';for(var i=1;i<=5;i++)s+=i<=n?'<b>●</b>':'○';return s;}
+  function open(id,from){
+    var p=P[id];if(!p)return;
+    var s=sums(p);
+    document.getElementById('pd-title').innerHTML=t(p.title);
+    document.getElementById('pd-meta').innerHTML=
+      '<span class="tag pr">'+(s.b===s.a?eur(s.b):eur(s.b)+' – '+eur(s.a))+'</span><span class="pd-dots" title="'+tx(UI.diff)+'">'+t(UI.diff)+' '+dots(p.lvl)+'</span>';
+    var h='';
+    h+='<p>'+t(p.intro)+'</p>';
+    h+='<div class="pd-two"><div class="pd-who k"><h4>'+t(UI.child)+'</h4>'+list(p.child,'ul')+'</div><div class="pd-who o"><h4>'+t(UI.parent)+'</h4>'+list(p.parent,'ul')+'</div></div>';
+    h+='<div><h4>'+t(UI.learn)+'</h4>'+list(p.learn,'ul')+'</div>';
+    h+='<div><h4>'+t(UI.steps)+'</h4>'+list(p.steps,'ol')+'</div>';
+    h+='<div><h4>'+t(UI.bom)+'</h4><div class="pd-bom">'+p.bom.map(row).join('')+
+       '<div class="pd-row sum"><span>'+t(UI.total)+'</span><span class="pp">'+eur(s.b)+'</span></div>'+
+       (s.a!==s.b?'<div class="pd-row sum"><span>'+t(UI.totalo)+'</span><span class="pp">'+eur(s.a)+'</span></div>':'')+
+       '</div><button class="pd-copy" type="button" id="pd-copy">'+t(UI.copy)+'</button><p class="pd-note">'+t(UI.price)+'</p></div>';
+    h+='<div class="pd-safe"><h4>'+t(UI.safe)+'</h4><p>'+t(p.safe)+'</p></div>';
+    h+='<div><h4>'+t(UI.more)+'</h4><p>'+t(p.more)+'</p></div>';
+    var body=document.getElementById('pd-body');
+    body.innerHTML=h;body.scrollTop=0;
+    document.getElementById('pd-copy').addEventListener('click',function(){
+      var l=lang(),txt=tx(p.title)+'\n'+p.bom.map(function(r){return '- '+tx(r[0])+(r[1]?' ×'+r[1]:'')+' ≈ '+eur(r[2])+(r[3]?' ('+tx(UI.opt)+')':'');}).join('\n')+'\n'+tx(UI.total)+': '+eur(s.b)+(s.a!==s.b?'\n'+tx(UI.totalo)+': '+eur(s.a):'');
+      var btn=this,done=function(){var o=btn.innerHTML;btn.innerHTML=t(UI.copied);setTimeout(function(){btn.innerHTML=o;},1800);};
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,function(){});}
+      else{var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(ta);}
+    });
+    dlg._from=from||null;
+    document.documentElement.classList.add('pd-lock');
+    dlg.showModal();
+  }
+  function close(){dlg.close();}
+  dlg.addEventListener('close',function(){document.documentElement.classList.remove('pd-lock');if(dlg._from&&dlg._from.focus)dlg._from.focus();});
+  dlg.addEventListener('click',function(e){if(e.target===dlg)close();});
+  document.getElementById('pd-x').addEventListener('click',close);
+  /* cards: add price tag + details button */
+  document.querySelectorAll('#familie .card[data-p]').forEach(function(c){
+    var id=c.getAttribute('data-p'),p=P[id];if(!p)return;
+    var s=sums(p);
+    var m=c.querySelector('.meta');
+    if(m){var tg=document.createElement('span');tg.className='tag pr';tg.textContent='≈ '+(s.b===s.a?eur(s.b):eur(s.b)+'–'+s.a);m.appendChild(tg);}
+    var b=document.createElement('button');b.type='button';b.className='pmore';
+    b.innerHTML=t(['Details en onderdelen →','Details and parts →']);
+    b.addEventListener('click',function(){open(id,b);});
+    c.appendChild(b);
+  });
+})();
+</script>
 </body></html>
