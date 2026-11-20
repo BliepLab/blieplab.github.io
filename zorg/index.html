@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="nl" data-lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BliepLab · Check-in</title>
+<meta name="description" content="Check-in voor alleenwonende buren: een respectvolle, privacyvriendelijke dagelijkse controle met mmWave-sensor, ESP32 en Meshtastic. / Daily check-in for neighbours who live alone.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{--bg:#f7f6ff;--bg2:#ecebff;--ink:#15172e;--muted:#474a6b;--line:rgba(21,23,46,.14);--cyan:#1a8fe0;--magenta:#5b48e8;--lime:#f2a900;--orange:#ee6a3c;--violet:#0f9d8a;--display:"Unbounded","Arial Black",sans-serif;--body:"Manrope","Segoe UI",system-ui,sans-serif;--mono:"JetBrains Mono",Consolas,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+[data-lang="nl"] [lang]:not([lang="nl"]):not(html),[data-lang="en"] [lang]:not([lang="en"]):not(html),[data-lang="ru"] [lang]:not([lang="ru"]):not(html){display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(247,246,255,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header .in{max-width:900px;margin:0 auto;padding:.6rem 1rem;display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap}
+header a{color:var(--ink);text-decoration:none;font-weight:700}
+.langsw{display:flex;border:1px solid var(--line);border-radius:999px;padding:2px;background:#fff}
+.langsw button{font-family:var(--mono);font-size:.76rem;padding:.3rem .7rem;border:0;background:transparent;color:var(--muted);cursor:pointer;border-radius:999px}
+.langsw button[aria-pressed="true"]{background:linear-gradient(90deg,var(--cyan),var(--magenta));color:#fff;font-weight:600}
+main{max-width:900px;margin:0 auto;padding:2rem 1rem 4rem}
+h1{font-family:var(--display);font-size:clamp(1.9rem,5vw,3rem);line-height:1.05;margin:.5rem 0 1rem;font-weight:900;text-wrap:balance}
+h2{font-family:var(--display);font-size:clamp(1.3rem,3vw,1.8rem);margin:2.6rem 0 .8rem;text-wrap:balance}
+h3{font-family:var(--display);font-size:1.1rem;margin:0 0 .8rem}
+.eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--orange)}
+.lead{font-size:1.15rem;color:var(--muted);max-width:62ch}
+p{margin:.6rem 0}ul,ol{padding-left:1.3rem;display:grid;gap:.45rem}li::marker{color:var(--magenta);font-weight:700}
+.note{color:var(--muted);font-size:.88rem}
+.callout{border-left:4px solid var(--orange);background:rgba(238,106,60,.09);border-radius:0 12px 12px 0;padding:.9rem 1.1rem;margin:1.2rem 0}
+.fig{margin:1rem 0;background:#fff;border:1px solid var(--line);border-radius:16px;padding:.8rem}
+svg.tl{width:100%;height:auto}svg text{font-family:var(--body);font-size:13px;fill:var(--ink)}svg text.w{fill:#fff;font-weight:700}svg text.tm{font-family:var(--mono);font-size:12px}svg text.sm{font-size:12.5px}
+.tw{overflow-x:auto;margin:1rem 0}table{border-collapse:collapse;width:100%;font-size:.93rem;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{padding:.55rem .8rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--bg2);font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase}
+code{font-family:var(--mono);font-size:.86em;background:var(--bg2);padding:.1em .35em;border-radius:6px}
+details{margin:.6rem 0;border:1px solid var(--line);border-radius:12px;background:#fff}summary{cursor:pointer;padding:.7rem 1rem;font-family:var(--mono);font-weight:600}
+pre{margin:0;padding:1rem;overflow:auto;background:#15172e;color:#e9e6ff;border-radius:0 0 12px 12px;font-size:.78rem;line-height:1.5}pre code{background:none;padding:0;color:inherit}
+.dl a{font-family:var(--mono);margin-right:.4rem}
+.agreement{border:2px solid var(--ink);border-radius:16px;background:#fff;padding:1.2rem 1.4rem;margin:1.4rem 0}.agreement li{margin-bottom:.4rem}
+.btn{font-family:var(--display);font-weight:700;font-size:.85rem;padding:.7rem 1.3rem;border-radius:999px;border:0;background:linear-gradient(90deg,var(--cyan),var(--magenta));color:#fff;cursor:pointer}
+@media print{header,main>*:not(.agreement-wrap){}body *{visibility:hidden}.agreement,.agreement *{visibility:visible}.agreement{position:absolute;left:0;top:0;width:100%;border:0}.btn{display:none}}
+</style></head><body>
+<header><div class="in"><a href="../demo/#buurt">&larr; BliepLab · <span lang="nl">Buurtproject</span><span lang="en">Neighbourhood project</span><span lang="ru">Проект для соседей</span></a>
+<div class="langsw" role="group" aria-label="Taal / Language / Язык"><button type="button" data-set="nl" aria-pressed="true">NL</button><button type="button" data-set="en" aria-pressed="false">EN</button><button type="button" data-set="ru" aria-pressed="false">RU</button></div></div></header>
+<main>
+<span class="eyebrow"><span lang="nl">Buurtproject · module</span><span lang="en">Neighbourhood project · module</span><span lang="ru">Соседский проект · модуль</span></span>
+<h1><span lang="nl">Check-in voor alleenwonende buren</span><span lang="en">Check-in for neighbours who live alone</span><span lang="ru">Проверка самочувствия одиноко живущих соседей</span></h1>
+<p class="lead"><span lang="nl">Een kleine, respectvolle voorziening binnen jullie buurt-mesh: geen camera, geen logboek, alleen één dagelijkse controle en een afgesproken zorgkring van 2–3 mensen.</span><span lang="en">A small, respectful provision inside your neighbourhood mesh: no camera, no log, just one daily check and an agreed care circle of 2–3 people.</span><span lang="ru">Небольшая и уважительная функция внутри вашей соседской mesh-сети: без камеры и журнала, только одна ежедневная проверка и согласованный круг заботы из 2–3 человек.</span></p>
+<div class="callout warn"><span lang="nl"><b>Belangrijk:</b> dit is een sociale check, geen medisch hulpmiddel. Het ziet geen val, geen hartstilstand en geen nood zolang iemand wel actief is. Wie medische risico’s heeft, houdt een personenalarmering (alarmknop met meldkamer). Bij nood: bel 112.</span><span lang="en"><b>Important:</b> this is a social check, not a medical device. It does not see a fall, a cardiac arrest or distress as long as someone is active. Anyone with medical risks keeps a personal alarm service (alarm button with a control room). In an emergency: call 112.</span><span lang="ru"><b>Важно:</b> это социальная проверка, а не медицинское устройство. Оно не видит падение, остановку сердца или беду, пока человек активен. Тем, у кого есть медицинские риски, нужна служба персональной тревожной кнопки (с диспетчерским центром). В экстренной ситуации: звоните 112.</span></div>
+<h2 id="idee"><span lang="nl">Het idee in één minuut</span><span lang="en">The idea in one minute</span><span lang="ru">Идея за одну минуту</span></h2>
+<ul><li><span lang="nl">De bewoner blijft zelfstandig. Niemand kijkt mee.</span><span lang="en">The resident stays independent. Nobody watches.</span><span lang="ru">Жилец остаётся самостоятельным. Никто не наблюдает.</span></li><li><span lang="nl">Een kleine sensor merkt alleen dat er leven in huis is en stuurt daar niets over.</span><span lang="en">A small sensor only notices that there is life in the home and sends nothing about it.</span><span lang="ru">Небольшой датчик лишь замечает, что в доме есть жизнь, и ничего об этом не отправляет.</span></li><li><span lang="nl">Eén keer per dag, op een afgesproken tijdstip, controleert het apparaatje of er activiteit was.</span><span lang="en">Once a day, at an agreed time, the device checks whether there was activity.</span><span lang="ru">Раз в день в согласованное время устройство проверяет, была ли активность.</span></li><li><span lang="nl">Was er niets, dan piept het eerst zacht bij de bewoner zelf. Een druk op de knop, of gewoon even de kamer in lopen, is genoeg.</span><span lang="en">If there was nothing, it first beeps softly at the resident. Pressing the button, or just walking into the room, is enough.</span><span lang="ru">Если активности не было, устройство сначала тихо пищит у самого жильца. Достаточно нажать кнопку или просто войти в комнату.</span></li><li><span lang="nl">Pas als er na 30 minuten nog niets is, krijgt de zorgkring één kort bericht. Een mens belt of loopt langs.</span><span lang="en">Only if there is still nothing after 30 minutes does the care circle get one short message. A person calls or walks over.</span><span lang="ru">Только если через 30 минут всё ещё ничего нет, круг заботы получает одно короткое сообщение. Человек звонит или заходит.</span></li></ul>
+<h2 id="principes"><span lang="nl">Principes</span><span lang="en">Principles</span><span lang="ru">Принципы</span></h2>
+<ul><li><span lang="nl"><b>Toestemming eerst.</b> Zonder een duidelijk ja van de bewoner (en liefst van de familie) gaat er niets aan.</span><span lang="en"><b>Consent first.</b> Nothing is switched on without a clear yes from the resident (and preferably the family).</span><span lang="ru"><b>Сначала согласие.</b> Без ясного «да» жильца (и желательно семьи) ничего не включается.</span></li><li><span lang="nl"><b>De bewoner houdt de regie.</b> Een pauzeschakelaar “ik ben weg”, altijd te stoppen, en de bewoner hoort en ziet wat het apparaat doet.</span><span lang="en"><b>The resident stays in control.</b> An “I’m away” pause switch, can stop at any time, and the resident hears and sees what the device does.</span><span lang="ru"><b>Жилец остаётся хозяином.</b> Переключатель паузы «меня нет», можно остановить в любой момент, и жилец слышит и видит, что делает устройство.</span></li><li><span lang="nl"><b>Zo min mogelijk gegevens.</b> Geen camera, geen beelden, geen bewegingslogboek, alleen een huisnummer in het bericht.</span><span lang="en"><b>As little data as possible.</b> No camera, no images, no movement log, only a house number in the message.</span><span lang="ru"><b>Минимум данных.</b> Никаких камер, изображений и журнала движений, в сообщении только номер дома.</span></li><li><span lang="nl"><b>Een mens beslist.</b> Het systeem belt nooit zelf 112; buren bellen of lopen langs.</span><span lang="en"><b>A human decides.</b> The system never calls 112 by itself; neighbours phone or walk over.</span><span lang="ru"><b>Решает человек.</b> Система сама никогда не вызывает 112; соседи звонят или заходят.</span></li><li><span lang="nl"><b>Geen verrassingen.</b> Elke maand een testbericht, elk jaar een gesprek of het nog past.</span><span lang="en"><b>No surprises.</b> A test message every month, a conversation every year on whether it still fits.</span><span lang="ru"><b>Без сюрпризов.</b> Каждый месяц тестовое сообщение, каждый год разговор о том, подходит ли это ещё.</span></li><li><span lang="nl"><b>Stilte is ook een signaal.</b> Elke dag komt een kort “OK”. Blijft dat uit, dan kijkt de zorgkring even. Zo valt ook een kapot apparaat op.</span><span lang="en"><b>Silence is a signal too.</b> A short “OK” arrives every day. If it does not, the care circle takes a look. That is how a broken device gets noticed as well.</span><span lang="ru"><b>Тишина тоже сигнал.</b> Каждый день приходит короткое «OK». Если его нет, круг заботы проверяет. Так замечают и сломанное устройство.</span></li></ul>
+<h2 id="dag"><span lang="nl">Zo werkt een dag</span><span lang="en">How a day works</span><span lang="ru">Как проходит день</span></h2>
+<div class="fig"><svg viewBox="0 0 720 190" role="img" aria-label="timeline" class="tl"><rect x="40" y="70" width="448" height="34" rx="8" fill="#1a8fe0" opacity=".85"/><rect x="488" y="70" width="64" height="34" fill="#f2a900"/><rect x="552" y="70" width="128" height="34" rx="0" fill="#ee6a3c"/><text lang="nl" x="264" y="92" text-anchor="middle" class="w">Activiteit zoeken (niets wordt verstuurd)</text><text lang="en" x="264" y="92" text-anchor="middle" class="w">Looking for activity (nothing is sent)</text><text lang="ru" x="264" y="92" text-anchor="middle" class="w">Ищем активность (ничего не отправляется)</text><text lang="nl" x="520" y="92" text-anchor="middle" class="w">piep</text><text lang="en" x="520" y="92" text-anchor="middle" class="w">beep</text><text lang="ru" x="520" y="92" text-anchor="middle" class="w">писк</text><text lang="nl" x="616" y="92" text-anchor="middle" class="w">bericht</text><text lang="en" x="616" y="92" text-anchor="middle" class="w">message</text><text lang="ru" x="616" y="92" text-anchor="middle" class="w">сообщение</text><line x1="40" y1="58" x2="40" y2="116" stroke="#15172e" stroke-width="1.5"/><text x="40" y="50" text-anchor="middle" class="tm">07:00</text><line x1="488" y1="58" x2="488" y2="116" stroke="#15172e" stroke-width="1.5"/><text x="488" y="50" text-anchor="middle" class="tm">10:30</text><line x1="552" y1="58" x2="552" y2="116" stroke="#15172e" stroke-width="1.5"/><text x="552" y="50" text-anchor="middle" class="tm">11:00</text><line x1="616" y1="58" x2="616" y2="116" stroke="#15172e" stroke-width="1.5"/><text x="616" y="50" text-anchor="middle" class="tm">11:30</text><line x1="680" y1="58" x2="680" y2="116" stroke="#15172e" stroke-width="1.5"/><text x="680" y="50" text-anchor="middle" class="tm">12:00</text><text lang="nl" x="40" y="140" text-anchor="start" class="sm">Venster opent</text><text lang="en" x="40" y="140" text-anchor="start" class="sm">Window opens</text><text lang="ru" x="40" y="140" text-anchor="start" class="sm">Окно открывается</text><text lang="nl" x="488" y="140" text-anchor="middle" class="sm">Controle</text><text lang="en" x="488" y="140" text-anchor="middle" class="sm">Check</text><text lang="ru" x="488" y="140" text-anchor="middle" class="sm">Проверка</text><text lang="nl" x="552" y="160" text-anchor="middle" class="sm">1e alarm</text><text lang="en" x="552" y="160" text-anchor="middle" class="sm">1st alert</text><text lang="ru" x="552" y="160" text-anchor="middle" class="sm">1-й сигнал</text><text lang="nl" x="648" y="160" text-anchor="middle" class="sm">2 herhalingen</text><text lang="en" x="648" y="160" text-anchor="middle" class="sm">2 repeats</text><text lang="ru" x="648" y="160" text-anchor="middle" class="sm">2 повтора</text></svg></div>
+<ol><li><span lang="nl"><b>07:00–10:30:</b> de sensor ziet beweging of aanwezigheid in de kamer. Het apparaat onthoudt alleen “vandaag is er activiteit geweest”.</span><span lang="en"><b>07:00–10:30:</b> the sensor sees movement or presence in the room. The device only remembers “there was activity today”.</span><span lang="ru"><b>07:00–10:30:</b> датчик видит движение или присутствие в комнате. Устройство запоминает только «сегодня активность была».</span></li><li><span lang="nl"><b>10:30, wel activiteit:</b> één kort bericht “Check-in OK nr 12” naar de zorgkring (dat kun je uitzetten).</span><span lang="en"><b>10:30, activity seen:</b> one short message “Check-in OK nr 12” to the care circle (you can switch this off).</span><span lang="ru"><b>10:30, активность была:</b> одно короткое сообщение «Check-in OK nr 12» кругу заботы (это можно отключить).</span></li><li><span lang="nl"><b>10:30, geen activiteit:</b> het apparaat piept elke minuut zacht en de led knippert. Druk op de knop of loop de kamer in: klaar, er wordt niets verstuurd.</span><span lang="en"><b>10:30, no activity:</b> the device beeps softly every minute and the LED blinks. Press the button or walk into the room: done, nothing is sent.</span><span lang="ru"><b>10:30, активности нет:</b> устройство тихо пищит каждую минуту и мигает светодиод. Нажмите кнопку или войдите в комнату: готово, ничего не отправляется.</span></li><li><span lang="nl"><b>11:00, nog steeds niets:</b> alarmbericht naar de zorgkring, daarna maximaal 2 herhalingen met 30 minuten ertussen.</span><span lang="en"><b>11:00, still nothing:</b> alert message to the care circle, then at most 2 repeats 30 minutes apart.</span><span lang="ru"><b>11:00, всё ещё ничего:</b> сообщение-тревога кругу заботы, затем максимум 2 повтора с интервалом 30 минут.</span></li><li><span lang="nl"><b>Later weer activiteit:</b> bericht “weer activiteit, alles in orde”, zodat niemand zich nog zorgen maakt.</span><span lang="en"><b>Activity again later:</b> a message “active again, all fine”, so nobody keeps worrying.</span><span lang="ru"><b>Позже снова активность:</b> сообщение «снова активность, всё в порядке», чтобы никто больше не волновался.</span></li><li><span lang="nl"><b>Schakelaar “ik ben weg”:</b> pauze zonder berichten. Weer uit: gewoon doorgaan.</span><span lang="en"><b>“I’m away” switch:</b> pause with no messages. Switch it off again: carry on as normal.</span><span lang="ru"><b>Переключатель «меня нет»:</b> пауза без сообщений. Выключили: всё продолжается как обычно.</span></li></ol>
+<p><span lang="nl">Het bericht is bewust kort: <code>ALARM check-in gemist nr 12: nog geen activiteit vandaag. Bel of loop even langs.</code></span><span lang="en">The message is deliberately short and is in Dutch in the code: <code>ALARM check-in gemist nr 12: nog geen activiteit vandaag. Bel of loop even langs.</code> (“ALARM check-in missed nr 12: no activity yet today. Call or walk over.”). Change it to your language.</span><span lang="ru">Сообщение намеренно короткое, в коде оно на нидерландском: <code>ALARM check-in gemist nr 12: nog geen activiteit vandaag. Bel of loop even langs.</code> («ALARM: check-in пропущен, дом 12: сегодня ещё нет активности. Позвоните или зайдите»). Замените его на нужный язык.</span></p>
+<h2 id="afspraken"><span lang="nl">Zorgkring en afspraken</span><span lang="en">Care circle and agreements</span><span lang="ru">Круг заботы и договорённости</span></h2>
+<p><span lang="nl">De techniek is het makkelijke deel. Het echte project is de afspraak tussen mensen.</span><span lang="en">The technology is the easy part. The real project is the agreement between people.</span><span lang="ru">Техника — лёгкая часть. Настоящий проект — это договорённость между людьми.</span></p>
+<ul><li><span lang="nl"><b>Bewoner:</b> beslist, kan pauzeren en stoppen wanneer hij of zij wil.</span><span lang="en"><b>Resident:</b> decides, can pause and stop whenever they like.</span><span lang="ru"><b>Жилец:</b> решает, может поставить на паузу и остановить, когда захочет.</span></li><li><span lang="nl"><b>Zorgkring (2–3 mensen, liefst een familielid en buren):</b> ontvangt het alarm, belt of loopt langs.</span><span lang="en"><b>Care circle (2–3 people, preferably a relative and neighbours):</b> receives the alert, phones or walks over.</span><span lang="ru"><b>Круг заботы (2–3 человека, лучше родственник и соседи):</b> получает сигнал, звонит или заходит.</span></li><li><span lang="nl"><b>Beheerder:</b> houdt het apparaat in orde (test, klok, batterij) en leest geen privézaken mee.</span><span lang="en"><b>Keeper:</b> keeps the device in order (test, clock, battery) and does not read private matters.</span><span lang="ru"><b>Хранитель:</b> следит за исправностью устройства (тест, часы, батарейка) и не читает личное.</span></li></ul>
+<p><span lang="nl"><b>Als een alarm binnenkomt:</b></span><span lang="en"><b>When an alert arrives:</b></span><span lang="ru"><b>Когда приходит сигнал:</b></span></p>
+<ol><li><span lang="nl">Bel de bewoner, twee keer.</span><span lang="en">Phone the resident, twice.</span><span lang="ru">Позвоните жильцу, два раза.</span></li><li><span lang="nl">Geen antwoord? Loop langs en bel aan.</span><span lang="en">No answer? Walk over and ring the bell.</span><span lang="ru">Нет ответа? Зайдите и позвоните в дверь.</span></li><li><span lang="nl">Geen reactie, of iets wat je ongerust maakt? Bel 112. Heb je een sleutel, gebruik die dan alleen zoals afgesproken.</span><span lang="en">No response, or something that worries you? Call 112. If you have a key, use it only as agreed.</span><span lang="ru">Нет реакции или что-то тревожит? Звоните 112. Если у вас есть ключ, используйте его только так, как договорились.</span></li><li><span lang="nl">Schrijf in de kring wie gaat (“ik ga”), zodat niet iedereen tegelijk komt en niet niemand.</span><span lang="en">Write in the circle who is going (“I’ll go”), so not everyone arrives at once and not nobody.</span><span lang="ru">Напишите в круге, кто идёт («я иду»), чтобы не пришли все сразу и не не пришёл никто.</span></li><li><span lang="nl">Meld het weer als alles in orde is.</span><span lang="en">Report back when all is well.</span><span lang="ru">Сообщите, когда всё в порядке.</span></li></ol>
+<p><span lang="nl"><b>Checklist vóór de start:</b></span><span lang="en"><b>Checklist before you start:</b></span><span lang="ru"><b>Чек-лист перед запуском:</b></span></p>
+<ul><li><span lang="nl">Je hebt met de bewoner gepraat, in alle rust. Het is geen verrassing en geen verplichting.</span><span lang="en">You talked to the resident, calmly. It is no surprise and no obligation.</span><span lang="ru">Вы поговорили с жильцом, спокойно. Это не сюрприз и не обязанность.</span></li><li><span lang="nl">De zorgkring is bekend en iedereen heeft ja gezegd.</span><span lang="en">The care circle is known and everyone said yes.</span><span lang="ru">Круг заботы известен, и все согласились.</span></li><li><span lang="nl">Het is duidelijk wie een sleutel heeft, of dat er geen sleutel is.</span><span lang="en">It is clear who has a key, or that nobody does.</span><span lang="ru">Ясно, у кого есть ключ, или что ключа ни у кого нет.</span></li><li><span lang="nl">De tijden zijn gekozen (venster, controle) en passen bij het ritme van de bewoner.</span><span lang="en">The times are chosen (window, check) and fit the resident’s rhythm.</span><span lang="ru">Время выбрано (окно, проверка) и подходит ритму жильца.</span></li><li><span lang="nl">De bewoner weet hoe je pauzeert en stopt.</span><span lang="en">The resident knows how to pause and stop.</span><span lang="ru">Жилец знает, как поставить на паузу и остановить.</span></li><li><span lang="nl">Er staat een evaluatiedatum (binnen 3 maanden, daarna jaarlijks).</span><span lang="en">An evaluation date is set (within 3 months, then yearly).</span><span lang="ru">Назначена дата оценки (в течение 3 месяцев, затем ежегодно).</span></li></ul>
+<div class="agreement" id="afspraak"><h3><span lang="nl">Voorbeeld-afspraak (afdrukken en invullen)</span><span lang="en">Example agreement (print and fill in)</span><span lang="ru">Образец соглашения (распечатать и заполнить)</span></h3>
+<ol><li><span lang="nl"><b>Bewoner:</b> ____________________ &nbsp; adres: ____________________</span><span lang="en"><b>Resident:</b> ____________________ &nbsp; address: ____________________</span><span lang="ru"><b>Жилец:</b> ____________________ &nbsp; адрес: ____________________</span></li><li><span lang="nl"><b>Zorgkring</b> (alleen deze mensen krijgen een bericht): 1 ____________ tel ____________ · 2 ____________ tel ____________ · 3 ____________ tel ____________</span><span lang="en"><b>Care circle</b> (only these people get a message): 1 ____________ tel ____________ · 2 ____________ tel ____________ · 3 ____________ tel ____________</span><span lang="ru"><b>Круг заботы</b> (только эти люди получают сообщения): 1 ____________ тел. ____________ · 2 ____________ тел. ____________ · 3 ____________ тел. ____________</span></li><li><span lang="nl"><b>Wat doet het apparaat?</b> Het controleert elke dag tussen __:__ en __:__ of er activiteit in huis is. Is die er niet, dan piept het eerst bij mij. Reageer ik niet binnen 30 minuten, dan krijgt de zorgkring een kort bericht.</span><span lang="en"><b>What does the device do?</b> Every day between __:__ and __:__ it checks whether there is activity in the home. If there is none, it first beeps at me. If I do not respond within 30 minutes, the care circle gets a short message.</span><span lang="ru"><b>Что делает устройство?</b> Каждый день между __:__ и __:__ оно проверяет, есть ли активность в доме. Если её нет, оно сначала пищит у меня. Если я не отреагирую в течение 30 минут, круг заботы получит короткое сообщение.</span></li><li><span lang="nl"><b>Wat doet het niet?</b> Het neemt geen beeld of geluid op, bewaart geen bewegingen, ziet geen vallen en vervangt geen alarmknop of 112.</span><span lang="en"><b>What does it not do?</b> It records no image or sound, stores no movements, does not see falls and does not replace an alarm button or 112.</span><span lang="ru"><b>Чего оно не делает?</b> Не записывает изображение и звук, не хранит движения, не видит падений и не заменяет тревожную кнопку или 112.</span></li><li><span lang="nl"><b>Mijn rechten:</b> ik kan het apparaat altijd pauzeren (schakelaar “ik ben weg”) of laten weghalen, zonder reden.</span><span lang="en"><b>My rights:</b> I can always pause the device (the “I’m away” switch) or have it removed, without giving a reason.</span><span lang="ru"><b>Мои права:</b> я всегда могу поставить устройство на паузу (переключатель «меня нет») или попросить убрать его без объяснения причин.</span></li><li><span lang="nl"><b>Sleutel:</b> ____________ heeft een sleutel / afspraak: ____________________</span><span lang="en"><b>Key:</b> ____________ has a key / agreement: ____________________</span><span lang="ru"><b>Ключ:</b> ключ у ____________ / договорённость: ____________________</span></li><li><span lang="nl"><b>Bij een alarm:</b> eerst bellen, dan langskomen, bij zorg of geen reactie 112 bellen.</span><span lang="en"><b>On an alert:</b> phone first, then visit, call 112 if worried or no response.</span><span lang="ru"><b>При сигнале:</b> сначала позвонить, затем зайти, при тревоге или отсутствии реакции звонить 112.</span></li><li><span lang="nl"><b>Evaluatie:</b> we bespreken elk jaar of dit nog past. Eerste gesprek op: __ / __ / ____.</span><span lang="en"><b>Evaluation:</b> we discuss every year whether this still fits. First conversation on: __ / __ / ____.</span><span lang="ru"><b>Оценка:</b> каждый год обсуждаем, подходит ли это ещё. Первый разговор: __ / __ / ____.</span></li><li><span lang="nl"><b>Handtekeningen:</b> bewoner ____________ · zorgkring ____________ ____________ ____________</span><span lang="en"><b>Signatures:</b> resident ____________ · care circle ____________ ____________ ____________</span><span lang="ru"><b>Подписи:</b> жилец ____________ · круг заботы ____________ ____________ ____________</span></li></ol>
+<button type="button" class="btn" onclick="window.print()"><span lang="nl">Afdrukken</span><span lang="en">Print</span><span lang="ru">Распечатать</span></button></div>
+<p class="note"><span lang="nl">Vragen over privacy of zorg? De gemeente of een welzijnsorganisatie kent de regels en denkt graag mee.</span><span lang="en">Questions about privacy or care? Your municipality or a local welfare organisation knows the rules and is glad to help.</span><span lang="ru">Вопросы о приватности или уходе? Муниципалитет или местная социальная организация знают правила и охотно помогут.</span></p>
+<h2 id="onderdelen"><span lang="nl">Onderdelen en prijzen</span><span lang="en">Parts and prices</span><span lang="ru">Детали и цены</span></h2>
+<div class="tw"><table class=""><tr><th><span lang="nl">Onderdeel</span><span lang="en">Part</span><span lang="ru">Деталь</span></th><th><span lang="nl">Prijs</span><span lang="en">Price</span><span lang="ru">Цена</span></th><th><span lang="nl">Opmerking</span><span lang="en">Note</span><span lang="ru">Примечание</span></th></tr><tr><td><span lang="nl">ESP32-C3 SuperMini</span><span lang="en">ESP32-C3 SuperMini</span><span lang="ru">ESP32-C3 SuperMini</span></td><td>€ 4</td><td><span lang="nl">het brein</span><span lang="en">the brain</span><span lang="ru">мозг</span></td></tr><tr><td><span lang="nl">LD2410C mmWave-aanwezigheidssensor</span><span lang="en">LD2410C mmWave presence sensor</span><span lang="ru">Датчик присутствия LD2410C (миллиметровые волны)</span></td><td>€ 6</td><td><span lang="nl">ziet ook stilzittende mensen; geen camera, geen beeld</span><span lang="en">also sees people sitting still; no camera, no image</span><span lang="ru">видит и неподвижных людей; без камеры и изображения</span></td></tr><tr><td><span lang="nl">DS3231-klokmodule + CR2032</span><span lang="en">DS3231 clock module + CR2032</span><span lang="ru">Модуль часов DS3231 + CR2032</span></td><td>€ 3</td><td><span lang="nl">houdt de tijd bij, ook zonder stroom</span><span lang="en">keeps time even without power</span><span lang="ru">хранит время даже без питания</span></td></tr><tr><td><span lang="nl">Grote drukknop (arcade, 24 mm)</span><span lang="en">Large push button (arcade, 24 mm)</span><span lang="ru">Большая кнопка (аркадная, 24 мм)</span></td><td>€ 2</td><td><span lang="nl">“ik ben ok”; lang indrukken = testbericht</span><span lang="en">“I’m OK”; long press = test message</span><span lang="ru">«я в порядке»; долгое нажатие = тестовое сообщение</span></td></tr><tr><td><span lang="nl">Schakelaar “ik ben weg”</span><span lang="en">“I’m away” switch</span><span lang="ru">Переключатель «меня нет»</span></td><td>€ 1,50</td><td><span lang="nl">pauze zonder berichten</span><span lang="en">pause with no messages</span><span lang="ru">пауза без сообщений</span></td></tr><tr><td><span lang="nl">Actieve zoemer 5 V + led met 330 Ω</span><span lang="en">Active buzzer 5 V + LED with 330 Ω</span><span lang="ru">Активный зуммер 5 В + светодиод с 330 Ω</span></td><td>€ 1,50</td><td><span lang="nl">zacht piepje en status</span><span lang="en">soft beep and status</span><span lang="ru">тихий писк и статус</span></td></tr><tr><td><span lang="nl">Printplaatje, draden</span><span lang="en">Perfboard, wires</span><span lang="ru">Макетная плата, провода</span></td><td>€ 2</td><td><span lang="nl"></span><span lang="en"></span><span lang="ru"></span></td></tr><tr><td><span lang="nl">Behuizing (3D-print of klein doosje)</span><span lang="en">Case (3D print or small box)</span><span lang="ru">Корпус (3D-печать или небольшая коробка)</span></td><td>€ 3</td><td><span lang="nl"></span><span lang="en"></span><span lang="ru"></span></td></tr><tr><td><span lang="nl"><b>Totaal check-in-set</b></span><span lang="en"><b>Total check-in kit</b></span><span lang="ru"><b>Итого набор проверки</b></span></td><td><b>€ 23</b></td><td><span lang="nl">per bewoner</span><span lang="en">per resident</span><span lang="ru">на одного жильца</span></td></tr><tr><td><span lang="nl">Thuisnode (Heltec V3) en USB-voeding 5 V</span><span lang="en">Home node (Heltec V3) and 5 V USB power</span><span lang="ru">Домашняя нода (Heltec V3) и USB-питание 5 В</span></td><td>€ 22 + € 7</td><td><span lang="nl">hoort bij het buurtproject; voeding vaak al aanwezig</span><span lang="en">part of the neighbourhood project; power supply often already there</span><span lang="ru">входит в соседский проект; блок питания часто уже есть</span></td></tr></table></div>
+<p class="note"><span lang="nl">Prijzen zijn schattingen (incl. btw). Controleer ze voor je bestelt.</span><span lang="en">Prices are estimates (incl. VAT). Check them before you order.</span><span lang="ru">Цены — оценки (с НДС). Проверьте их перед заказом.</span></p>
+<h2 id="aansluiten"><span lang="nl">Aansluiten</span><span lang="en">Wiring</span><span lang="ru">Подключение</span></h2>
+<div class="fig"><svg viewBox="0 0 720 230" role="img" aria-label="wiring" class="tl"><rect x="20" y="20" width="130" height="44" rx="10" fill="#e6f3fd" stroke="#15172e" stroke-width="1.5"/><text lang="nl" x="85.0" y="47.0" text-anchor="middle" class="sm">LD2410C</text><text lang="en" x="85.0" y="47.0" text-anchor="middle" class="sm">LD2410C</text><text lang="ru" x="85.0" y="47.0" text-anchor="middle" class="sm">LD2410C</text><rect x="20" y="80" width="130" height="44" rx="10" fill="#fff3d6" stroke="#15172e" stroke-width="1.5"/><text lang="nl" x="85.0" y="107.0" text-anchor="middle" class="sm">knop + schakelaar</text><text lang="en" x="85.0" y="107.0" text-anchor="middle" class="sm">button + switch</text><text lang="ru" x="85.0" y="107.0" text-anchor="middle" class="sm">кнопка + переключатель</text><rect x="20" y="140" width="130" height="44" rx="10" fill="#fde7df" stroke="#15172e" stroke-width="1.5"/><text lang="nl" x="85.0" y="167.0" text-anchor="middle" class="sm">zoemer + led</text><text lang="en" x="85.0" y="167.0" text-anchor="middle" class="sm">buzzer + LED</text><text lang="ru" x="85.0" y="167.0" text-anchor="middle" class="sm">зуммер + светодиод</text><rect x="250" y="60" width="170" height="90" rx="10" fill="#ece9ff" stroke="#15172e" stroke-width="1.5"/><text lang="nl" x="335.0" y="110.0" text-anchor="middle" class="sm">ESP32-C3 SuperMini</text><text lang="en" x="335.0" y="110.0" text-anchor="middle" class="sm">ESP32-C3 SuperMini</text><text lang="ru" x="335.0" y="110.0" text-anchor="middle" class="sm">ESP32-C3 SuperMini</text><rect x="250" y="170" width="170" height="44" rx="10" fill="#e3f6f3" stroke="#15172e" stroke-width="1.5"/><text lang="nl" x="335.0" y="197.0" text-anchor="middle" class="sm">DS3231 (klok)</text><text lang="en" x="335.0" y="197.0" text-anchor="middle" class="sm">DS3231 (clock)</text><text lang="ru" x="335.0" y="197.0" text-anchor="middle" class="sm">DS3231 (часы)</text><rect x="530" y="60" width="170" height="90" rx="10" fill="#e6f3fd" stroke="#15172e" stroke-width="1.5"/><text lang="nl" x="615.0" y="110.0" text-anchor="middle" class="sm">Meshtastic-node</text><text lang="en" x="615.0" y="110.0" text-anchor="middle" class="sm">Meshtastic node</text><text lang="ru" x="615.0" y="110.0" text-anchor="middle" class="sm">Нода Meshtastic</text><line x1="150" y1="42" x2="250" y2="85" stroke="#15172e" stroke-width="2"/><line x1="150" y1="102" x2="250" y2="105" stroke="#15172e" stroke-width="2"/><line x1="150" y1="162" x2="250" y2="125" stroke="#15172e" stroke-width="2"/><line x1="335" y1="150" x2="335" y2="170" stroke="#15172e" stroke-width="2"/><line x1="420" y1="105" x2="530" y2="105" stroke="#15172e" stroke-width="2"/><text lang="nl" x="475" y="95" text-anchor="middle" class="sm">serieel</text><text lang="en" x="475" y="95" text-anchor="middle" class="sm">serial</text><text lang="ru" x="475" y="95" text-anchor="middle" class="sm">UART</text><text lang="nl" x="615" y="175" text-anchor="middle" class="sm">LoRa naar de zorgkring</text><text lang="en" x="615" y="175" text-anchor="middle" class="sm">LoRa to the care circle</text><text lang="ru" x="615" y="175" text-anchor="middle" class="sm">LoRa к кругу заботы</text></svg></div>
+<div class="tw"><table class=""><tr><th><span lang="nl">Verbinding</span><span lang="en">Connection</span><span lang="ru">Соединение</span></th><th><span lang="nl">Pin</span><span lang="en">Pin</span><span lang="ru">Пин</span></th><th><span lang="nl">Opmerking</span><span lang="en">Note</span><span lang="ru">Примечание</span></th></tr><tr><td>LD2410C VCC / GND</td><td>5 V / GND</td><td></td></tr><tr><td>LD2410C OUT</td><td>GPIO 0</td><td><span lang="nl">HOOG = aanwezig</span><span lang="en">HIGH = presence</span><span lang="ru">HIGH = присутствие</span></td></tr><tr><td><span lang="nl">Drukknop</span><span lang="en">Push button</span><span lang="ru">Кнопка</span></td><td>GPIO 1 ↔ GND</td><td><span lang="nl">interne pull-up</span><span lang="en">internal pull-up</span><span lang="ru">внутренняя подтяжка</span></td></tr><tr><td><span lang="nl">Schakelaar “ik ben weg”</span><span lang="en">“I’m away” switch</span><span lang="ru">Переключатель «меня нет»</span></td><td>GPIO 3 ↔ GND</td><td><span lang="nl">dicht = weg</span><span lang="en">closed = away</span><span lang="ru">замкнут = нет дома</span></td></tr><tr><td><span lang="nl">Zoemer +</span><span lang="en">Buzzer +</span><span lang="ru">Зуммер +</span></td><td>GPIO 4</td><td><span lang="nl">− naar GND; transistor bij > 20 mA</span><span lang="en">− to GND; transistor if > 20 mA</span><span lang="ru">− на GND; транзистор при > 20 мА</span></td></tr><tr><td><span lang="nl">Led</span><span lang="en">LED</span><span lang="ru">Светодиод</span></td><td>GPIO 5 → 330 Ω → LED → GND</td><td></td></tr><tr><td>DS3231 SDA / SCL / VCC / GND</td><td>GPIO 6 / GPIO 7 / 3,3 V / GND</td><td></td></tr><tr><td><span lang="nl">Naar Meshtastic-node</span><span lang="en">To the Meshtastic node</span><span lang="ru">К ноде Meshtastic</span></td><td>GPIO 10 (TX) → RX-pin node, GND ↔ GND</td><td><span lang="nl">3,3 V-niveau; zelfde baudrate (9600)</span><span lang="en">3.3 V level; same baud rate (9600)</span><span lang="ru">уровень 3,3 В; та же скорость (9600)</span></td></tr></table></div>
+<ul><li><span lang="nl">Plaats de sensor op 1,2–2 m hoogte, gericht op de plek waar de bewoner overdag zit of loopt (kamer, keuken). Niet in de slaapkamer en niet richting de voordeur.</span><span lang="en">Mount the sensor at 1.2–2 m height, aimed at where the resident sits or walks during the day (living room, kitchen). Not in the bedroom and not towards the front door.</span><span lang="ru">Установите датчик на высоте 1,2–2 м, направьте туда, где жилец днём сидит или ходит (комната, кухня). Не в спальне и не в сторону входной двери.</span></li><li><span lang="nl">Houd hem uit de buurt van ventilatoren, bewegende gordijnen, planten en huisdieren: mmWave ziet ook die.</span><span lang="en">Keep it away from fans, moving curtains, plants and pets: mmWave sees those too.</span><span lang="ru">Держите его подальше от вентиляторов, движущихся штор, растений и домашних животных: миллиметровые волны видят и их.</span></li><li><span lang="nl">De ESP32 en de sensor delen één 5 V USB-voeding; alle massa’s (GND) zijn verbonden, ook met de Meshtastic-node.</span><span lang="en">The ESP32 and the sensor share one 5 V USB supply; all grounds are connected, including to the Meshtastic node.</span><span lang="ru">ESP32 и датчик питаются от одного USB-блока 5 В; все земли (GND) соединены, в том числе с нодой Meshtastic.</span></li><li><span lang="nl">Alleen 5 V laagspanning in het apparaat; geen netspanning aanraken.</span><span lang="en">Only 5 V low voltage in the device; do not touch mains.</span><span lang="ru">В устройстве только низкое напряжение 5 В; сетевого напряжения не касайтесь.</span></li></ul>
+<h2 id="meshtastic"><span lang="nl">Meshtastic instellen</span><span lang="en">Setting up Meshtastic</span><span lang="ru">Настройка Meshtastic</span></h2>
+<ol><li><span lang="nl">Flash de node in de browser en kies regio EU_868.</span><span lang="en">Flash the node in the browser and choose region EU_868.</span><span lang="ru">Прошейте ноду в браузере и выберите регион EU_868.</span></li><li><span lang="nl">Maak voor deze zorgkring een eigen privékanaal (bijvoorbeeld “zorg-12”, met een eigen willekeurige sleutel) en zet het als eerste kanaal van deze node. Voeg hetzelfde kanaal (QR-code) alleen toe aan de telefoons of nodes van de zorgkring.</span><span lang="en">Create a separate private channel for this care circle (for example “zorg-12”, with its own random key) and set it as this node’s first channel. Add the same channel (QR code) only to the phones or nodes of the care circle.</span><span lang="ru">Создайте для этого круга заботы отдельный приватный канал (например, «zorg-12» с собственным случайным ключом) и сделайте его первым каналом этой ноды. Добавьте тот же канал (QR-код) только в телефоны или ноды круга заботы.</span></li><li><span lang="nl">Zet het delen van de locatie uit en geef de node het huisnummer als naam.</span><span lang="en">Turn off location sharing and name the node after the house number.</span><span lang="ru">Отключите передачу местоположения и назовите ноду номером дома.</span></li><li><span lang="nl">Zet de Serial-module aan: modus TEXTMSG, baudrate zoals in de schets (9600), RX-pin zoals je bedraad hebt. Menu-namen verschillen per firmwareversie: volg de actuele Meshtastic-documentatie voor de Serial-module.</span><span lang="en">Enable the Serial module: mode TEXTMSG, baud rate as in the sketch (9600), RX pin as you wired it. Menu names differ per firmware version: follow the current Meshtastic documentation for the Serial module.</span><span lang="ru">Включите модуль Serial: режим TEXTMSG, скорость как в скетче (9600), RX-пин как вы подключили. Названия меню зависят от версии прошивки: следуйте актуальной документации Meshtastic по модулю Serial.</span></li><li><span lang="nl">Test: houd de knop 3 seconden ingedrukt. De zorgkring moet “TEST check-in nr 12” ontvangen, en niemand anders.</span><span lang="en">Test: hold the button for 3 seconds. The care circle must receive “TEST check-in nr 12”, and nobody else.</span><span lang="ru">Тест: удерживайте кнопку 3 секунды. Круг заботы должен получить «TEST check-in nr 12», и больше никто.</span></li><li><span lang="nl">Test het bereik: het bericht moet ook aankomen bij iemand uit de zorgkring die een paar straten verderop is. Komt het niet door, controleer dan of de gedeelde router pakketten van dit kanaal doorgeeft. Zo niet, dan kan het kanaal ook aan de router worden toegevoegd, maar wie de router beheert kan dan de berichten lezen: spreek af wie dat is.</span><span lang="en">Test the range: the message must also arrive for someone in the care circle a few streets away. If it does not get through, check that the shared router relays packets of this channel. If not, the channel can also be added to the router, but whoever manages the router can then read the messages: agree who that is.</span><span lang="ru">Проверьте дальность: сообщение должно дойти и до члена круга заботы, находящегося в нескольких улицах. Если не доходит, проверьте, передаёт ли общий роутер пакеты этого канала. Если нет, канал можно добавить и на роутер, но тогда его хранитель сможет читать сообщения: договоритесь, кто это.</span></li></ol>
+<h2 id="algoritme"><span lang="nl">Het algoritme</span><span lang="en">The algorithm</span><span lang="ru">Алгоритм</span></h2>
+<div class="tw"><table class=""><tr><th><span lang="nl">Instelling</span><span lang="en">Setting</span><span lang="ru">Параметр</span></th><th><span lang="nl">Standaard</span><span lang="en">Default</span><span lang="ru">По умолчанию</span></th><th><span lang="nl">Betekenis</span><span lang="en">Meaning</span><span lang="ru">Смысл</span></th></tr><tr><td>windowStartMin</td><td>07:00</td><td><span lang="nl">activiteit telt vanaf dit tijdstip; eerdere activiteit (nacht) niet</span><span lang="en">activity counts from this time; earlier activity (night) does not</span><span lang="ru">активность считается с этого времени; более ранняя (ночью) не считается</span></td></tr><tr><td>deadlineMin</td><td>10:30</td><td><span lang="nl">tijdstip van de controle</span><span lang="en">time of the check</span><span lang="ru">время проверки</span></td></tr><tr><td>graceMin</td><td>30</td><td><span lang="nl">minuten zacht piepen vóór het alarm</span><span lang="en">minutes of soft beeping before the alert</span><span lang="ru">минут тихого писка до сигнала</span></td></tr><tr><td>alertRepeats / repeatEveryMin</td><td>2 / 30</td><td><span lang="nl">aantal herhalingen en tijd ertussen</span><span lang="en">number of repeats and time between them</span><span lang="ru">число повторов и интервал между ними</span></td></tr><tr><td>dailyOk</td><td>true</td><td><span lang="nl">dagelijks een kort “OK” (stilte = even kijken)</span><span lang="en">a short “OK” every day (silence = take a look)</span><span lang="ru">ежедневное короткое «OK» (тишина = проверить)</span></td></tr></table></div>
+<div class="tw"><table class=""><tr><th><span lang="nl">Fase</span><span lang="en">Phase</span><span lang="ru">Фаза</span></th><th><span lang="nl">Wat gebeurt er</span><span lang="en">What happens</span><span lang="ru">Что происходит</span></th></tr><tr><td>WAITING</td><td><span lang="nl">wacht op de controle; activiteit in het venster wordt onthouden</span><span lang="en">waits for the check; activity inside the window is remembered</span><span lang="ru">ждёт проверки; активность в окне запоминается</span></td></tr><tr><td>OK_DONE</td><td><span lang="nl">controle geslaagd (of overgeslagen na opstarten)</span><span lang="en">check passed (or skipped after start-up)</span><span lang="ru">проверка пройдена (или пропущена после запуска)</span></td></tr><tr><td>PROMPTING</td><td><span lang="nl">piept zacht, wacht op de bewoner; activiteit of knop beëindigt het zonder bericht</span><span lang="en">beeps softly and waits for the resident; activity or the button ends it with no message</span><span lang="ru">тихо пищит и ждёт жильца; активность или кнопка завершают всё без сообщения</span></td></tr><tr><td>ALERTED</td><td><span lang="nl">bericht verstuurd, max. 2 herhalingen; activiteit stuurt “weer in orde”</span><span lang="en">message sent, at most 2 repeats; activity sends “all fine again”</span><span lang="ru">сообщение отправлено, максимум 2 повтора; активность отправляет «снова в порядке»</span></td></tr><tr><td>PAUSED</td><td><span lang="nl">schakelaar “ik ben weg”: niets wordt gecontroleerd of verstuurd</span><span lang="en">“I’m away” switch: nothing is checked or sent</span><span lang="ru">переключатель «меня нет»: ничего не проверяется и не отправляется</span></td></tr></table></div>
+<ul><li><span lang="nl">Als het apparaat na de controletijd opstart (bijvoorbeeld na stroomuitval), slaat het die dag stil over. De volgende ochtend begint het normaal.</span><span lang="en">If the device starts after the check time (for example after a power cut), it silently skips that day. The next morning it starts as normal.</span><span lang="ru">Если устройство запускается после времени проверки (например, после отключения электричества), оно молча пропускает этот день. Со следующего утра всё идёт как обычно.</span></li><li><span lang="nl">Is de bewoner vroeg de deur uit? Gebruik de schakelaar “ik ben weg”, of kies een latere controle.</span><span lang="en">Is the resident out early? Use the “I’m away” switch, or choose a later check time.</span><span lang="ru">Жилец рано ушёл из дома? Используйте переключатель «меня нет» или выберите более позднее время проверки.</span></li><li><span lang="nl">De klok is lokale tijd. Bij de wissel tussen zomer- en wintertijd verschuift alles een uur: stel de klok opnieuw in of kies tijden met marge.</span><span lang="en">The clock is local time. At the switch between summer and winter time everything shifts by an hour: reset the clock or choose times with a margin.</span><span lang="ru">Часы идут по местному времени. При переходе на летнее/зимнее время всё сдвигается на час: переустановите часы или выбирайте время с запасом.</span></li></ul>
+<h2 id="code"><span lang="nl">De code</span><span lang="en">The code</span><span lang="ru">Код</span></h2>
+<p><span lang="nl">De beslislogica staat los van de hardware in <code>checkin_core.h</code> en is getest op een computer met 11 controles: een gewone dag, geen activiteit, reactie tijdens het piepen, herstel na een alarm, nachtelijke activiteit, schakelaar “ik ben weg”, opstarten na de controle, middernacht en dagenreeksen. De schets voor de ESP32-C3 (sensor, klok, knop, zoemer, seriële verbinding) is geschreven maar nog <b>niet op echte hardware getest</b>: doorloop het testplan hieronder.</span><span lang="en">The decision logic lives separately from the hardware in <code>checkin_core.h</code> and has been tested on a computer with 11 checks: a normal day, no activity, a response during the beeping, recovery after an alert, night activity, the “I’m away” switch, start-up after the check, midnight and multi-day runs. The sketch for the ESP32-C3 (sensor, clock, button, buzzer, serial link) is written but <b>not yet tested on real hardware</b>: go through the test plan below.</span><span lang="ru">Логика принятия решений вынесена отдельно от железа в <code>checkin_core.h</code> и проверена на компьютере 11 тестами: обычный день, нет активности, реакция во время писка, восстановление после сигнала, ночная активность, переключатель «меня нет», запуск после проверки, полночь и серии дней. Скетч для ESP32-C3 (датчик, часы, кнопка, зуммер, последовательная связь) написан, но <b>ещё не проверен на реальном железе</b>: пройдите план тестирования ниже.</span></p>
+<p class="dl"><a href="checkin/checkin.ino" download>checkin.ino</a> · <a href="checkin/checkin_core.h" download>checkin_core.h</a> · <a href="checkin/test_core.cpp" download>test_core.cpp</a></p>
+<p><span lang="nl">Test op een computer: <code>g++ -std=c++17 -o test_core test_core.cpp &amp;&amp; ./test_core</code> (verwacht: <code>all tests passed</code>). Arduino: bibliotheek <em>RTClib</em> van Adafruit, bord ESP32C3 Dev Module, beide bestanden in één map met de naam <code>checkin</code>.</span><span lang="en">Test on a computer: <code>g++ -std=c++17 -o test_core test_core.cpp &amp;&amp; ./test_core</code> (expected: <code>all tests passed</code>). Arduino: <em>RTClib</em> library by Adafruit, board ESP32C3 Dev Module, both files in one folder named <code>checkin</code>.</span><span lang="ru">Тест на компьютере: <code>g++ -std=c++17 -o test_core test_core.cpp &amp;&amp; ./test_core</code> (ожидается: <code>all tests passed</code>). Arduino: библиотека <em>RTClib</em> от Adafruit, плата ESP32C3 Dev Module, оба файла в одной папке с именем <code>checkin</code>.</span></p>
+<details><summary>checkin.ino</summary><pre><code>// checkin.ino - neighbour check-in node (ESP32-C3 SuperMini)
+// Reads a presence sensor, decides with checkin_core.h and sends a short text
+// to a Meshtastic node over a serial cable (Meshtastic "Serial module", TEXTMSG mode).
+//
+// Libraries: "RTClib" by Adafruit. Board: ESP32C3 Dev Module (USB CDC on boot: enabled).
+// Put checkin_core.h in the same folder as this file.
+//
+// IMPORTANT: this sketch was written for real hardware but has not been tested on it yet.
+// Test every part with the checklist on the guide page before you rely on it.
+
+#include &lt;Wire.h&gt;
+#include &lt;RTClib.h&gt;
+#include "checkin_core.h"
+
+// ---------- settings you change ----------
+#define HOUSE "12"                  // house number used in the messages
+#define SERIAL_BAUD 9600            // must match the Meshtastic Serial module setting
+checkin::Config cfg;                // times: see checkin_core.h (07:00, 10:30, 30 min)
+
+// ---------- pins (ESP32-C3 SuperMini) ----------
+const int PIN_PRESENCE = 0;   // LD2410C OUT (HIGH = presence)
+const int PIN_BUTTON   = 1;   // big button to GND
+const int PIN_AWAY     = 3;   // "I'm away" switch to GND (closed = away)
+const int PIN_BUZZER   = 4;   // active buzzer (use a transistor if it draws more than 20 mA)
+const int PIN_LED      = 5;   // LED + 330 ohm to GND
+const int PIN_SDA      = 6;   // DS3231
+const int PIN_SCL      = 7;
+const int PIN_MESH_TX  = 10;  // to the RX pin of the Meshtastic node (common GND!)
+
+// ---------- messages (Dutch; change to your language) ----------
+const char MSG_OK[]        = "Check-in OK nr " HOUSE;
+const char MSG_ALERT[]     = "ALARM check-in gemist nr " HOUSE ": nog geen activiteit vandaag. Bel of loop even langs.";
+const char MSG_REPEAT[]    = "HERHALING check-in gemist nr " HOUSE ". Bel of loop even langs.";
+const char MSG_RECOVERED[] = "Check-in nr " HOUSE ": weer activiteit, alles in orde.";
+const char MSG_TEST[]      = "TEST check-in nr " HOUSE;
+
+RTC_DS3231 rtc;
+checkin::State state;
+uint32_t lastTick = 0, lastBeep = 0, buttonDownAt = 0;
+uint8_t presenceStreak = 0;
+bool buttonWas = false;
+bool buttonEvent = false;
+
+void sendText(const char* text) {
+  Serial1.println(text);
+  Serial.println(text);  // also visible on the USB serial monitor
+}
+
+void beep(uint16_t ms) {
+  digitalWrite(PIN_BUZZER, HIGH);
+  delay(ms);
+  digitalWrite(PIN_BUZZER, LOW);
+}
+
+void setup() {
+  pinMode(PIN_PRESENCE, INPUT);
+  pinMode(PIN_BUTTON, INPUT_PULLUP);
+  pinMode(PIN_AWAY, INPUT_PULLUP);
+  pinMode(PIN_BUZZER, OUTPUT);
+  pinMode(PIN_LED, OUTPUT);
+  Serial.begin(115200);
+  Serial1.begin(SERIAL_BAUD, SERIAL_8N1, -1, PIN_MESH_TX);  // transmit only
+  Wire.begin(PIN_SDA, PIN_SCL);
+  if (!rtc.begin()) {
+    while (true) { digitalWrite(PIN_LED, !digitalRead(PIN_LED)); delay(100); }  // fast blink: no RTC
+  }
+  if (rtc.lostPower()) {
+    // First start: take the time of compiling. Flash the board right after compiling,
+    // or set the time another way, otherwise the clock is wrong.
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  }
+  beep(100);
+}
+
+void loop() {
+  // button: short press = "I'm OK", long press (3 s) = send a test message
+  bool down = digitalRead(PIN_BUTTON) == LOW;
+  if (down &amp;&amp; !buttonWas) buttonDownAt = millis();
+  if (!down &amp;&amp; buttonWas) {
+    if (millis() - buttonDownAt &gt;= 3000) { sendText(MSG_TEST); beep(300); }
+    else buttonEvent = true;
+  }
+  buttonWas = down;
+
+  // once per second: sensor, clock, decision
+  if (millis() - lastTick &gt;= 1000) {
+    lastTick = millis();
+    presenceStreak = (digitalRead(PIN_PRESENCE) == HIGH) ? min&lt;int&gt;(presenceStreak + 1, 10) : 0;
+    DateTime now = rtc.now();
+    checkin::Input in;
+    in.minuteOfDay = now.hour() * 60 + now.minute();
+    in.activity = presenceStreak &gt;= 2 || buttonEvent;  // 2 s of presence filters out glitches
+    in.away = digitalRead(PIN_AWAY) == LOW;
+    buttonEvent = false;
+
+    switch (checkin::step(state, cfg, in)) {
+      case checkin::EV_SEND_OK:           sendText(MSG_OK); break;
+      case checkin::EV_SEND_ALERT:        sendText(MSG_ALERT); break;
+      case checkin::EV_SEND_ALERT_REPEAT: sendText(MSG_REPEAT); break;
+      case checkin::EV_SEND_RECOVERED:    sendText(MSG_RECOVERED); break;
+      default: break;
+    }
+
+    // status LED: steady = fine, slow blink = prompting, fast blink = alert sent, off = away
+    uint8_t sec = now.second();
+    switch (state.phase) {
+      case checkin::PROMPTING: digitalWrite(PIN_LED, sec % 2); break;
+      case checkin::ALERTED:   digitalWrite(PIN_LED, (millis() / 250) % 2); break;
+      case checkin::PAUSED:    digitalWrite(PIN_LED, LOW); break;
+      default:                 digitalWrite(PIN_LED, sec % 10 == 0 ? HIGH : LOW); break;  // short flash every 10 s
+    }
+    // gentle beep once a minute while prompting
+    if (state.phase == checkin::PROMPTING &amp;&amp; sec == 0) beep(150);
+  }
+}
+</code></pre></details>
+<details><summary>checkin_core.h</summary><pre><code>// checkin_core.h - pure decision logic for the neighbour check-in node.
+// No Arduino dependencies, so it can be tested on a normal computer.
+// Time is handled in minutes since midnight (0..1439), local time.
+#pragma once
+#include &lt;stdint.h&gt;
+
+namespace checkin {
+
+struct Config {
+  uint16_t windowStartMin = 7 * 60;       // activity counts from 07:00
+  uint16_t deadlineMin    = 10 * 60 + 30; // first check at 10:30
+  uint16_t graceMin       = 30;           // beeping time before an alert is sent
+  uint8_t  alertRepeats   = 2;            // extra alert messages after the first
+  uint16_t repeatEveryMin = 30;           // minutes between alert messages
+  bool     dailyOk        = true;         // send a short "OK" every day
+};
+
+enum Phase : uint8_t {
+  WAITING,    // window open or not yet started, waiting for the deadline
+  OK_DONE,    // today's check passed (or was skipped)
+  PROMPTING,  // no activity at the deadline: beep and wait for the resident
+  ALERTED,    // grace time over: care circle has been messaged
+  PAUSED      // "I'm away" switch is on
+};
+
+enum Event : uint8_t {
+  EV_NONE,
+  EV_SEND_OK,
+  EV_SEND_ALERT,
+  EV_SEND_ALERT_REPEAT,
+  EV_SEND_RECOVERED
+};
+
+struct Input {
+  uint16_t minuteOfDay;  // 0..1439
+  bool activity;         // presence detected or button pressed right now
+  bool away;             // "I'm away" switch is on
+};
+
+struct State {
+  bool     init = false;
+  Phase    phase = WAITING;
+  bool     activity = false;   // activity seen inside today's window
+  bool     awayPrev = false;
+  uint16_t prev = 0;           // previous minuteOfDay
+  uint16_t promptStart = 0;
+  uint16_t lastAlert = 0;
+  uint8_t  alertsSent = 0;
+};
+
+// minutes elapsed from 'from' to 'to', across midnight
+inline uint16_t elapsed(uint16_t from, uint16_t to) {
+  return (uint16_t)((to + 1440u - from) % 1440u);
+}
+
+// true when the clock moved over 'mark' between 'prev' and 'now'
+inline bool crossed(uint16_t prev, uint16_t now, uint16_t mark) {
+  if (prev == now) return false;
+  if (prev &lt; now) return prev &lt; mark &amp;&amp; now &gt;= mark;
+  return mark &gt; prev || mark &lt;= now;  // wrapped over midnight
+}
+
+inline bool inWindow(const Config&amp; c, uint16_t now) {
+  return now &gt;= c.windowStartMin &amp;&amp; now &lt; c.deadlineMin;
+}
+
+// Call this every second or so. Returns an event when a message must be sent.
+inline Event step(State&amp; s, const Config&amp; c, const Input&amp; in) {
+  Event ev = EV_NONE;
+  const uint16_t now = in.minuteOfDay;
+
+  if (!s.init) {
+    s.init = true;
+    s.prev = now;
+    s.awayPrev = in.away;
+    s.activity = false;
+    s.phase = in.away ? PAUSED : (now &gt;= c.deadlineMin ? OK_DONE : WAITING);
+  }
+
+  // "I'm away" switch
+  if (in.away) {
+    s.phase = PAUSED;
+    s.awayPrev = true;
+    s.prev = now;
+    return EV_NONE;
+  }
+  if (s.awayPrev) {  // switch just turned off: resident is back
+    s.awayPrev = false;
+    s.activity = true;
+    s.alertsSent = 0;
+    s.phase = (now &gt;= c.deadlineMin) ? OK_DONE : WAITING;
+  }
+
+  // new day: reset when the window start is passed
+  if (crossed(s.prev, now, c.windowStartMin)) {
+    s.phase = WAITING;
+    s.activity = false;
+    s.alertsSent = 0;
+  }
+  s.prev = now;
+
+  // activity
+  if (in.activity) {
+    if (s.phase == WAITING &amp;&amp; inWindow(c, now)) {
+      s.activity = true;
+    } else if (s.phase == PROMPTING) {
+      s.activity = true;
+      s.phase = OK_DONE;
+    } else if (s.phase == ALERTED) {
+      s.activity = true;
+      s.phase = OK_DONE;
+      s.alertsSent = 0;
+      return EV_SEND_RECOVERED;
+    }
+  }
+
+  // deadline reached
+  if (s.phase == WAITING &amp;&amp; now &gt;= c.deadlineMin) {
+    if (s.activity) {
+      s.phase = OK_DONE;
+      if (c.dailyOk) ev = EV_SEND_OK;
+    } else {
+      s.phase = PROMPTING;
+      s.promptStart = now;
+    }
+    return ev;
+  }
+
+  // beeping time over
+  if (s.phase == PROMPTING &amp;&amp; elapsed(s.promptStart, now) &gt;= c.graceMin) {
+    s.phase = ALERTED;
+    s.alertsSent = 1;
+    s.lastAlert = now;
+    return EV_SEND_ALERT;
+  }
+
+  // repeat alert a limited number of times
+  if (s.phase == ALERTED &amp;&amp; s.alertsSent &lt;= c.alertRepeats &amp;&amp;
+      elapsed(s.lastAlert, now) &gt;= c.repeatEveryMin) {
+    s.alertsSent++;
+    s.lastAlert = now;
+    return EV_SEND_ALERT_REPEAT;
+  }
+  return ev;
+}
+
+}  // namespace checkin
+</code></pre></details>
+<h2 id="testplan"><span lang="nl">Testplan</span><span lang="en">Test plan</span><span lang="ru">План тестирования</span></h2>
+<ul><li><span lang="nl"><b>Op tafel, snel:</b> zet in de code <code>deadlineMin</code> twee minuten na nu en <code>graceMin</code> op 2. Controleer: zacht piepen, alarmbericht, herhalingen, en “weer in orde” zodra je voor de sensor beweegt.</span><span lang="en"><b>On the table, fast:</b> in the code set <code>deadlineMin</code> two minutes from now and <code>graceMin</code> to 2. Check: soft beeping, alert message, repeats, and “all fine again” as soon as you move in front of the sensor.</span><span lang="ru"><b>На столе, быстро:</b> в коде поставьте <code>deadlineMin</code> через две минуты от текущего времени и <code>graceMin</code> = 2. Проверьте: тихий писк, сообщение-тревога, повторы и «снова в порядке», как только вы двинетесь перед датчиком.</span></li><li><span lang="nl"><b>Sensor:</b> kijk in de seriële monitor of aanwezigheid binnen 2 seconden wordt gezien en of een leeg vertrek geen activiteit geeft (ook niet door een ventilator of gordijn).</span><span lang="en"><b>Sensor:</b> check in the serial monitor that presence is seen within 2 seconds and that an empty room gives no activity (not from a fan or curtain either).</span><span lang="ru"><b>Датчик:</b> убедитесь по серийному монитору, что присутствие видно в течение 2 секунд, а пустая комната не даёт активности (и от вентилятора или шторы тоже).</span></li><li><span lang="nl"><b>Knop:</b> kort drukken stopt het piepen; 3 seconden drukken stuurt “TEST”.</span><span lang="en"><b>Button:</b> a short press stops the beeping; holding for 3 seconds sends “TEST”.</span><span lang="ru"><b>Кнопка:</b> короткое нажатие останавливает писк; удержание 3 секунды отправляет «TEST».</span></li><li><span lang="nl"><b>Schakelaar “ik ben weg”:</b> aan = geen berichten, uit = gewoon doorgaan.</span><span lang="en"><b>“I’m away” switch:</b> on = no messages, off = carry on as normal.</span><span lang="ru"><b>Переключатель «меня нет»:</b> включён = сообщений нет, выключен = всё продолжается как обычно.</span></li><li><span lang="nl"><b>Stroomuitval:</b> haal de stekker 10 seconden eruit. De tijd moet kloppen en er mag geen vals alarm komen.</span><span lang="en"><b>Power cut:</b> pull the plug for 10 seconds. The time must be right and there must be no false alert.</span><span lang="ru"><b>Отключение питания:</b> выньте вилку на 10 секунд. Время должно быть верным, ложного сигнала быть не должно.</span></li><li><span lang="nl"><b>Bereik en privacy:</b> het bericht komt bij iedereen in de zorgkring aan en bij niemand anders.</span><span lang="en"><b>Range and privacy:</b> the message reaches everyone in the care circle and nobody else.</span><span lang="ru"><b>Дальность и приватность:</b> сообщение доходит до всех в круге заботы и ни до кого больше.</span></li><li><span lang="nl"><b>Een week proefdraaien:</b> met toestemming van de bewoner, maar berichten alleen naar de telefoon van de beheerder. Pas dan de zorgkring toevoegen.</span><span lang="en"><b>A week of trial running:</b> with the resident’s consent, but messages only to the keeper’s phone. Only then add the care circle.</span><span lang="ru"><b>Неделя пробной работы:</b> с согласия жильца, но сообщения только на телефон хранителя. Только потом добавьте круг заботы.</span></li><li><span lang="nl"><b>Daarna elke maand:</b> een testbericht met de knop en een korte controle van de klok.</span><span lang="en"><b>After that, every month:</b> a test message with the button and a quick check of the clock.</span><span lang="ru"><b>Затем каждый месяц:</b> тестовое сообщение кнопкой и краткая проверка часов.</span></li></ul>
+<h2 id="problemen"><span lang="nl">Veelvoorkomende problemen</span><span lang="en">Common problems</span><span lang="ru">Частые проблемы</span></h2>
+<div class="tw"><table class=""><tr><th><span lang="nl">Probleem</span><span lang="en">Problem</span><span lang="ru">Проблема</span></th><th><span lang="nl">Wat te doen</span><span lang="en">What to do</span><span lang="ru">Что делать</span></th></tr><tr><td><span lang="nl">Huisdier laat de sensor altijd “actief” zien</span><span lang="en">A pet always makes the sensor “active”</span><span lang="ru">Домашнее животное делает датчик всегда «активным»</span></td><td><span lang="nl">Plaats de sensor waar het dier niet komt, of gebruik alleen de knop. Een controle die altijd slaagt beschermt niemand.</span><span lang="en">Place the sensor where the pet does not go, or use the button only. A check that always passes protects nobody.</span><span lang="ru">Поставьте датчик там, куда животное не заходит, или используйте только кнопку. Проверка, которая всегда проходит, никого не защищает.</span></td></tr><tr><td><span lang="nl">Vals alarm: bewoner was al vroeg weg</span><span lang="en">False alert: the resident left early</span><span lang="ru">Ложный сигнал: жилец рано ушёл</span></td><td><span lang="nl">Gebruik de schakelaar “ik ben weg” of verschuif de controle naar later.</span><span lang="en">Use the “I’m away” switch or move the check later.</span><span lang="ru">Используйте переключатель «меня нет» или сдвиньте проверку на более позднее время.</span></td></tr><tr><td><span lang="nl">Bezoek maakt het apparaat “actief”</span><span lang="en">Visitors make the device “active”</span><span lang="ru">Гости делают устройство «активным»</span></td><td><span lang="nl">Dat is acceptabel: er is dan ook iemand in huis.</span><span lang="en">That is acceptable: someone is in the home then.</span><span lang="ru">Это допустимо: значит, в доме кто-то есть.</span></td></tr><tr><td><span lang="nl">Geen dagelijks “OK” binnengekomen</span><span lang="en">No daily “OK” arrived</span><span lang="ru">Не пришло ежедневное «OK»</span></td><td><span lang="nl">Stroom, klok of verbinding kan kapot zijn, of het is iets met de bewoner: bel, loop zo nodig langs.</span><span lang="en">Power, clock or link may be broken, or something is up with the resident: call, walk over if needed.</span><span lang="ru">Возможно, сломались питание, часы или связь, или что-то с жильцом: позвоните, при необходимости зайдите.</span></td></tr><tr><td><span lang="nl">Te veel meldingen</span><span lang="en">Too many alerts</span><span lang="ru">Слишком много сигналов</span></td><td><span lang="nl">Zet de controle later, verlaag de gevoeligheid van de sensor in de HLK-app, of spreek andere tijden af.</span><span lang="en">Move the check later, lower the sensor sensitivity in the HLK app, or agree other times.</span><span lang="ru">Сдвиньте проверку позже, снизьте чувствительность датчика в приложении HLK или договоритесь о другом времени.</span></td></tr></table></div>
+<h2 id="onderhoud"><span lang="nl">Onderhoud en stoppen</span><span lang="en">Maintenance and stopping</span><span lang="ru">Обслуживание и остановка</span></h2>
+<ul><li><span lang="nl">Elke maand een testbericht; elk jaar een gesprek of het nog past.</span><span lang="en">A test message every month; a conversation every year on whether it still fits.</span><span lang="ru">Каждый месяц тестовое сообщение; каждый год разговор о том, подходит ли это ещё.</span></li><li><span lang="nl">De CR2032 in de klokmodule gaat 2–3 jaar mee. Zet een herinnering.</span><span lang="en">The CR2032 in the clock module lasts 2–3 years. Set a reminder.</span><span lang="ru">Батарейка CR2032 в модуле часов служит 2–3 года. Поставьте напоминание.</span></li><li><span lang="nl">Stoppen kan altijd: stekker eruit, kanaal bij de zorgkring verwijderen, afspraak vernietigen. Er zijn geen gegevens om te wissen: er wordt niets bewaard.</span><span lang="en">Stopping is always possible: unplug it, remove the channel from the care circle, destroy the agreement. There is no data to delete: nothing is stored.</span><span lang="ru">Остановить можно всегда: выньте вилку, удалите канал у круга заботы, уничтожьте соглашение. Данных для удаления нет: ничего не хранится.</span></li></ul>
+<h2 id="privacy"><span lang="nl">Privacy in het kort</span><span lang="en">Privacy in short</span><span lang="ru">Приватность коротко</span></h2>
+<ul><li><span lang="nl"><b>Wat het huis verlaat:</b> alleen een korte tekst met het huisnummer, naar 2–3 mensen, via een versleuteld kanaal. Dat een node zendt, is voor ontvangers in de buurt wel zichtbaar.</span><span lang="en"><b>What leaves the home:</b> only a short text with the house number, to 2–3 people, over an encrypted channel. That a node transmits is visible to receivers nearby.</span><span lang="ru"><b>Что покидает дом:</b> только короткий текст с номером дома, 2–3 людям, по зашифрованному каналу. То, что нода передаёт, видно приёмникам поблизости.</span></li><li><span lang="nl"><b>Wat wordt bewaard:</b> alleen de toestand van vandaag, in het geheugen van het apparaat. Bij stroomuitval is die weg. Geen tijden, geen bewegingen.</span><span lang="en"><b>What is stored:</b> only today’s state, in the device’s memory. A power cut erases it. No times, no movements.</span><span lang="ru"><b>Что хранится:</b> только состояние на сегодня, в памяти устройства. При отключении питания оно стирается. Никаких времён и движений.</span></li><li><span lang="nl"><b>Wie kan meelezen:</b> iedereen met de sleutel van het kanaal. Houd de sleutel alleen bij de zorgkring en deel hem niet in een groepsapp.</span><span lang="en"><b>Who can read along:</b> everyone with the channel key. Keep the key within the care circle only and do not share it in a group chat.</span><span lang="ru"><b>Кто может читать:</b> все, у кого есть ключ канала. Держите ключ только в круге заботы и не публикуйте его в общем чате.</span></li></ul>
+<h2 id="beperkingen"><span lang="nl">Beperkingen op een rij</span><span lang="en">Limitations at a glance</span><span lang="ru">Ограничения</span></h2>
+<ul><li><span lang="nl">Het ziet geen val en geen medische nood zolang iemand beweegt.</span><span lang="en">It does not see a fall or a medical emergency as long as someone moves.</span><span lang="ru">Оно не видит падение или медицинскую неотложную ситуацию, пока человек двигается.</span></li><li><span lang="nl">Het werkt alleen bij stroom en radiobereik; berichten komen niet gegarandeerd aan.</span><span lang="en">It works only with power and radio coverage; messages are not guaranteed to arrive.</span><span lang="ru">Оно работает только при питании и радиопокрытии; доставка сообщений не гарантирована.</span></li><li><span lang="nl">Huisdieren, bezoek en ventilatoren kunnen de sensor misleiden.</span><span lang="en">Pets, visitors and fans can fool the sensor.</span><span lang="ru">Домашние животные, гости и вентиляторы могут обмануть датчик.</span></li><li><span lang="nl">Het is zelfbouw: sensor, klok en seriële verbinding zijn nog niet op echte hardware getest.</span><span lang="en">It is DIY: sensor, clock and serial link have not yet been tested on real hardware.</span><span lang="ru">Это самоделка: датчик, часы и последовательная связь ещё не проверены на реальном железе.</span></li><li><span lang="nl">Het vervangt nooit een personenalarmering, rook- of CO-melders of 112.</span><span lang="en">It never replaces a personal alarm service, smoke or CO alarms or 112.</span><span lang="ru">Оно никогда не заменяет службу тревожной кнопки, датчики дыма и CO или 112.</span></li></ul>
+</main>
+<script>
+(function(){var r=document.documentElement;function set(l){r.setAttribute('data-lang',l);r.setAttribute('lang',l);document.querySelectorAll('.langsw button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.set===l));});try{localStorage.setItem('sl-lang',l);}catch(e){}}
+var s='nl';try{s=localStorage.getItem('sl-lang')||'nl';}catch(e){}if(['nl','en','ru'].indexOf(s)<0)s=(s==='uk'||s==='pl')?'en':'nl';set(s);
+document.querySelectorAll('.langsw button').forEach(function(b){b.addEventListener('click',function(){set(b.dataset.set);});});})();
+</script></body></html>
