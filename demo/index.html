@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>SoldeerLab</title>
+<title>BliepLab</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
@@ -198,7 +198,7 @@ footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-bet
 
 <header>
   <div class="wrap">
-    <a class="brand" href="#top"><b></b>SoldeerLab</a>
+    <a class="brand" href="#top"><b></b>BliepLab</a>
     <nav aria-label="Main">
       <a href="#lora">LoRa / Mesh</a>
       <a href="#projecten"><span lang="nl">Projecten</span><span lang="en">Projects</span></a>
@@ -447,14 +447,14 @@ footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-bet
       <article class="card" style="--c1:var(--orange);--c2:var(--magenta)"><span class="sched"><span lang="nl">Elke dinsdag · 19:00–22:00</span><span lang="en">Every Tuesday · 19:00–22:00</span></span><h3><span lang="nl">Open werkplaats</span><span lang="en">Open workshop</span></h3><p><span lang="nl">Soldeerstations, oscilloscoop, 3D-printers en mensen die je vastgelopen project meekijken.</span><span lang="en">Soldering stations, a scope, 3D printers and people who'll look at your stuck project.</span></p></article>
       <article class="card" style="--c1:var(--lime);--c2:var(--cyan)"><span class="sched"><span lang="nl">1e zaterdag · 10:00</span><span lang="en">1st Saturday · 10:00</span></span><h3><span lang="nl">Familie-ochtend</span><span lang="en">Family morning</span></h3><p><span lang="nl">Eén familieproject in één ochtend, materiaal inbegrepen. Max. 8 gezinnen.</span><span lang="en">One family project in one morning, materials included. Max. 8 families.</span></p></article>
       <article class="card" style="--c1:var(--cyan);--c2:var(--violet)"><span class="sched"><span lang="nl">Laatste donderdag · 20:00</span><span lang="en">Last Thursday · 20:00</span></span><h3><span lang="nl">Mesh-avond</span><span lang="en">Mesh night</span></h3><p><span lang="nl">Bereikkaart bijwerken, nieuwe routers plannen, firmware-updates samen.</span><span lang="en">Update the coverage map, plan new routers, firmware updates together.</span></p></article>
-      <article class="card" style="--c1:var(--magenta);--c2:var(--lime)"><span class="sched">#soldeerlab</span><h3><span lang="nl">Op de mesh</span><span lang="en">On the mesh</span></h3><p><span lang="nl">Zet je node op het openbare kanaal en zeg hallo. We luisteren.</span><span lang="en">Put your node on the public channel and say hello. We're listening.</span></p></article>
+      <article class="card" style="--c1:var(--magenta);--c2:var(--lime)"><span class="sched">#blieplab</span><h3><span lang="nl">Op de mesh</span><span lang="en">On the mesh</span></h3><p><span lang="nl">Zet je node op het openbare kanaal en zeg hallo. We luisteren.</span><span lang="en">Put your node on the public channel and say hello. We're listening.</span></p></article>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <div>© 2026 SoldeerLab · Haarlem · <span lang="nl">Alle projecten open-source (CERN-OHL-S)</span><span lang="en">All projects open source (CERN-OHL-S)</span></div>
+    <div>© 2026 BliepLab · Haarlem · <span lang="nl">Alle projecten open-source (CERN-OHL-S)</span><span lang="en">All projects open source (CERN-OHL-S)</span></div>
     <div class="mono">EU_868 · LONG_FAST · hop 3</div>
   </div>
 </footer>
@@ -498,7 +498,7 @@ footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-bet
     var g=function(id){return document.getElementById(id).value.trim();};
     if(!g('f-name')||!g('f-email')||!g('f-msg')){form.reportValidity();return;}
     var l=root.getAttribute('data-lang');
-    var s=(l==='nl'?'Offerteaanvraag SoldeerLab':'Quote request SoldeerLab')+'\n'+(l==='nl'?'Naam':'Name')+': '+g('f-name')+'\nE-mail: '+g('f-email')+'\n'+(l==='nl'?'Organisatie':'Organisation')+': '+(g('f-org')||'-')+'\n'+(l==='nl'?'Soort':'Type')+': '+sel.options[sel.selectedIndex].textContent+'\nBudget: '+g('f-budget')+'\n'+(l==='nl'?'Datum':'Date')+': '+(g('f-date')||'-')+'\n\n'+g('f-msg');
+    var s=(l==='nl'?'Offerteaanvraag BliepLab':'Quote request BliepLab')+'\n'+(l==='nl'?'Naam':'Name')+': '+g('f-name')+'\nE-mail: '+g('f-email')+'\n'+(l==='nl'?'Organisatie':'Organisation')+': '+(g('f-org')||'-')+'\n'+(l==='nl'?'Soort':'Type')+': '+sel.options[sel.selectedIndex].textContent+'\nBudget: '+g('f-budget')+'\n'+(l==='nl'?'Datum':'Date')+': '+(g('f-date')||'-')+'\n\n'+g('f-msg');
     document.getElementById('summary').textContent=s;document.getElementById('done').hidden=false;});
   document.getElementById('copy').addEventListener('click',function(){var t=document.getElementById('summary'),btn=this;
     function selectIt(){var r=document.createRange();r.selectNodeContents(t);var s=getSelection();s.removeAllRanges();s.addRange(r);}
