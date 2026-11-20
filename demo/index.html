@@ -192,6 +192,52 @@ footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-bet
   section{padding-block:3.5rem}
   .hero{min-height:auto}
 }
+/* interest quiz */
+.quiz .qbox{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:clamp(1.1rem,3vw,2rem);box-shadow:0 20px 50px rgba(23,21,58,.08);max-width:900px}
+.quiz .qbox h3{font-size:1.3rem;margin-bottom:.6rem}
+.quiz .qbox p{color:var(--muted)}
+.quiz .qbox:focus{outline:none}
+.quiz .qmeta{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0 1.4rem}
+.quiz .qprog{display:flex;align-items:center;gap:.8rem;margin-bottom:1.4rem;font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.quiz .qprog i{flex:1;height:8px;border-radius:99px;background:var(--bg2);overflow:hidden;display:block}
+.quiz .qprog i b{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--magenta),var(--orange));border-radius:99px;transition:width .3s}
+.quiz fieldset{border:0;margin:0 0 1.5rem;padding:0;min-width:0}
+.quiz legend{font-weight:700;font-size:1.02rem;padding:0;margin-bottom:.6rem;color:var(--ink);line-height:1.35}
+.quiz legend span.n{font-family:var(--mono);font-size:.74rem;color:var(--muted);margin-right:.5rem}
+.quiz .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem}
+.quiz .opt{position:relative;display:block}
+.quiz .opt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.quiz .opt span.box{display:grid;justify-items:center;gap:.15rem;padding:.55rem .2rem;border-radius:14px;border:2px solid var(--line);background:#fff;text-align:center;transition:transform .15s,border-color .15s,background .15s}
+.quiz .opt .emo{font-size:1.5rem;line-height:1}
+.quiz .opt .lbl{font-size:.68rem;color:var(--muted);line-height:1.15;font-weight:600}
+.quiz .opt:hover .box{transform:translateY(-2px);border-color:var(--cyan)}
+.quiz .opt input:checked+.box{border-color:var(--magenta);background:linear-gradient(180deg,#fff,#ecebff);box-shadow:0 6px 18px rgba(91,72,232,.25)}
+.quiz .opt input:checked+.box .lbl{color:var(--ink)}
+.quiz .opt input:focus-visible+.box{outline:2px solid var(--lime);outline-offset:2px}
+.quiz .qnav{display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;margin-top:.5rem}
+.quiz .qnav .msg{color:var(--orange);font-size:.9rem;font-weight:600;min-height:1.3em}
+.quiz .qnav .sp{flex:1}
+.quiz button.btn{cursor:pointer;font-family:var(--display)}
+.quiz .res-top{display:grid;gap:1.1rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:1.4rem 0 2rem}
+.quiz .rcard{position:relative;border:1px solid var(--line);border-radius:18px;padding:1.1rem;background:#fff;display:grid;gap:.5rem;align-content:start;overflow:hidden}
+.quiz .rcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--c)}
+.quiz .rcard .rk{font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.12em}
+.quiz .rcard h4{font-family:var(--display);font-size:1.05rem;margin:0;line-height:1.2}
+.quiz .rcard .ic{font-size:1.8rem}
+.quiz .rcard p{font-size:.92rem}
+.quiz .rcard ul{margin:.2rem 0 0;padding-left:1.1rem;color:var(--muted);font-size:.88rem}
+.quiz .rcard b.sm{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--violet)}
+.quiz .bars{display:grid;gap:.55rem;margin:1rem 0 1.8rem}
+.quiz .bar{display:grid;grid-template-columns:minmax(120px,210px) 1fr 3rem;gap:.7rem;align-items:center;font-size:.9rem}
+.quiz .bar i{display:block;height:14px;border-radius:99px;background:var(--bg2);overflow:hidden}
+.quiz .bar i b{display:block;height:100%;border-radius:99px;background:var(--c)}
+.quiz .bar span.pc{font-family:var(--mono);font-size:.8rem;color:var(--muted);text-align:right}
+.quiz .note-box{border:1px dashed var(--line);border-radius:14px;padding:1rem 1.1rem;background:rgba(255,255,255,.6);font-size:.92rem;margin-bottom:1.2rem}
+.quiz .note-box b{color:var(--ink)}
+.quiz .note-box ul{margin:.4rem 0 0;padding-left:1.2rem}
+.quiz .rbtns{display:flex;gap:.7rem;flex-wrap:wrap}
+@media (max-width:560px){.quiz .opt .lbl{font-size:.6rem}.quiz .bar{grid-template-columns:1fr 3rem}.quiz .bar i{grid-column:1/3;order:3}}
+@media print{header,.blobs,.rbtns,footer,section:not(.quiz){display:none!important}}
 </style>
 
 <div class="blobs" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -202,6 +248,7 @@ footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-bet
     <nav aria-label="Main">
       <a href="#lora">LoRa / Mesh</a>
       <a href="#projecten"><span lang="nl">Projecten</span><span lang="en">Projects</span></a>
+      <a href="#test"><span lang="nl">Test</span><span lang="en">Quiz</span></a>
       <a href="#familie"><span lang="nl">Familie</span><span lang="en">Family</span></a>
       <a href="#art">Art</a>
       <a href="#opdracht"><span lang="nl">Op maat</span><span lang="en">Custom</span></a>
@@ -331,6 +378,17 @@ footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-bet
         <article class="card" style="--c1:var(--magenta);--c2:var(--violet)"><div class="num">8HP</div><div class="meta"><span class="tag m">FPGA</span></div><h3><span lang="nl">Eurorack-module met iCE40</span><span lang="en">Eurorack module with an iCE40</span></h3><p><span lang="nl">Wavetable-oscillator in Verilog, 12-bit DAC, CV op ±5 V, geanodiseerd front.</span><span lang="en">Wavetable oscillator in Verilog, 12-bit DAC, CV at ±5 V, anodised front panel.</span></p><div class="parts">iCE40UP5K · MCP4922 · yosys</div><div class="lvl"><i style="width:90%"></i></div></article>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="quiz" id="test">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--violet)"><span lang="nl">Interessetest · 12–17 jaar · voor jongeren &amp; ouders</span><span lang="en">Interest test · ages 12–17 · for teens &amp; parents</span></span>
+      <h2><span lang="nl">Welke ICT-richting past bij jou? <span class="grad">Geen goed of fout.</span></span><span lang="en">Which ICT direction fits you? <span class="grad">No right or wrong.</span></span></h2>
+      <p><span lang="nl">Van video, bloggen en websites tot programmeren, micro-elektronica en reparatie: ontdek waar je nieuwsgierigheid zit.</span><span lang="en">From video, blogging and websites to programming, microelectronics and repair: find out where your curiosity lies.</span></p>
+    </div>
+    <div id="quiz-app"></div>
   </div>
 </section>
 
@@ -642,6 +700,193 @@ footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-bet
       R.render(S,C);requestAnimationFrame(frame);}
     requestAnimationFrame(frame);
   })();
+})();
+</script>
+<script>
+(function(){
+  var app=document.getElementById('quiz-app');if(!app)return;
+  function L(nl,en){return '<span lang="nl">'+nl+'</span><span lang="en">'+en+'</span>';}
+  function cur(){return document.documentElement.getAttribute('data-lang')==='en'?'en':'nl';}
+  var D=[
+   {k:'content',e:'🎬',c:'#ee6a3c',nl:'Content & media',en:'Content & media',
+    dn:'Verhalen vertellen met beeld, geluid en tekst: video, social media, podcasts, blogs en streams.',
+    de:'Telling stories with images, sound and text: video, social media, podcasts, blogs and streams.',
+    tn:['Een korte video maken en monteren','Een eigen podcast of blog starten','Een kleine livestream proberen'],
+    te:['Make and edit a short video','Start your own podcast or blog','Try a small livestream'],
+    jn:'videomaker, contentcreator, redacteur, social-mediaspecialist, game-streamer',
+    je:'video maker, content creator, editor, social media specialist, game streamer',
+    q:[['Een korte video filmen en monteren met muziek en effecten','Film a short video and edit it with music and effects'],
+       ['Een eigen kanaal, podcast of blog starten over iets wat ik leuk vind','Start my own channel, podcast or blog about something I like'],
+       ['Bedenken hoe ik een verhaal vertel zodat mensen blijven kijken','Figure out how to tell a story so people keep watching'],
+       ['Foto\'s bewerken en er een mooie reeks van maken','Edit photos and turn them into a nice series'],
+       ['Uitzoeken waarom sommige posts viral gaan','Find out why some posts go viral'],
+       ['Live streamen of een online evenement presenteren','Livestream or host an online event']]},
+   {k:'web',e:'🌐',c:'#1a8fe0',nl:'Websites & app-ontwerp',en:'Websites & app design',
+    dn:'Dingen maken die mensen op een scherm gebruiken: websites, apps en hoe ze eruitzien en aanvoelen.',
+    de:'Making things people use on a screen: websites, apps, and how they look and feel.',
+    tn:['Een eigen website bouwen (HTML en CSS)','Een app-schets maken in een gratis ontwerptool','Een pagina bouwen voor een club of vriend'],
+    te:['Build your own website (HTML and CSS)','Sketch an app in a free design tool','Build a page for a club or friend'],
+    jn:'webdesigner, front-end developer, UX-ontwerper, app-ontwerper',
+    je:'web designer, front-end developer, UX designer, app designer',
+    q:[['Een eigen website maken en zien hoe die in de browser verschijnt','Build my own website and see it appear in the browser'],
+       ['Een app of website mooier en handiger maken voor de gebruiker','Make an app or website nicer and easier to use'],
+       ['Kleuren, lettertypes en logo\'s uitkiezen voor een project','Pick colours, fonts and logos for a project'],
+       ['Een app schetsen en uitleggen hoe die werkt','Sketch an app and explain how it works'],
+       ['Een webshop of pagina bouwen voor een club of vriend(in)','Build a webshop or page for a club or a friend'],
+       ['Animaties en kleine effecten op een pagina maken','Create animations and small effects on a page']]},
+   {k:'code',e:'💻',c:'#5b48e8',nl:'Programmeren & games',en:'Programming & games',
+    dn:'Met logica en code dingen laten gebeuren: spellen, programma\'s, automatisering en bots.',
+    de:'Making things happen with logic and code: games, programs, automation and bots.',
+    tn:['Een eenvoudig spel maken in Scratch of Python','Een bot voor Discord schrijven','Een saai klusje automatiseren met een scriptje'],
+    te:['Make a simple game in Scratch or Python','Write a Discord bot','Automate a boring chore with a small script'],
+    jn:'softwareontwikkelaar, gameontwikkelaar, app-bouwer, automatiseringsspecialist',
+    je:'software developer, game developer, app builder, automation specialist',
+    q:[['Een eenvoudig spel programmeren','Program a simple game'],
+       ['Een puzzel oplossen door stap voor stap een regel te bedenken','Solve a puzzle by working out a rule step by step'],
+       ['Een fout (bug) in een programma opsporen en herstellen','Track down and fix an error (bug) in a program'],
+       ['Een programma schrijven dat een saai klusje voor mij doet','Write a program that does a boring chore for me'],
+       ['Leren hoe apps en games van binnen werken','Learn how apps and games work on the inside'],
+       ['Een eigen bot maken voor Discord of een chatapp','Make my own bot for Discord or a chat app']]},
+   {k:'maker',e:'🔌',c:'#f2a900',nl:'Micro-elektronica & maken',en:'Microelectronics & making',
+    dn:'Elektronica en techniek die je kunt vastpakken: schakelingen, sensoren, robots en slimme objecten.',
+    de:'Electronics and technology you can hold: circuits, sensors, robots and smart objects.',
+    tn:['Een LED-schakeling solderen of op een breadboard bouwen','Een sensor aan een Arduino of ESP32 koppelen','Een slimme plantenmeter of lamp bouwen'],
+    te:['Solder an LED circuit or build one on a breadboard','Connect a sensor to an Arduino or ESP32','Build a smart plant monitor or lamp'],
+    jn:'elektronicatechnicus, embedded engineer, robotica-ingenieur, IoT-ontwikkelaar, productontwerper',
+    je:'electronics technician, embedded engineer, robotics engineer, IoT developer, product designer',
+    q:[['Een LED-schakeling bouwen en laten knipperen','Build an LED circuit and make it blink'],
+       ['Solderen: onderdelen vastmaken op een printplaat','Soldering: attach parts to a circuit board'],
+       ['Een kleine robot bouwen die zelf rijdt of reageert','Build a small robot that drives or reacts on its own'],
+       ['Sensoren gebruiken om licht, temperatuur, beweging of afstand te meten','Use sensors to measure light, temperature, motion or distance'],
+       ['Iets slims voor thuis maken, zoals een plantenmeter of slimme lamp','Make something smart for home, like a plant monitor or smart lamp'],
+       ['Een eigen ontwerp 3D-printen of lasersnijden en er elektronica in bouwen','3D-print or laser-cut my own design and put electronics inside']]},
+   {k:'repair',e:'🛠️',c:'#0f9d8a',nl:'Techniek & reparatie',en:'Hardware & repair',
+    dn:'Uitzoeken hoe apparaten werken en ze weer aan de praat krijgen: computers, telefoons en randapparatuur.',
+    de:'Finding out how devices work and getting them going again: computers, phones and peripherals.',
+    tn:['Een oude computer openmaken en de onderdelen benoemen','Een pc uit losse onderdelen bouwen','Een oud apparaat repareren in een repair-café'],
+    te:['Open an old computer and name the parts','Build a PC from separate parts','Repair an old device at a repair cafe'],
+    jn:'ICT-beheerder, servicetechnicus, hardwareontwikkelaar, repair-specialist, systeembeheerder',
+    je:'IT support technician, service engineer, hardware developer, repair specialist, system administrator',
+    q:[['Een kapot apparaat openmaken om te zien wat er mis is','Open up a broken device to see what is wrong'],
+       ['Een computer uit losse onderdelen in elkaar zetten','Put a computer together from separate parts'],
+       ['Een telefoonscherm of batterij vervangen','Replace a phone screen or battery'],
+       ['Uitzoeken waarom een laptop traag is en dat oplossen','Figure out why a laptop is slow and fix it'],
+       ['Oude apparaten weer aan de praat krijgen in plaats van weggooien','Get old devices working again instead of throwing them away'],
+       ['Kabels, printers of wifi bij familie en vrienden aan de praat krijgen','Get cables, printers or wifi working for family and friends']]},
+   {k:'data',e:'📊',c:'#d1478c',nl:'Data & AI',en:'Data & AI',
+    dn:'Patronen vinden in cijfers en computers dingen leren: grafieken, onderzoek en kunstmatige intelligentie.',
+    de:'Finding patterns in numbers and teaching computers things: charts, research and artificial intelligence.',
+    tn:['Eigen data verzamelen (bijv. temperatuur) en er een grafiek van maken','Een beeldherkenningsmodel trainen met een gratis tool','Een vraag onderzoeken met echte data'],
+    te:['Collect your own data (e.g. temperature) and chart it','Train an image recognition model with a free tool','Investigate a question with real data'],
+    jn:'data-analist, data scientist, AI-ontwikkelaar, onderzoeker, statisticus',
+    je:'data analyst, data scientist, AI developer, researcher, statistician',
+    q:[['Cijfers verzamelen en er grafieken van maken','Collect numbers and turn them into charts'],
+       ['Patronen vinden, bijvoorbeeld in sportuitslagen of weerdata','Find patterns, for example in sports results or weather data'],
+       ['Uitproberen hoe een AI-chatbot of beeldgenerator werkt','Try out how an AI chatbot or image generator works'],
+       ['Een computer leren om foto\'s of geluiden te herkennen','Teach a computer to recognise pictures or sounds'],
+       ['Een onderzoek doen en met bewijs een vraag beantwoorden','Do an investigation and answer a question with evidence'],
+       ['Voorspellen wat er gaat gebeuren op basis van eerdere gegevens','Predict what will happen based on earlier data']]},
+   {k:'secure',e:'🛡️',c:'#2a6f97',nl:'Security & netwerken',en:'Security & networks',
+    dn:'Begrijpen hoe verbindingen werken en hoe je ze veilig houdt: netwerken, codes, privacy en beveiliging.',
+    de:'Understanding how connections work and how to keep them safe: networks, codes, privacy and security.',
+    tn:['Een eigen thuisnetwerkkaart tekenen','Een sterk wachtwoord- en 2FA-plan voor het gezin maken','Meedoen aan een beginners-CTF (puzzelwedstrijd)'],
+    te:['Draw a map of your home network','Make a strong password and 2FA plan for the family','Join a beginner CTF (puzzle contest)'],
+    jn:'security-specialist, netwerkbeheerder, ethisch hacker, privacy-adviseur, cloudengineer',
+    je:'security specialist, network administrator, ethical hacker, privacy adviser, cloud engineer',
+    q:[['Geheime codes bedenken of kraken','Invent or crack secret codes'],
+       ['Uitzoeken hoe een wifi-netwerk of het internet precies werkt','Find out exactly how a wifi network or the internet works'],
+       ['Mijn accounts en wachtwoorden zo veilig mogelijk maken','Make my accounts and passwords as safe as possible'],
+       ['Meedoen aan een puzzelwedstrijd waarin je zwakke plekken zoekt (in een veilige oefenomgeving)','Take part in a puzzle contest where you look for weak spots (in a safe practice environment)'],
+       ['Nadenken over privacy: wie ziet welke gegevens van mij?','Think about privacy: who sees which of my data?'],
+       ['Zorgen dat apparaten thuis veilig met elkaar kunnen praten','Make sure devices at home can talk to each other safely']]},
+   {k:'people',e:'🤝',c:'#7a5cc4',nl:'Tech met mensen',en:'Tech with people',
+    dn:'Techniek inzetten voor anderen: uitleggen, helpen, samenwerken en ideeën vertalen naar wat mensen nodig hebben.',
+    de:'Using technology for others: explaining, helping, collaborating and turning ideas into what people need.',
+    tn:['Een buur of grootouder helpen met hun telefoon','Een korte uitleg of workshop geven aan jongere kinderen','Een tech-idee bedenken voor een probleem in de buurt'],
+    te:['Help a neighbour or grandparent with their phone','Give a short explanation or workshop to younger kids','Come up with a tech idea for a neighbourhood problem'],
+    jn:'productmanager, ICT-docent, projectleider, UX-onderzoeker, helpdesk- of communityspecialist',
+    je:'product manager, IT teacher, project lead, UX researcher, helpdesk or community specialist',
+    q:[['Iemand anders uitleggen hoe iets met technologie werkt','Explain to someone else how some technology works'],
+       ['Een groepsproject leiden waarin iedereen een eigen taak heeft','Lead a group project where everyone has their own task'],
+       ['Ouderen of jongere kinderen helpen met hun telefoon of computer','Help older people or younger kids with their phone or computer'],
+       ['Bedenken wat mensen echt nodig hebben en daar een digitale oplossing voor zoeken','Work out what people really need and look for a digital solution'],
+       ['Een workshop of les geven over iets wat ik goed kan','Give a workshop or lesson about something I am good at'],
+       ['In een team een tech-idee uitwerken en presenteren','Develop and present a tech idea in a team']]}
+  ];
+  var N=D.length,PER=6,PAGE=6,TOTAL=N*PER,PAGES=TOTAL/PAGE;
+  var Q=[];for(var i=0;i<PER;i++){for(var j=0;j<N;j++){var d=(j+i*3)%N;Q.push({d:d,i:i});}}
+  var SC=[['😖','Echt niet','No way'],['🙁','Liever niet','Not really'],['😐','Neutraal','Neutral'],['🙂','Wel leuk','Quite fun'],['🤩','Superleuk','Love it']];
+  var st={stage:'intro',page:0,a:new Array(TOTAL).fill(null),msg:false};
+
+  function scrollTop(){var el=document.getElementById('test');if(el&&el.getBoundingClientRect().top<0){el.scrollIntoView({behavior:'smooth',block:'start'});}var b=app.querySelector('.qbox');if(b){b.setAttribute('tabindex','-1');b.focus({preventScroll:true});}}
+  function intro(){
+    return '<div class="qbox"><h3>'+L('Waar word jij blij van in de digitale wereld?','What gets you excited in the digital world?')+'</h3>'
+     +'<p>'+L('48 korte vragen over dingen die je zou kunnen doen. Je zegt steeds hoe leuk je het zou vinden. Er zijn <b>geen goede of foute antwoorden</b>: het gaat om wat jij leuk vindt, niet om wat je al kunt.','48 short questions about things you could do. Each time you say how much you would enjoy it. There are <b>no right or wrong answers</b>: it is about what you like, not what you can already do.')+'</p>'
+     +'<div class="qmeta"><span class="tag c">'+L('± 10 minuten','± 10 minutes')+'</span><span class="tag m">'+L('48 vragen · 8 pagina\'s','48 questions · 8 pages')+'</span><span class="tag l">'+L('voor 12–17 jaar','for ages 12–17')+'</span></div>'
+     +'<p>'+L('Aan het eind zie je in welke richtingen je het meest geïnteresseerd bent, van video en websites tot elektronica en reparatie, met ideeën om thuis uit te proberen. Ouders kunnen meekijken en erover praten.','At the end you see which directions interest you most, from video and websites to electronics and repair, with ideas to try at home. Parents can look along and talk about it.')+'</p>'
+     +'<p style="margin-top:.6rem;font-size:.88rem">'+L('Je antwoorden blijven in je eigen browser: er wordt niets verstuurd of opgeslagen.','Your answers stay in your own browser: nothing is sent or stored.')+'</p>'
+     +'<div class="qnav" style="margin-top:1.4rem"><button type="button" class="btn lime" data-q="start">'+L('Start de test','Start the test')+'</button></div></div>';
+  }
+  function page(){
+    var p=st.page,h='<div class="qbox"><div class="qprog"><span>'+L('Pagina','Page')+' '+(p+1)+'/'+PAGES+'</span><i><b style="width:'+Math.round(p/PAGES*100)+'%"></b></i></div>';
+    for(var n=p*PAGE;n<(p+1)*PAGE;n++){
+      var q=Q[n],dm=D[q.d],t=dm.q[q.i];
+      h+='<fieldset><legend><span class="n">'+(n+1)+'.</span>'+L(t[0],t[1])+'</legend><div class="scale" role="radiogroup">';
+      for(var v=0;v<5;v++){
+        h+='<label class="opt"><input type="radio" name="q'+n+'" value="'+(v+1)+'"'+(st.a[n]===v+1?' checked':'')+' data-n="'+n+'"><span class="box"><span class="emo" aria-hidden="true">'+SC[v][0]+'</span><span class="lbl">'+L(SC[v][1],SC[v][2])+'</span></span></label>';
+      }
+      h+='</div></fieldset>';
+    }
+    var left=0;for(var m=p*PAGE;m<(p+1)*PAGE;m++){if(st.a[m]===null)left++;}
+    h+='<div class="qnav"><button type="button" class="btn ghost" data-q="prev">'+L('← Terug','← Back')+'</button><span class="msg" aria-live="polite">'+(st.msg&&left?L('Nog '+left+' vraag/vragen op deze pagina.','Still '+left+' question(s) on this page.'):'')+'</span><span class="sp"></span>'
+      +'<button type="button" class="btn" data-q="next">'+(p===PAGES-1?L('Bekijk mijn uitslag','See my results'):L('Volgende →','Next →'))+'</button></div></div>';
+    return h;
+  }
+  function score(){
+    var sum=D.map(function(){return 0;}),hi=D.map(function(){return 0;});
+    Q.forEach(function(q,n){var v=st.a[n]||3;sum[q.d]+=v;if(v===5)hi[q.d]++;});
+    return D.map(function(dm,i){return {i:i,pct:Math.round((sum[i]-PER)/(PER*4)*100),hi:hi[i]};}).sort(function(a,b){return b.pct-a.pct||b.hi-a.hi||a.i-b.i;});
+  }
+  function results(){
+    var r=score(),top=r.slice(0,3),h='<div class="qbox"><span class="eyebrow" style="color:var(--orange)">'+L('Jouw uitslag','Your results')+'</span><h3 style="margin-top:.5rem">';
+    var max=r[0].pct,min=r[r.length-1].pct,mix=(r[0].pct-r[1].pct)<=8;
+    h+=L(D[r[0].i].nl+(mix?' + '+D[r[1].i].nl:''),D[r[0].i].en+(mix?' + '+D[r[1].i].en:''))+'</h3>';
+    var intro;
+    if(max<40)intro=L('Digitale richtingen springen er nu niet echt uit. Dat is helemaal prima: interesses groeien vaak pas door iets uit te proberen. Kijk hieronder wat het meest in de buurt komt en probeer één klein ding.','No digital direction really stands out right now. That is perfectly fine: interests often grow only by trying something. See what comes closest below and try one small thing.');
+    else if(max-min<=20)intro=L('Je vindt veel richtingen leuk: een brede interesse. Kies niet te snel; probeer van elk van de top drie één klein project en kijk wat blijft hangen.','You like many directions: a broad interest. Do not choose too fast; try one small project from each of the top three and see what sticks.');
+    else if(mix)intro=L('Je hebt meerdere sterke interesses die dicht bij elkaar liggen. Combineren kan ook: bijvoorbeeld elektronica + programmeren, of video + websites.','You have several strong interests close together. Combining works too: for example electronics + programming, or video + websites.');
+    else intro=L('Er is een duidelijke voorkeur. Hieronder zie je de top drie met ideeën om dit thuis te proberen.','There is a clear preference. Below are the top three with ideas to try at home.');
+    h+='<p>'+intro+'</p><div class="res-top">';
+    top.forEach(function(t,k){var dm=D[t.i];
+      h+='<div class="rcard" style="--c:'+dm.c+'"><span class="rk">#'+(k+1)+' · '+t.pct+'%</span><span class="ic" aria-hidden="true">'+dm.e+'</span><h4>'+L(dm.nl,dm.en)+'</h4><p>'+L(dm.dn,dm.de)+'</p>'
+       +'<b class="sm">'+L('Probeer thuis','Try at home')+'</b><ul>'+dm.tn.map(function(x,y){return '<li>'+L(x,dm.te[y])+'</li>';}).join('')+'</ul>'
+       +'<b class="sm">'+L('Beroepen in deze richting','Jobs in this direction')+'</b><p>'+L(dm.jn,dm.je)+'</p></div>';});
+    h+='</div><h3 style="font-size:1.05rem">'+L('Alle richtingen','All directions')+'</h3><div class="bars">';
+    r.forEach(function(t){var dm=D[t.i];h+='<div class="bar" style="--c:'+dm.c+'"><span>'+dm.e+' '+L(dm.nl,dm.en)+'</span><i><b style="width:'+Math.max(t.pct,2)+'%"></b></i><span class="pc">'+t.pct+'%</span></div>';});
+    h+='</div><div class="note-box"><b>'+L('Voor ouders','For parents')+'</b><ul>'
+      +'<li>'+L('Dit is een speelse aanwijzing, geen beroepentest of diagnose. Interesses veranderen sterk tussen 12 en 17 jaar.','This is a playful indication, not a career test or diagnosis. Interests change a lot between ages 12 and 17.')+'</li>'
+      +'<li>'+L('Vraag uw kind: “Wat in je top drie verrast je? Wat wil je als eerste proberen?” Laat het kind kiezen.','Ask your child: "What in your top three surprises you? What do you want to try first?" Let the child choose.')+'</li>'
+      +'<li>'+L('Een laag percentage betekent niet “niet goed in”, alleen dat het nu minder trekt. Een klein project zegt meer dan een vragenlijst.','A low percentage does not mean "not good at", only that it appeals less right now. A small project says more than a questionnaire.')+'</li></ul></div>'
+      +'<div class="rbtns"><a class="btn lime" href="#projecten">'+L('Bekijk projecten','See projects')+'</a><button type="button" class="btn ghost" data-q="copy">'+L('Kopieer uitslag','Copy results')+'</button><button type="button" class="btn ghost" data-q="print">'+L('Print','Print')+'</button><button type="button" class="btn ghost" data-q="again">'+L('Opnieuw','Start over')+'</button></div><p id="q-copied" style="font-size:.85rem;margin-top:.6rem;min-height:1.2em" aria-live="polite"></p></div>';
+    return h;
+  }
+  function render(){app.innerHTML=st.stage==='intro'?intro():st.stage==='quiz'?page():results();}
+  function summary(){var l=cur(),r=score(),s=(l==='nl'?'BliepLab interessetest':'BliepLab interest test')+'\n';
+    r.forEach(function(t,k){var dm=D[t.i];s+=(k+1)+'. '+(l==='nl'?dm.nl:dm.en)+': '+t.pct+'%\n';});return s;}
+  app.addEventListener('change',function(e){var t=e.target;if(t.matches&&t.matches('input[type=radio][data-n]')){st.a[+t.dataset.n]=+t.value;var left=0;for(var m=st.page*PAGE;m<(st.page+1)*PAGE;m++){if(st.a[m]===null)left++;}var ms=app.querySelector('.msg');if(ms&&!left)ms.innerHTML='';}});
+  app.addEventListener('click',function(e){var b=e.target.closest('button[data-q]');if(!b)return;var a=b.dataset.q;
+    if(a==='start'){st.stage='quiz';st.page=0;render();scrollTop();}
+    else if(a==='prev'){if(st.page===0){st.stage='intro';}else{st.page--;}st.msg=false;render();scrollTop();}
+    else if(a==='next'){var left=false;for(var m=st.page*PAGE;m<(st.page+1)*PAGE;m++){if(st.a[m]===null)left=true;}
+      if(left){st.msg=true;render();var f=app.querySelector('fieldset input:not(:checked)');var first=null;app.querySelectorAll('fieldset').forEach(function(fs){if(!first&&!fs.querySelector('input:checked'))first=fs;});if(first){first.scrollIntoView({block:'center',behavior:'smooth'});}return;}
+      st.msg=false;if(st.page===PAGES-1){st.stage='result';}else{st.page++;}render();scrollTop();}
+    else if(a==='again'){st.stage='intro';st.page=0;st.a=new Array(TOTAL).fill(null);st.msg=false;render();scrollTop();}
+    else if(a==='print'){window.print();}
+    else if(a==='copy'){var txt=summary(),p=document.getElementById('q-copied');
+      function ok(){if(p)p.textContent=cur()==='nl'?'Gekopieerd.':'Copied.';}
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,function(){if(p)p.textContent=txt;});}else if(p){p.textContent=txt;}}
+  });
+  render();
 })();
 </script>
 
