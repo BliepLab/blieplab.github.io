@@ -1,0 +1,648 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>SoldeerLab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: bright lavender-white sheet, saturated signal colors, floating 3D mesh behind the hero, tilting white cards. Single light look by design. */
+:root{
+  --bg:#f7f6ff;
+  --bg2:#ecebff;
+  --panel:rgba(255,255,255,.85);
+  --ink:#15172e;
+  --muted:#474a6b;
+  --line:rgba(21,23,46,.14);
+  --cyan:#1a8fe0;
+  --magenta:#5b48e8;
+  --lime:#f2a900;
+  --orange:#ee6a3c;
+  --violet:#0f9d8a;
+  --display:"Unbounded","Arial Black",sans-serif;
+  --body:"Manrope","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:var(--cyan)}
+h1,h2,h3{font-family:var(--display);line-height:1.02;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.4rem,7.2vw,5.4rem);font-weight:900;letter-spacing:-.02em}
+h2{font-size:clamp(1.8rem,4.4vw,3.2rem);font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:700;line-height:1.2}
+p{margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.grad{background:linear-gradient(95deg,var(--cyan),var(--magenta) 55%,var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent}
+.eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;display:inline-flex;align-items:center;gap:.5rem}
+.eyebrow::before{content:"";width:28px;height:2px;background:currentColor;box-shadow:0 0 10px currentColor}
+.tag{font-family:var(--mono);font-size:.7rem;padding:.2rem .55rem;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tag.c{color:var(--cyan);border-color:var(--cyan);box-shadow:0 0 12px rgba(60,207,255,.35)}
+.tag.m{color:var(--magenta);border-color:var(--magenta);box-shadow:0 0 12px rgba(91,72,232,.3)}
+.tag.l{color:var(--lime);border-color:var(--lime);box-shadow:0 0 12px rgba(255,210,63,.35)}
+.tag.o{color:var(--orange);border-color:var(--orange)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+[data-lang="nl"] [lang="en"]{display:none!important}
+[data-lang="en"] [lang="nl"]{display:none!important}
+
+/* ambient blobs */
+.blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blobs i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.28;will-change:transform;transform:translateZ(0)}
+.blobs i:nth-child(1){width:60vw;height:60vw;left:-20vw;top:-10vh;background:var(--violet)}
+.blobs i:nth-child(2){width:50vw;height:50vw;right:-15vw;top:30vh;background:var(--lime);opacity:.18}
+.blobs i:nth-child(3){width:45vw;height:45vw;left:20vw;bottom:-20vh;background:var(--cyan);opacity:.22}
+
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:rgba(247,246,255,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;gap:1rem;padding-block:.7rem;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:900;font-size:1.25rem;letter-spacing:.02em;display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--ink)}
+.brand b{width:30px;height:30px;border-radius:8px;background:conic-gradient(from 200deg,var(--cyan),var(--magenta),var(--orange),var(--cyan));box-shadow:0 4px 14px rgba(91,72,232,.4)}
+nav{display:flex;gap:.2rem 1.1rem;flex-wrap:wrap;margin-left:auto}
+nav a{font-weight:700;font-size:.9rem;text-decoration:none;color:var(--muted);padding:.2rem 0;border-bottom:2px solid transparent}
+nav a:hover,nav a:focus-visible{color:var(--ink);border-image:linear-gradient(90deg,var(--cyan),var(--magenta)) 1;outline:none}
+.langsw{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;padding:2px;background:#fff}
+.langsw button{font-family:var(--mono);font-size:.76rem;padding:.3rem .7rem;border:0;background:transparent;color:var(--muted);cursor:pointer;border-radius:999px}
+.langsw button[aria-pressed="true"]{background:linear-gradient(90deg,var(--cyan),var(--magenta));color:#fff;font-weight:600}
+.langsw button:focus-visible{outline:2px solid var(--lime)}
+
+/* hero */
+.hero{position:relative;padding-block:3rem 4rem;min-height:70vh;display:grid;align-items:center}
+#scene{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.hero .wrap{position:relative;z-index:1;display:grid;gap:1.2rem;max-width:1180px}
+.hero .glass{display:grid;gap:1.2rem;justify-items:start;padding:1.6rem 1.8rem;margin-inline:-1.8rem;border-radius:28px;background:rgba(247,246,255,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 0 0 1px rgba(255,255,255,.6) inset,0 20px 60px rgba(23,21,58,.08);max-width:760px}
+@media (max-width:820px){.hero .glass{margin-inline:0;padding:1.2rem}}
+.hero .lead{font-size:clamp(1.05rem,2vw,1.35rem);max-width:52ch;color:var(--muted);font-weight:500}
+.cta{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.6rem}
+.btn{font-family:var(--display);font-weight:700;font-size:.9rem;letter-spacing:.02em;padding:.8rem 1.4rem;border-radius:999px;border:2px solid transparent;background:linear-gradient(90deg,var(--cyan),var(--magenta));color:#fff;text-decoration:none;cursor:pointer;box-shadow:0 10px 30px rgba(91,72,232,.3);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(26,143,224,.4)}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--line);box-shadow:none}
+.btn.lime{background:linear-gradient(90deg,var(--lime),var(--orange));color:#17153a;box-shadow:0 10px 30px rgba(255,183,3,.35)}
+.btn:focus-visible{outline:2px solid var(--lime);outline-offset:3px}
+.hero .hint{font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.1em}
+
+/* ticker */
+.ticker{border-block:1px solid var(--line);background:var(--ink);color:#e9e6ff;overflow:hidden;white-space:nowrap;font-family:var(--mono);font-size:.8rem;padding-block:.55rem}
+.ticker span{display:inline-block;padding-inline:1.6rem}
+.ticker b{color:var(--lime);font-weight:600}
+@media (prefers-reduced-motion:no-preference){.ticker div{display:inline-block;animation:tick 40s linear infinite}@keyframes tick{to{transform:translateX(-50%)}}}
+
+/* sections */
+section{padding-block:5rem;position:relative}
+.sec-head{display:grid;gap:.8rem;max-width:66ch;margin-bottom:2.4rem}
+.sec-head p{color:var(--muted);font-size:1.08rem}
+
+/* 3D tilt cards */
+.grid{display:grid;gap:1.1rem;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));perspective:1200px}
+.card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:1.25rem;display:grid;gap:.6rem;align-content:start;min-width:0;transform-style:preserve-3d;transition:transform .12s ease-out,box-shadow .2s;box-shadow:0 8px 24px rgba(23,21,58,.06);overflow:hidden}
+.card::before{content:"";position:absolute;inset:-1px;border-radius:18px;padding:1px;background:linear-gradient(135deg,var(--c1,var(--cyan)),transparent 40%,transparent 60%,var(--c2,var(--magenta)));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.8;pointer-events:none}
+.card::after{content:"";position:absolute;width:160px;height:160px;border-radius:50%;background:var(--c1,var(--cyan));filter:blur(60px);opacity:.22;right:-40px;top:-40px;pointer-events:none}
+.card:hover{box-shadow:0 30px 60px rgba(23,21,58,.18)}
+.card>*{transform:translateZ(18px)}
+.card .meta{display:flex;gap:.4rem;flex-wrap:wrap}
+.card p{color:var(--muted);font-size:.93rem}
+.card .parts{font-family:var(--mono);font-size:.74rem;color:var(--violet);border-top:1px dashed var(--line);padding-top:.6rem;margin-top:.2rem;opacity:.9}
+.card .num{font-family:var(--display);font-weight:900;font-size:2.6rem;line-height:1;background:linear-gradient(180deg,var(--c1,var(--cyan)),var(--c2,var(--magenta)));-webkit-background-clip:text;background-clip:text;color:transparent}
+.card .cube{width:64px;height:64px;position:relative;transform-style:preserve-3d;margin-bottom:.2rem}
+@media (prefers-reduced-motion:no-preference){.card .cube{animation:spin 9s linear infinite}@keyframes spin{to{transform:rotateX(360deg) rotateY(360deg)}}}
+.cube i{position:absolute;inset:0;border:1.5px solid var(--c1,var(--cyan));background:color-mix(in srgb,var(--c1,var(--cyan)) 18%,#fff);box-shadow:0 0 14px color-mix(in srgb,var(--c1,var(--cyan)) 60%,transparent)}
+.cube i:nth-child(1){transform:translateZ(32px)}.cube i:nth-child(2){transform:rotateY(180deg) translateZ(32px)}.cube i:nth-child(3){transform:rotateY(90deg) translateZ(32px)}.cube i:nth-child(4){transform:rotateY(-90deg) translateZ(32px)}.cube i:nth-child(5){transform:rotateX(90deg) translateZ(32px)}.cube i:nth-child(6){transform:rotateX(-90deg) translateZ(32px)}
+.lvl{height:6px;border-radius:3px;background:rgba(23,21,58,.08);position:relative;overflow:hidden}
+.lvl i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--cyan),var(--magenta))}
+
+/* lora */
+.lora .wrap{display:grid;gap:2.5rem;grid-template-columns:1fr 1.1fr;align-items:start}
+.lora .wrap>*{min-width:0}
+.specs{display:grid;gap:.6rem}
+.specs div{display:grid;grid-template-columns:1fr auto;gap:1rem;padding:.75rem 1rem;border-radius:12px;background:#fff;border:1px solid var(--line);font-size:.9rem;align-items:center}
+.specs b{font-family:var(--mono);font-weight:600;color:var(--violet);text-align:right}
+.radar{position:relative;aspect-ratio:1/1;max-width:100%;border-radius:50%;background:radial-gradient(circle,rgba(31,182,255,.18),transparent 70%);display:grid;place-items:center;margin-top:1rem}
+.radar svg{width:100%;height:100%;max-width:100%}
+@media (prefers-reduced-motion:no-preference){.sweep{transform-origin:160px 160px;animation:sweep 3.5s linear infinite}@keyframes sweep{to{transform:rotate(360deg)}}.ping{animation:ping 2.5s ease-out infinite}@keyframes ping{0%{r:4;opacity:1}100%{r:60;opacity:0}}}
+
+/* tabs */
+.tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.6rem}
+.tabs button{font-family:var(--display);font-weight:700;font-size:.85rem;padding:.6rem 1.1rem;border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;cursor:pointer;transition:transform .15s}
+.tabs button:hover{transform:translateY(-2px);color:var(--ink)}
+.tabs button[aria-selected="true"]{background:linear-gradient(90deg,var(--lime),var(--orange));color:#17153a;border-color:transparent;box-shadow:0 8px 24px rgba(255,183,3,.4)}
+.tabs button:focus-visible{outline:2px solid var(--magenta);outline-offset:2px}
+.panel{display:grid;gap:1.4rem}
+.panel .intro{color:var(--muted);max-width:64ch;font-size:1.02rem}
+
+/* family */
+.roles{display:grid;gap:1.4rem;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-bottom:2.4rem;perspective:1200px}
+.role{position:relative;padding:1.4rem 1.3rem 1.3rem;border-radius:22px;color:#17153a;font-weight:700;display:grid;gap:.35rem;transform-style:preserve-3d;transition:transform .15s ease-out;min-height:230px;align-content:end;overflow:visible}
+.role::after{content:"";position:absolute;inset:0;border-radius:22px;transform:translateZ(-18px) translate(10px,14px);background:rgba(21,23,46,.18);filter:blur(2px);z-index:-1}
+.role small{font-family:var(--mono);font-weight:600;letter-spacing:.15em;font-size:.7rem;opacity:.8}
+.role b{font-family:var(--display);font-size:1.15rem;line-height:1.15}
+.role span{font-weight:500;font-size:.9rem;opacity:.9}
+.role>*{transform:translateZ(24px)}
+.role.a{background:linear-gradient(145deg,#ffc83d,#f2a900)}.role.b{background:linear-gradient(145deg,#3fa8ef,#1a8fe0);color:#fff}.role.c{background:linear-gradient(145deg,#7a68ff,#5b48e8);color:#fff}
+.role .obj{position:absolute;right:1.2rem;top:1.1rem;width:84px;height:84px;transform:translateZ(50px);transform-style:preserve-3d}
+@media (prefers-reduced-motion:no-preference){.pyr,.ring,.orbit{animation:spin3 10s linear infinite}@keyframes spin3{to{transform:rotateY(360deg) rotateX(360deg)}}}
+.pyr,.ring,.orbit{position:absolute;inset:0;transform-style:preserve-3d}
+.pyr i{position:absolute;left:12px;top:0;width:0;height:0;border-left:30px solid transparent;border-right:30px solid transparent;border-bottom:68px solid rgba(255,255,255,.85);transform-origin:50% 100%}
+.pyr i:nth-child(1){transform:translateZ(30px) rotateX(-28deg)}.pyr i:nth-child(2){transform:rotateY(90deg) translateZ(30px) rotateX(-28deg);border-bottom-color:rgba(255,255,255,.6)}.pyr i:nth-child(3){transform:rotateY(180deg) translateZ(30px) rotateX(-28deg);border-bottom-color:rgba(255,255,255,.45)}.pyr i:nth-child(4){transform:rotateY(-90deg) translateZ(30px) rotateX(-28deg);border-bottom-color:rgba(255,255,255,.7)}
+.ring i{position:absolute;inset:4px;border-radius:50%;border:9px solid rgba(255,255,255,.9)}
+.ring i:nth-child(2){transform:rotateY(60deg);border-color:rgba(255,255,255,.6)}.ring i:nth-child(3){transform:rotateY(120deg);border-color:rgba(255,255,255,.4)}
+.orbit i{position:absolute;width:30px;height:30px;border-radius:50%;background:#fff;top:27px;left:27px}
+.orbit i:nth-child(1){transform:translateX(-28px) translateZ(10px)}.orbit i:nth-child(2){transform:translateX(28px) translateZ(-10px);background:#ffc83d}
+.orbit u{position:absolute;inset:0;border-radius:50%;border:3px dashed rgba(255,255,255,.7);transform:rotateX(70deg)}
+.lora-stage{position:relative;height:340px;border-radius:24px;overflow:hidden;border:1px solid var(--line);margin-top:1.4rem;background:#0f1230;box-shadow:0 20px 50px rgba(23,21,58,.18)}
+#lora3d{width:100%;height:100%;display:block;cursor:grab}
+.lora-stage .cap,.art-stage .cap{position:absolute;left:1rem;bottom:1rem;font-family:var(--mono);font-size:.72rem;color:#9fe8ff;letter-spacing:.1em}
+
+/* art */
+.art{background:linear-gradient(180deg,transparent,rgba(91,72,232,.08) 30%,rgba(26,143,224,.08) 70%,transparent)}
+.art-stage{position:relative;height:420px;border-radius:24px;overflow:hidden;border:1px solid var(--line);margin-bottom:2rem;background:#07061a;box-shadow:0 20px 50px rgba(23,21,58,.18)}
+#art3d{width:100%;height:100%;display:block}
+
+/* commission */
+.commission .wrap{display:grid;gap:2.5rem;grid-template-columns:1fr 1fr;align-items:start}
+.commission .wrap>*{min-width:0}
+.uses{display:grid;gap:.9rem;grid-template-columns:1fr 1fr}
+.use{padding:1rem;border-radius:14px;background:#fff;border:1px solid var(--line);display:grid;gap:.3rem}
+.use .ic{font-size:1.6rem;line-height:1}
+.use b{font-size:.98rem}
+.use p{color:var(--muted);font-size:.86rem}
+.process{display:grid;gap:.5rem;margin-top:1.6rem;position:relative}
+.process>div{display:grid;grid-template-columns:2.8rem 1fr;gap:.6rem;font-size:.92rem;align-items:center}
+.process>div>div{display:block}
+.process>div>span{font-family:var(--display);font-weight:900;color:var(--magenta);font-size:1.3rem}
+form{background:#fff;border:1px solid var(--line);border-radius:22px;padding:1.5rem;display:grid;gap:.9rem;position:relative;overflow:hidden;box-shadow:0 20px 50px rgba(23,21,58,.08)}
+form::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 100% 0%,rgba(242,169,0,.12),transparent 50%),radial-gradient(circle at 0% 100%,rgba(26,143,224,.12),transparent 50%);pointer-events:none}
+form>*{position:relative}
+label{display:grid;gap:.3rem;font-size:.86rem;font-weight:700}
+input,select,textarea{font:inherit;font-weight:400;font-size:.95rem;padding:.6rem .8rem;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);width:100%}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--cyan);outline-offset:1px;border-color:var(--cyan)}
+textarea{min-height:110px;resize:vertical}
+.row2{display:grid;gap:.9rem;grid-template-columns:1fr 1fr}
+.note{font-size:.8rem;color:var(--muted)}
+.done{display:grid;gap:.6rem;border:1px solid var(--lime);background:rgba(255,183,3,.12);border-radius:12px;padding:.9rem}
+.done pre{font-family:var(--mono);font-size:.78rem;white-space:pre-wrap;margin:0;color:var(--ink)}
+.copybtn{justify-self:start}
+
+/* community */
+.sched{font-family:var(--mono);font-size:.78rem;color:var(--orange);letter-spacing:.05em}
+
+footer{padding-block:3rem;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-between}
+
+@media (max-width:820px){
+  .lora .wrap,.commission .wrap{grid-template-columns:1fr}
+  .row2,.uses{grid-template-columns:1fr}
+  section{padding-block:3.5rem}
+  .hero{min-height:auto}
+}
+</style>
+
+<div class="blobs" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#top"><b></b>SoldeerLab</a>
+    <nav aria-label="Main">
+      <a href="#lora">LoRa / Mesh</a>
+      <a href="#projecten"><span lang="nl">Projecten</span><span lang="en">Projects</span></a>
+      <a href="#familie"><span lang="nl">Familie</span><span lang="en">Family</span></a>
+      <a href="#art">Art</a>
+      <a href="#opdracht"><span lang="nl">Op maat</span><span lang="en">Custom</span></a>
+    </nav>
+    <div class="langsw" role="group" aria-label="Taal / Language">
+      <button type="button" id="lang-nl" data-set="nl" aria-pressed="true">NL</button>
+      <button type="button" id="lang-en" data-set="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="wrap"><div class="glass">
+    <span class="eyebrow" style="color:var(--orange)"><span lang="nl">Maker-lab · Haarlem &amp; de hele mesh</span><span lang="en">Maker lab · Haarlem &amp; the whole mesh</span></span>
+    <h1>
+      <span lang="nl">Solderen.<br>Flashen.<br><span class="grad">Wauw.</span></span>
+      <span lang="en">Solder.<br>Flash.<br><span class="grad">Wow.</span></span>
+    </h1>
+    <p class="lead">
+      <span lang="nl">Micro-elektronica die écht iets doet: van je eerste knipperende LED tot een LoRa-meshnetwerk over de hele stad, lichtkunst die ademt en slimme dingen die je met je kind bouwt.</span>
+      <span lang="en">Microelectronics that actually do something: from your first blinking LED to a LoRa mesh across the whole city, light art that breathes, and smart things you build with your kid.</span>
+    </p>
+    <div class="cta">
+      <a class="btn" href="#projecten"><span lang="nl">Kies je project</span><span lang="en">Pick your project</span></a>
+      <a class="btn lime" href="#lora"><span lang="nl">Start Meshtastic</span><span lang="en">Start Meshtastic</span></a>
+      <a class="btn ghost" href="#opdracht"><span lang="nl">Iets op maat?</span><span lang="en">Something custom?</span></a>
+    </div>
+    <p class="hint"><span lang="nl">↖ sleep met je muis door het netwerk</span><span lang="en">↖ drag your mouse through the network</span></p>
+  </div></div>
+</section>
+
+<div class="ticker" aria-hidden="true"><div>
+  <span>EU_868 · <b>869.4–869.65 MHz</b></span><span>LONG_FAST · <b>SF11 / BW250</b></span><span>+27 dBm ERP · <b>10 % duty</b></span><span>ESP32 · RP2040 · nRF52840</span><span>3.3 V logic · <b>5 µA sleep</b></span><span>WS2812B · <b>1200 px</b></span><span>KiCad 8 · 4-layer · 50 Ω CPWG</span><span>CERN-OHL-S</span>
+  <span>EU_868 · <b>869.4–869.65 MHz</b></span><span>LONG_FAST · <b>SF11 / BW250</b></span><span>+27 dBm ERP · <b>10 % duty</b></span><span>ESP32 · RP2040 · nRF52840</span><span>3.3 V logic · <b>5 µA sleep</b></span><span>WS2812B · <b>1200 px</b></span><span>KiCad 8 · 4-layer · 50 Ω CPWG</span><span>CERN-OHL-S</span>
+</div></div>
+
+<section class="lora" id="lora">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow" style="color:var(--cyan)">LoRa &amp; Meshtastic</span>
+      <h2 style="margin-top:.7rem"><span lang="nl">Een netwerk zonder simkaart, zonder internet, <span class="grad">zonder baas.</span></span><span lang="en">A network with no SIM, no internet, <span class="grad">no boss.</span></span></h2>
+      <p style="color:var(--muted);margin-top:1rem;max-width:56ch;font-size:1.05rem">
+        <span lang="nl">Meshtastic maakt van goedkope LoRa-radio's een mesh: berichten hoppen van node naar node, kilometers ver. Wij helpen met je eerste node, de antenne, de juiste regio en het uitrollen van een buurt- of stadsmesh.</span>
+        <span lang="en">Meshtastic turns cheap LoRa radios into a mesh: messages hop node to node for kilometres. We help with your first node, the antenna, the right region and growing a neighbourhood or city mesh.</span>
+      </p>
+      <div class="lora-stage"><canvas id="lora3d" aria-hidden="true"></canvas><div class="cap"><span lang="nl">LIVE · 869 MHz propagatie · sleep om te draaien</span><span lang="en">LIVE · 869 MHz propagation · drag to rotate</span></div></div>
+    </div>
+    <div style="display:grid;gap:1.1rem">
+      <div class="specs">
+        <div><span lang="nl">Frequentieband (NL/EU)</span><span lang="en">Frequency band (NL/EU)</span><b>EU_868</b></div>
+        <div><span lang="nl">Max. zendvermogen</span><span lang="en">Max. TX power</span><b>+27 dBm · 10 %</b></div>
+        <div><span lang="nl">Typisch bereik stad / zichtlijn</span><span lang="en">Typical range urban / line of sight</span><b>1–3 km / 40 km</b></div>
+        <div><span lang="nl">Batterij nRF52-node</span><span lang="en">Battery, nRF52 node</span><b>2–4 wk · 18650</b></div>
+      </div>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <article class="card" style="--c1:var(--cyan);--c2:var(--lime)"><div class="meta"><span class="tag c">Beginner</span><span class="tag">2 h · €40</span></div><h3><span lang="nl">Je eerste node</span><span lang="en">Your first node</span></h3><p><span lang="nl">Flashen in de browser, EU_868, antenne-check en je eerste bericht dwars door Haarlem.</span><span lang="en">Flash in the browser, EU_868, antenna check and your first message across Haarlem.</span></p><div class="parts">Heltec V3 · T-Beam · RAK WisBlock</div></article>
+        <article class="card" style="--c1:var(--lime);--c2:var(--orange)"><div class="meta"><span class="tag l">Weekend</span></div><h3><span lang="nl">Solar-router op het dak</span><span lang="en">Solar router on the roof</span></h3><p><span lang="nl">Zelfvoorzienende ROUTER met 5 W-paneel en IP67-doos die een hele wijk dekt.</span><span lang="en">Self-sufficient ROUTER with 5 W panel and IP67 box covering a whole district.</span></p><div class="parts">RAK4631 · LiFePO4 · 5 dBi N-female</div></article>
+        <article class="card" style="--c1:var(--magenta);--c2:var(--violet)"><div class="meta"><span class="tag m">Advanced</span></div><h3><span lang="nl">Telemetrie zonder internet</span><span lang="en">Telemetry without internet</span></h3><p><span lang="nl">Slootpeil, kas, boot-GPS → MQTT-bridge → Grafana.</span><span lang="en">Ditch level, greenhouse, boat GPS → MQTT bridge → Grafana.</span></p><div class="parts">BME280 · JSN-SR04T · Pi gateway</div></article>
+        <article class="card" style="--c1:var(--orange);--c2:var(--magenta)"><div class="meta"><span class="tag o">Expert</span></div><h3><span lang="nl">Eigen firmware-module</span><span lang="en">Your own firmware module</span></h3><p><span lang="nl">PlatformIO, MeshModule, protobuf, eigen kanaal. Met code-review.</span><span lang="en">PlatformIO, MeshModule, protobuf, custom channel. With code review.</span></p><div class="parts">C++ · nanopb · firmware fork</div></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projecten">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--violet)"><span lang="nl">Projecten per niveau</span><span lang="en">Projects by level</span></span>
+      <h2><span lang="nl">Van 6 jaar tot <span class="grad">firmware-hacker.</span></span><span lang="en">From age 6 to <span class="grad">firmware hacker.</span></span></h2>
+      <p><span lang="nl">Elk project heeft een onderdelenlijst, een tijd en een resultaat dat je thuis blijft gebruiken. Kies je groep.</span><span lang="en">Every project has a parts list, a time estimate and a result you'll keep using at home. Pick your group.</span></p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Level">
+      <button role="tab" id="tab-kids" aria-selected="true" aria-controls="p-kids" data-tab="kids">6–9</button>
+      <button role="tab" id="tab-tweens" aria-selected="false" aria-controls="p-tweens" data-tab="tweens">10–13</button>
+      <button role="tab" id="tab-teens" aria-selected="false" aria-controls="p-teens" data-tab="teens">14–17</button>
+      <button role="tab" id="tab-adults" aria-selected="false" aria-controls="p-adults" data-tab="adults"><span lang="nl">Volwassen starters</span><span lang="en">Adult starters</span></button>
+      <button role="tab" id="tab-pro" aria-selected="false" aria-controls="p-pro" data-tab="pro"><span lang="nl">Gevorderd &amp; expert</span><span lang="en">Advanced &amp; expert</span></button>
+    </div>
+
+    <div class="panel" id="p-kids" role="tabpanel" aria-labelledby="tab-kids">
+      <p class="intro"><span lang="nl">Geen soldeerbout, wel echte stroom. Breadboards, krokodillenklemmen, grote onderdelen. Samen met een volwassene.</span><span lang="en">No soldering iron, but real current. Breadboards, alligator clips, big parts. Together with an adult.</span></p>
+      <div class="grid">
+        <article class="card" style="--c1:var(--lime);--c2:var(--cyan)"><div class="cube"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="meta"><span class="tag">30 min · €8</span></div><h3><span lang="nl">Wenskaart die oplicht</span><span lang="en">Light-up greeting card</span></h3><p><span lang="nl">Kopertape, knoopcel, LED: je eerste gesloten stroomkring, in een kaart voor oma.</span><span lang="en">Copper tape, coin cell, LED: your first closed circuit, in a card for grandma.</span></p><div class="parts">CR2032 · 5 mm LED · copper tape</div><div class="lvl"><i style="width:15%"></i></div></article>
+        <article class="card" style="--c1:var(--orange);--c2:var(--lime)"><div class="meta"><span class="tag">45 min · €12</span></div><h3><span lang="nl">Citroenbatterij-klok</span><span lang="en">Lemon battery clock</span></h3><p><span lang="nl">Vier citroenen, zink en koper. Meet hoeveel volt fruit geeft en laat een klokje lopen.</span><span lang="en">Four lemons, zinc and copper. Measure how many volts fruit makes and run a clock.</span></p><div class="parts">4× lemon · Zn/Cu · LCD clock</div><div class="lvl"><i style="width:20%"></i></div></article>
+        <article class="card" style="--c1:var(--magenta);--c2:var(--orange)"><div class="meta"><span class="tag">1 h · €15</span></div><h3>Vibrobot</h3><p><span lang="nl">Tandenborstelkop + trilmotor + batterij = robotje dat over tafel danst.</span><span lang="en">Toothbrush head + vibration motor + battery = a little robot dancing across the table.</span></p><div class="parts">pager motor · LR44 · foam tape</div><div class="lvl"><i style="width:20%"></i></div></article>
+        <article class="card" style="--c1:var(--cyan);--c2:var(--violet)"><div class="meta"><span class="tag">1.5 h · €18</span></div><h3><span lang="nl">Nachtlampje dat zelf aangaat</span><span lang="en">Night light that turns itself on</span></h3><p><span lang="nl">Lichtsensor + transistor: aan als het donker wordt. Je eerste automatische schakeling.</span><span lang="en">Light sensor + transistor: on when it gets dark. Your first automatic circuit.</span></p><div class="parts">LDR · BC547 · 10 kΩ</div><div class="lvl"><i style="width:30%"></i></div></article>
+      </div>
+    </div>
+
+    <div class="panel" id="p-tweens" role="tabpanel" aria-labelledby="tab-tweens" hidden>
+      <p class="intro"><span lang="nl">Eerste microcontroller, eerste code. Blokprogrammeren of simpele Arduino-sketches, en leren solderen.</span><span lang="en">First microcontroller, first code. Block programming or simple Arduino sketches, and learning to solder.</span></p>
+      <div class="grid">
+        <article class="card" style="--c1:var(--cyan);--c2:var(--magenta)"><div class="num">7</div><div class="meta"><span class="tag">2 h · €20</span></div><h3><span lang="nl">Dobbelsteen met 7 LED's</span><span lang="en">Seven-LED dice</span></h3><p><span lang="nl">Knop, zeven LED's, Arduino Nano: random getallen en je eerste soldeerwerk.</span><span lang="en">Button, seven LEDs, Arduino Nano: random numbers and your first soldering.</span></p><div class="parts">Nano · 7× LED · perfboard</div><div class="lvl"><i style="width:35%"></i></div></article>
+        <article class="card" style="--c1:var(--lime);--c2:var(--cyan)"><div class="meta"><span class="tag">3 h · €25</span></div><h3><span lang="nl">Plantenwachter</span><span lang="en">Plant guardian</span></h3><p><span lang="nl">Bodemvochtsensor + piezo: de plant piept als hij dorst heeft. Daarna een pompje erbij.</span><span lang="en">Soil sensor + piezo: the plant beeps when thirsty. Then add a tiny pump.</span></p><div class="parts">capacitive sensor · ESP32-C3 · 5 V pump</div><div class="lvl"><i style="width:40%"></i></div></article>
+        <article class="card" style="--c1:var(--orange);--c2:var(--magenta)"><div class="meta"><span class="tag">3 h · €30</span></div><h3><span lang="nl">Lijnvolgrobot</span><span lang="en">Line-following robot</span></h3><p><span lang="nl">Twee IR-sensoren, twee motoren, één als-dan-regel. Parcours van zwarte tape.</span><span lang="en">Two IR sensors, two motors, one if-then rule. A track made of black tape.</span></p><div class="parts">2× TCRT5000 · L298N · 2× TT motor</div><div class="lvl"><i style="width:45%"></i></div></article>
+        <article class="card" style="--c1:var(--cyan);--c2:var(--lime)"><div class="meta"><span class="tag c">LoRa</span><span class="tag">2 h</span></div><h3><span lang="nl">Geheime berichten zonder wifi</span><span lang="en">Secret messages without Wi-Fi</span></h3><p><span lang="nl">Twee Meshtastic-nodes, eigen versleuteld kanaal: chatten met je vriend aan de andere kant van het park.</span><span lang="en">Two Meshtastic nodes, private encrypted channel: chat with your friend across the park.</span></p><div class="parts">2× Heltec V3 · AES-256 key</div><div class="lvl"><i style="width:35%"></i></div></article>
+      </div>
+    </div>
+
+    <div class="panel" id="p-teens" role="tabpanel" aria-labelledby="tab-teens" hidden>
+      <p class="intro"><span lang="nl">Echte projecten met echte code. ESP32, sensoren, 3D-printen en je eigen printplaat in KiCad.</span><span lang="en">Real projects with real code. ESP32, sensors, 3D printing and your own PCB in KiCad.</span></p>
+      <div class="grid">
+        <article class="card" style="--c1:var(--magenta);--c2:var(--cyan)"><div class="num">9</div><div class="meta"><span class="tag">1 day · €35</span></div><h3><span lang="nl">Macro-pad voor je pc</span><span lang="en">Macro pad for your PC</span></h3><p><span lang="nl">Negen mechanische toetsen, RP2040, CircuitPython, eigen keycaps uit de printer.</span><span lang="en">Nine mechanical switches, RP2040, CircuitPython, custom keycaps from the printer.</span></p><div class="parts">Pico · 9× MX · KiCad PCB</div><div class="lvl"><i style="width:55%"></i></div></article>
+        <article class="card" style="--c1:var(--lime);--c2:var(--orange)"><div class="meta"><span class="tag">1 day · €40</span></div><h3><span lang="nl">CO₂-stoplicht voor het lokaal</span><span lang="en">CO₂ traffic light for the classroom</span></h3><p><span lang="nl">Echte NDIR-sensor, kleurenring, webpagina met grafiek. 800 ppm geel, 1200 rood.</span><span lang="en">Real NDIR sensor, colour ring, web page with a chart. 800 ppm amber, 1200 red.</span></p><div class="parts">SCD40 · ESP32 · 12× WS2812B</div><div class="lvl"><i style="width:55%"></i></div></article>
+        <article class="card" style="--c1:var(--cyan);--c2:var(--lime)"><div class="meta"><span class="tag c">LoRa</span><span class="tag">2 days</span></div><h3><span lang="nl">Fietstracker met Meshtastic</span><span lang="en">Bike tracker with Meshtastic</span></h3><p><span lang="nl">GPS-node in het frame, positie elke 5 min op de mesh, kaart op je telefoon. Geen abonnement.</span><span lang="en">GPS node in the frame, position every 5 min on the mesh, map on your phone. No subscription.</span></p><div class="parts">T-Beam · NEO-6M · 18650</div><div class="lvl"><i style="width:60%"></i></div></article>
+        <article class="card" style="--c1:var(--orange);--c2:var(--magenta)"><div class="meta"><span class="tag">2 days · €50</span></div><h3><span lang="nl">Handheld retro-console</span><span lang="en">Handheld retro console</span></h3><p><span lang="nl">ESP32-S3, 2,8" TFT, zes knoppen en een eigen spel in C++. Behuizing ontwerp je zelf.</span><span lang="en">ESP32-S3, 2.8" TFT, six buttons and your own game in C++. Design the case yourself.</span></p><div class="parts">ILI9341 · LiPo · TP4056</div><div class="lvl"><i style="width:65%"></i></div></article>
+      </div>
+    </div>
+
+    <div class="panel" id="p-adults" role="tabpanel" aria-labelledby="tab-adults" hidden>
+      <p class="intro"><span lang="nl">Nooit gesoldeerd, wel nieuwsgierig? Projecten die een echt probleem in huis oplossen, in één avond of weekend.</span><span lang="en">Never soldered, but curious? Projects that solve a real problem at home, in one evening or weekend.</span></p>
+      <div class="grid">
+        <article class="card" style="--c1:var(--lime);--c2:var(--cyan)"><div class="num">P1</div><div class="meta"><span class="tag">1 evening · €22</span></div><h3><span lang="nl">Slimme-meter-uitlezer</span><span lang="en">Smart meter reader</span></h3><p><span lang="nl">ESP32 aan de P1-poort: live verbruik, gas en teruglevering in Home Assistant.</span><span lang="en">ESP32 on the P1 port: live consumption, gas and feed-in in Home Assistant.</span></p><div class="parts">ESP32 · RJ12 · ESPHome DSMR</div><div class="lvl"><i style="width:40%"></i></div></article>
+        <article class="card" style="--c1:var(--cyan);--c2:var(--violet)"><div class="meta"><span class="tag">1 evening · €18</span></div><h3><span lang="nl">Luchtkwaliteit in de slaapkamer</span><span lang="en">Bedroom air quality</span></h3><p><span lang="nl">Temperatuur, vocht en CO₂ op e-paper dat maanden op batterij werkt.</span><span lang="en">Temperature, humidity and CO₂ on e-paper that runs for months on battery.</span></p><div class="parts">SHT40 · SCD41 · 2.9" e-paper</div><div class="lvl"><i style="width:45%"></i></div></article>
+        <article class="card" style="--c1:var(--magenta);--c2:var(--orange)"><div class="meta"><span class="tag">Weekend · €30</span></div><h3><span lang="nl">Regenton op je telefoon</span><span lang="en">Rain barrel on your phone</span></h3><p><span lang="nl">Ultrasone sensor in het deksel; melding als de ton bijna leeg is of overloopt.</span><span lang="en">Ultrasonic sensor in the lid; alert when the barrel is nearly empty or overflowing.</span></p><div class="parts">JSN-SR04T · IP65 box · MQTT</div><div class="lvl"><i style="width:45%"></i></div></article>
+        <article class="card" style="--c1:var(--cyan);--c2:var(--lime)"><div class="meta"><span class="tag c">LoRa</span><span class="tag">Weekend</span></div><h3><span lang="nl">Mesh voor je wandel- of zeilclub</span><span lang="en">Mesh for your hiking or sailing club</span></h3><p><span lang="nl">Vier nodes, één kanaal, positie delen op het IJsselmeer of de Veluwe waar geen bereik is.</span><span lang="en">Four nodes, one channel, position sharing on the IJsselmeer or Veluwe where there's no coverage.</span></p><div class="parts">4× T-Echo · offline tiles</div><div class="lvl"><i style="width:40%"></i></div></article>
+      </div>
+    </div>
+
+    <div class="panel" id="p-pro" role="tabpanel" aria-labelledby="tab-pro" hidden>
+      <p class="intro"><span lang="nl">Voor wie al een lab heeft. Eigen PCB's, RF-metingen, register-niveau firmware, conferentie-waardig.</span><span lang="en">For people who already own a lab. Custom PCBs, RF measurements, register-level firmware, conference-worthy.</span></p>
+      <div class="grid">
+        <article class="card" style="--c1:var(--cyan);--c2:var(--magenta)"><div class="num">1.5</div><div class="meta"><span class="tag c">RF</span></div><h3><span lang="nl">Antenne-tuning met NanoVNA</span><span lang="en">Antenna tuning with a NanoVNA</span></h3><p><span lang="nl">SWR &lt; 1.5 op 869 MHz, ground planes, coax-verlies en waarom de meegeleverde antenne op 915 staat.</span><span lang="en">SWR &lt; 1.5 at 869 MHz, ground planes, coax loss and why the bundled antenna is cut for 915.</span></p><div class="parts">NanoVNA-H4 · RG316 · ¼ λ GP</div><div class="lvl"><i style="width:80%"></i></div></article>
+        <article class="card" style="--c1:var(--lime);--c2:var(--cyan)"><div class="num">4L</div><div class="meta"><span class="tag l">PCB</span></div><h3><span lang="nl">Eigen nRF52840 + SX1262 board</span><span lang="en">Custom nRF52840 + SX1262 board</span></h3><p><span lang="nl">Meshtastic-compatibel van schema tot reflow: 50 Ω trace, matching network, UF2-bootloader.</span><span lang="en">Meshtastic-compatible from schematic to reflow: 50 Ω trace, matching network, UF2 bootloader.</span></p><div class="parts">KiCad 8 · 0402 · hotplate</div><div class="lvl"><i style="width:95%"></i></div></article>
+        <article class="card" style="--c1:var(--orange);--c2:var(--lime)"><div class="num">5µA</div><div class="meta"><span class="tag o">Power</span></div><h3><span lang="nl">Sensor-node op 5 µA slaapstroom</span><span lang="en">Sensor node at 5 µA sleep</span></h3><p><span lang="nl">Jaren op één CR123A: PPK2-profiling, RTC-wake en wat de LDO écht kost.</span><span lang="en">Years on one CR123A: PPK2 profiling, RTC wake and what the LDO really costs.</span></p><div class="parts">PPK2 · TPS7A02 · LoRaWAN OTAA</div><div class="lvl"><i style="width:85%"></i></div></article>
+        <article class="card" style="--c1:var(--magenta);--c2:var(--violet)"><div class="num">8HP</div><div class="meta"><span class="tag m">FPGA</span></div><h3><span lang="nl">Eurorack-module met iCE40</span><span lang="en">Eurorack module with an iCE40</span></h3><p><span lang="nl">Wavetable-oscillator in Verilog, 12-bit DAC, CV op ±5 V, geanodiseerd front.</span><span lang="en">Wavetable oscillator in Verilog, 12-bit DAC, CV at ±5 V, anodised front panel.</span></p><div class="parts">iCE40UP5K · MCP4922 · yosys</div><div class="lvl"><i style="width:90%"></i></div></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="family" id="familie">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--orange)"><span lang="nl">Familieprojecten · ouders + kinderen</span><span lang="en">Family projects · parents + kids</span></span>
+      <h2><span lang="nl">Slimme dingen voor thuis, <span class="grad">samen gebouwd.</span></span><span lang="en">Smart things for home, <span class="grad">built together.</span></span></h2>
+      <p><span lang="nl">Elk project verdeelt het werk: iets voor het kind, iets voor de ouder, en een moment waarop je het samen aanzet.</span><span lang="en">Every project splits the work: something for the child, something for the parent, and a moment when you switch it on together.</span></p>
+    </div>
+    <div class="roles">
+      <div class="role a">
+        <div class="obj"><div class="pyr"><i></i><i></i><i></i><i></i></div></div>
+        <small>01 · <span lang="nl">KIND</span><span lang="en">CHILD</span></small>
+        <b><span lang="nl">Ontwerpt en bouwt</span><span lang="en">Designs and builds</span></b>
+        <span><span lang="nl">Kleuren, knoppen, behuizing, de regels.</span><span lang="en">Colours, buttons, case, the rules.</span></span>
+      </div>
+      <div class="role b">
+        <div class="obj"><div class="ring"><i></i><i></i><i></i></div></div>
+        <small>02 · <span lang="nl">OUDER</span><span lang="en">PARENT</span></small>
+        <b><span lang="nl">Soldeert en sluit aan</span><span lang="en">Solders and connects</span></b>
+        <span><span lang="nl">Netspanning, wifi, montage aan de muur.</span><span lang="en">Mains, Wi-Fi, mounting on the wall.</span></span>
+      </div>
+      <div class="role c">
+        <div class="obj"><div class="orbit"><i></i><i></i><u></u></div></div>
+        <small>03 · <span lang="nl">SAMEN</span><span lang="en">TOGETHER</span></small>
+        <b><span lang="nl">Testen en verbeteren</span><span lang="en">Test and improve</span></b>
+        <span><span lang="nl">Versie 2 is altijd beter.</span><span lang="en">Version 2 is always better.</span></span>
+      </div>
+    </div>
+    <div class="grid">
+      <article class="card" style="--c1:var(--lime);--c2:var(--cyan)"><div class="meta"><span class="tag l">6+</span><span class="tag">2 h</span></div><h3><span lang="nl">Tandenpoets-timer</span><span lang="en">Tooth-brushing timer</span></h3><p><span lang="nl">LED-ring die in twee minuten uitgaat, met een deuntje op het eind. Kind kiest kleuren en liedje.</span><span lang="en">LED ring that turns off over two minutes, with a tune at the end. The child picks colours and song.</span></p><div class="parts">ESP32-C3 · 16× WS2812B · piezo</div></article>
+      <article class="card" style="--c1:var(--cyan);--c2:var(--magenta)"><div class="meta"><span class="tag c">8+</span><span class="tag">Weekend</span></div><h3><span lang="nl">Wie-is-er-thuis-bord</span><span lang="en">Who-is-home board</span></h3><p><span lang="nl">Een lampje per gezinslid, aangestuurd door wie op de wifi zit. Niets verlaat het huis.</span><span lang="en">One light per family member, driven by who's on the Wi-Fi. Nothing leaves the house.</span></p><div class="parts">ESP32 · Home Assistant · plywood</div></article>
+      <article class="card" style="--c1:var(--orange);--c2:var(--lime)"><div class="meta"><span class="tag o">8+</span><span class="tag">3 h</span></div><h3><span lang="nl">Huisdier-voerautomaat</span><span lang="en">Pet feeder</span></h3><p><span lang="nl">Servo, trechter, knop op de telefoon. Kind programmeert de tijden, ouder regelt de voeding.</span><span lang="en">Servo, hopper, button on the phone. The child programs the times, the parent handles power.</span></p><div class="parts">MG996R · 3D auger · 5 V 2 A</div></article>
+      <article class="card" style="--c1:var(--magenta);--c2:var(--cyan)"><div class="meta"><span class="tag m">10+</span><span class="tag">Weekend</span></div><h3><span lang="nl">Weerstation op het balkon</span><span lang="en">Balcony weather station</span></h3><p><span lang="nl">Temperatuur, regen, wind; scherm in de keuken met grafiek van de week.</span><span lang="en">Temperature, rain, wind; display in the kitchen with the week's chart.</span></p><div class="parts">BME280 · rain gauge · e-paper 4.2"</div></article>
+      <article class="card" style="--c1:var(--cyan);--c2:var(--lime)"><div class="meta"><span class="tag c">10+ · LoRa</span><span class="tag">2 h</span></div><h3><span lang="nl">Slimme brievenbus</span><span lang="en">Smart letterbox</span></h3><p><span lang="nl">Sensor in de klep stuurt een berichtje als de post er is. Met LoRa ook ver van huis.</span><span lang="en">A sensor in the flap sends a message when post arrives. With LoRa even far from the house.</span></p><div class="parts">reed switch · Meshtastic node</div></article>
+      <article class="card" style="--c1:var(--lime);--c2:var(--orange)"><div class="meta"><span class="tag l">12+</span><span class="tag">Weekend</span></div><h3><span lang="nl">Energie-dashboard voor het gezin</span><span lang="en">Family energy dashboard</span></h3><p><span lang="nl">Welke kamer verbruikt het meest? Kind bouwt de pagina, ouder sluit de stekkers aan.</span><span lang="en">Which room uses the most? The child builds the page, the parent connects the plugs.</span></p><div class="parts">P1 · 4× Tasmota plugs · wall tablet</div></article>
+    </div>
+  </div>
+</section>
+
+<section class="art" id="art">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--orange)"><span lang="nl">Elektronica voor kunstobjecten</span><span lang="en">Electronics for art objects</span></span>
+      <h2><span lang="nl">Licht, beweging en geluid die <span class="grad">op mensen reageren.</span></span><span lang="en">Light, motion and sound that <span class="grad">react to people.</span></span></h2>
+      <p><span lang="nl">Interactieve installaties, kinetische sculpturen, generatieve lichtkunst. Van schets tot object dat maanden onbeheerd in een galerie draait.</span><span lang="en">Interactive installations, kinetic sculptures, generative light art. From sketch to an object that runs unattended in a gallery for months.</span></p>
+    </div>
+    <div class="art-stage"><canvas id="art3d" aria-hidden="true"></canvas><div class="cap"><span lang="nl">LIVE · generatieve lichtsculptuur · beweeg je muis</span><span lang="en">LIVE · generative light sculpture · move your mouse</span></div></div>
+    <div class="grid">
+      <article class="card" style="--c1:var(--magenta);--c2:var(--cyan)"><div class="num">1200</div><div class="meta"><span class="tag m">LED</span></div><h3><span lang="nl">Ademende wand</span><span lang="en">Breathing wall</span></h3><p><span lang="nl">1.200 LED's achter melkglas; Perlin-ruis die vertraagt als er iemand voor staat.</span><span lang="en">1,200 LEDs behind frosted acrylic; Perlin noise that slows when someone stands in front.</span></p><div class="parts">ESP32-S3 · WS2814 24 V · LD2410 mmWave</div></article>
+      <article class="card" style="--c1:var(--orange);--c2:var(--magenta)"><div class="num">36</div><div class="meta"><span class="tag o">Kinetic</span></div><h3><span lang="nl">Pendelveld</span><span lang="en">Pendulum field</span></h3><p><span lang="nl">36 slingers op stappenmotoren vormen golven; het ritme komt van een microfoon in de ruimte.</span><span lang="en">36 pendulums on steppers forming waves; the rhythm comes from a mic in the room.</span></p><div class="parts">NEMA11 · TMC2209 · CAN bus</div></article>
+      <article class="card" style="--c1:var(--lime);--c2:var(--cyan)"><div class="num">♪</div><div class="meta"><span class="tag l">Sound</span></div><h3><span lang="nl">Zingende planten</span><span lang="en">Singing plants</span></h3><p><span lang="nl">Capacitieve aanraking op echte planten stuurt een synthesizer. Elk blad een toon.</span><span lang="en">Capacitive touch on real plants drives a synthesizer. Every leaf a note.</span></p><div class="parts">MPR121 · Daisy Seed · 40 W amp</div></article>
+      <article class="card" style="--c1:var(--cyan);--c2:var(--lime)"><div class="num">12</div><div class="meta"><span class="tag c">LoRa</span></div><h3><span lang="nl">Lantaarns die met elkaar praten</span><span lang="en">Lanterns that talk to each other</span></h3><p><span lang="nl">Twaalf lantaarns op een plein, via LoRa-mesh, geven een lichtgolf door als je voorbijloopt.</span><span lang="en">Twelve lanterns on a square, linked by LoRa mesh, pass a wave of light along as you walk by.</span></p><div class="parts">nRF52 + SX1262 · PIR · solar</div></article>
+      <article class="card" style="--c1:var(--violet);--c2:var(--magenta)"><div class="num">30</div><div class="meta"><span class="tag">E-paper</span></div><h3><span lang="nl">Gedichtenmuur</span><span lang="en">Poetry wall</span></h3><p><span lang="nl">Dertig e-paper schermen, elk uur een nieuwe regel, getypt door bezoekers bij de ingang.</span><span lang="en">Thirty e-paper screens, a new line every hour, typed by visitors at the entrance.</span></p><div class="parts">30× 7.5" e-paper · RS-485</div></article>
+      <article class="card" style="--c1:var(--orange);--c2:var(--lime)"><div class="num">☀</div><div class="meta"><span class="tag o">Mechanical</span></div><h3><span lang="nl">Zonnewijzer met laser</span><span lang="en">Laser sundial</span></h3><p><span lang="nl">Een gimbal volgt de echte zonpositie (ook bij bewolking) en projecteert de tijd op de vloer.</span><span lang="en">A gimbal follows the real sun position (even when cloudy) and projects the time onto the floor.</span></p><div class="parts">2× stepper · GPS + RTC · class 2 laser</div></article>
+    </div>
+  </div>
+</section>
+
+<section class="commission" id="opdracht">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow" style="color:var(--cyan)"><span lang="nl">Private opdrachten</span><span lang="en">Private commissions</span></span>
+      <h2 style="margin-top:.7rem"><span lang="nl">Een slim object op maat <span class="grad">voor jouw ruimte.</span></span><span lang="en">A custom smart object <span class="grad">for your space.</span></span></h2>
+      <p style="color:var(--muted);margin-block:1rem 1.6rem;max-width:54ch;font-size:1.02rem"><span lang="nl">Eenmalige interactieve objecten voor winkels, bedrijven, musea en kunstenaars. Inclusief CE-conforme voeding, documentatie en onderhoud.</span><span lang="en">One-off interactive objects for shops, companies, museums and artists. Including CE-compliant power, documentation and maintenance.</span></p>
+      <div class="uses">
+        <div class="use"><div class="ic">🪟</div><b><span lang="nl">Etalages</span><span lang="en">Shop windows</span></b><p><span lang="nl">Displays die reageren op voorbijgangers, spots die aangaan bij aandacht, dag/nachtprogramma's.</span><span lang="en">Displays that react to passers-by, spots that light up on attention, day/night programmes.</span></p></div>
+        <div class="use"><div class="ic">📣</div><b><span lang="nl">Reclame &amp; beurzen</span><span lang="en">Advertising &amp; trade shows</span></b><p><span lang="nl">Tellers, interactieve demo's, lichtobjecten met je logo die in een koffer meegaan.</span><span lang="en">Counters, interactive demos, light objects with your logo that travel in a case.</span></p></div>
+        <div class="use"><div class="ic">🎨</div><b><span lang="nl">Kunsttentoonstellingen</span><span lang="en">Art exhibitions</span></b><p><span lang="nl">Technische realisatie voor kunstenaars: sensoriek, motoren, licht, en drie maanden betrouwbaarheid.</span><span lang="en">Technical realisation for artists: sensing, motors, light, and three months of reliability.</span></p></div>
+        <div class="use"><div class="ic">✨</div><b><span lang="nl">En verder</span><span lang="en">And beyond</span></b><p><span lang="nl">Horeca, scholen, escape rooms, woningen, boten. Moet het knipperen, bewegen of meten? Praat met ons.</span><span lang="en">Restaurants, schools, escape rooms, homes, boats. Needs to blink, move or measure? Talk to us.</span></p></div>
+      </div>
+      <div class="process">
+        <div><span>01</span><div><b><span lang="nl">Gesprek</span><span lang="en">Conversation</span></b> · <span lang="nl">gratis, 30 min, ter plekke of online</span><span lang="en">free, 30 min, on site or online</span></div></div>
+        <div><span>02</span><div><b><span lang="nl">Schets &amp; offerte</span><span lang="en">Sketch &amp; quote</span></b> · <span lang="nl">binnen 7 dagen, vaste prijs</span><span lang="en">within 7 days, fixed price</span></div></div>
+        <div><span>03</span><div><b>Prototype</b> · <span lang="nl">je ziet het werken vóór de definitieve bouw</span><span lang="en">you see it working before the final build</span></div></div>
+        <div><span>04</span><div><b><span lang="nl">Installatie &amp; nazorg</span><span lang="en">Installation &amp; aftercare</span></b> · <span lang="nl">12 maanden support</span><span lang="en">12 months of support</span></div></div>
+      </div>
+    </div>
+
+    <form id="inq" novalidate>
+      <h3 style="font-size:1.4rem"><span lang="nl">Vraag een offerte aan</span><span lang="en">Request a quote</span></h3>
+      <div class="row2">
+        <label><span lang="nl">Naam</span><span lang="en">Name</span><input id="f-name" name="name" type="text" autocomplete="name" required></label>
+        <label><span lang="nl">E-mail</span><span lang="en">Email</span><input id="f-email" name="email" type="email" autocomplete="email" required></label>
+      </div>
+      <label><span lang="nl">Organisatie (optioneel)</span><span lang="en">Organisation (optional)</span><input id="f-org" name="org" type="text" autocomplete="organization"></label>
+      <div class="row2">
+        <label><span lang="nl">Soort project</span><span lang="en">Project type</span><select id="f-type" name="type"></select></label>
+        <label><span lang="nl">Budget-indicatie</span><span lang="en">Budget indication</span>
+          <select id="f-budget" name="budget"><option value="<1k">&lt; €1.000</option><option value="1-5k">€1.000 – €5.000</option><option value="5-20k">€5.000 – €20.000</option><option value=">20k">&gt; €20.000</option><option value="?">?</option></select>
+        </label>
+      </div>
+      <label><span lang="nl">Gewenste datum</span><span lang="en">Target date</span><input id="f-date" name="date" type="date"></label>
+      <label><span lang="nl">Beschrijf je idee</span><span lang="en">Describe your idea</span><textarea id="f-msg" name="msg" required></textarea></label>
+      <button class="btn" type="submit"><span lang="nl">Verstuur aanvraag</span><span lang="en">Send request</span></button>
+      <p class="note"><span lang="nl">Of mail direct: <span class="mono">opdracht@soldeerlab.nl</span> · antwoord binnen 2 werkdagen.</span><span lang="en">Or email directly: <span class="mono">opdracht@soldeerlab.nl</span> · reply within 2 working days.</span></p>
+      <div class="done" id="done" hidden>
+        <b><span lang="nl">Klaar. Kopieer de samenvatting en stuur hem naar opdracht@soldeerlab.nl:</span><span lang="en">Ready. Copy the summary and send it to opdracht@soldeerlab.nl:</span></b>
+        <pre id="summary"></pre>
+        <button type="button" class="btn ghost copybtn" id="copy"><span lang="nl">Kopieer</span><span lang="en">Copy</span></button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="community" id="community">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--cyan)">Community</span>
+      <h2><span lang="nl">Kom langs <span class="grad">met je bordje.</span></span><span lang="en">Drop by <span class="grad">with your board.</span></span></h2>
+    </div>
+    <div class="grid">
+      <article class="card" style="--c1:var(--orange);--c2:var(--magenta)"><span class="sched"><span lang="nl">Elke dinsdag · 19:00–22:00</span><span lang="en">Every Tuesday · 19:00–22:00</span></span><h3><span lang="nl">Open werkplaats</span><span lang="en">Open workshop</span></h3><p><span lang="nl">Soldeerstations, oscilloscoop, 3D-printers en mensen die je vastgelopen project meekijken.</span><span lang="en">Soldering stations, a scope, 3D printers and people who'll look at your stuck project.</span></p></article>
+      <article class="card" style="--c1:var(--lime);--c2:var(--cyan)"><span class="sched"><span lang="nl">1e zaterdag · 10:00</span><span lang="en">1st Saturday · 10:00</span></span><h3><span lang="nl">Familie-ochtend</span><span lang="en">Family morning</span></h3><p><span lang="nl">Eén familieproject in één ochtend, materiaal inbegrepen. Max. 8 gezinnen.</span><span lang="en">One family project in one morning, materials included. Max. 8 families.</span></p></article>
+      <article class="card" style="--c1:var(--cyan);--c2:var(--violet)"><span class="sched"><span lang="nl">Laatste donderdag · 20:00</span><span lang="en">Last Thursday · 20:00</span></span><h3><span lang="nl">Mesh-avond</span><span lang="en">Mesh night</span></h3><p><span lang="nl">Bereikkaart bijwerken, nieuwe routers plannen, firmware-updates samen.</span><span lang="en">Update the coverage map, plan new routers, firmware updates together.</span></p></article>
+      <article class="card" style="--c1:var(--magenta);--c2:var(--lime)"><span class="sched">#soldeerlab</span><h3><span lang="nl">Op de mesh</span><span lang="en">On the mesh</span></h3><p><span lang="nl">Zet je node op het openbare kanaal en zeg hallo. We luisteren.</span><span lang="en">Put your node on the public channel and say hello. We're listening.</span></p></article>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 SoldeerLab · Haarlem · <span lang="nl">Alle projecten open-source (CERN-OHL-S)</span><span lang="en">All projects open source (CERN-OHL-S)</span></div>
+    <div class="mono">EU_868 · LONG_FAST · hop 3</div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  var root=document.documentElement;
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* language */
+  var typeOpts={nl:[["window","Etalage"],["ad","Reclame / beurs"],["art","Kunsttentoonstelling"],["home","Woning / slim huis"],["other","Anders"]],
+                en:[["window","Shop window"],["ad","Advertising / trade show"],["art","Art exhibition"],["home","Home / smart house"],["other","Other"]]};
+  var sel=document.getElementById('f-type');
+  function fillTypes(l){var cur=sel.value;sel.innerHTML='';typeOpts[l].forEach(function(o){var op=document.createElement('option');op.value=o[0];op.textContent=o[1];sel.appendChild(op);});if(cur)sel.value=cur;}
+  function setLang(l){root.setAttribute('data-lang',l);root.setAttribute('lang',l);
+    document.querySelectorAll('.langsw button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.set===l));});
+    fillTypes(l);try{localStorage.setItem('sl-lang',l);}catch(e){}}
+  var saved='nl';try{saved=localStorage.getItem('sl-lang')||'nl';}catch(e){}
+  setLang(saved==='en'?'en':'nl');
+  document.querySelectorAll('.langsw button').forEach(function(b){b.addEventListener('click',function(){setLang(b.dataset.set);});});
+
+  /* tabs */
+  var tabs=document.querySelectorAll('[role=tab]');
+  function showTab(id){tabs.forEach(function(t){var on=t.dataset.tab===id;t.setAttribute('aria-selected',String(on));document.getElementById('p-'+t.dataset.tab).hidden=!on;});}
+  tabs.forEach(function(t){t.addEventListener('click',function(){showTab(t.dataset.tab);});});
+  var h=(location.hash||'').replace('#','');
+  if(['kids','tweens','teens','adults','pro'].indexOf(h)>-1){showTab(h);setTimeout(function(){document.getElementById('projecten').scrollIntoView();},0);}
+
+  /* 3D tilt cards */
+  if(!reduce&&matchMedia('(hover:hover)').matches){
+    document.querySelectorAll('.card,.role').forEach(function(c){
+      c.addEventListener('mousemove',function(e){var r=c.getBoundingClientRect();var x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform='rotateY('+(x*14)+'deg) rotateX('+(-y*14)+'deg) translateZ(6px)';});
+      c.addEventListener('mouseleave',function(){c.style.transform='';});
+    });
+  }
+
+  /* form */
+  var form=document.getElementById('inq');
+  form.addEventListener('submit',function(e){e.preventDefault();
+    var g=function(id){return document.getElementById(id).value.trim();};
+    if(!g('f-name')||!g('f-email')||!g('f-msg')){form.reportValidity();return;}
+    var l=root.getAttribute('data-lang');
+    var s=(l==='nl'?'Offerteaanvraag SoldeerLab':'Quote request SoldeerLab')+'\n'+(l==='nl'?'Naam':'Name')+': '+g('f-name')+'\nE-mail: '+g('f-email')+'\n'+(l==='nl'?'Organisatie':'Organisation')+': '+(g('f-org')||'-')+'\n'+(l==='nl'?'Soort':'Type')+': '+sel.options[sel.selectedIndex].textContent+'\nBudget: '+g('f-budget')+'\n'+(l==='nl'?'Datum':'Date')+': '+(g('f-date')||'-')+'\n\n'+g('f-msg');
+    document.getElementById('summary').textContent=s;document.getElementById('done').hidden=false;});
+  document.getElementById('copy').addEventListener('click',function(){var t=document.getElementById('summary'),btn=this;
+    function selectIt(){var r=document.createRange();r.selectNodeContents(t);var s=getSelection();s.removeAllRanges();s.addRange(r);}
+    function ok(){btn.textContent='✓';setTimeout(function(){btn.innerHTML='<span lang="nl">Kopieer</span><span lang="en">Copy</span>';},1500);}
+    try{navigator.clipboard.writeText(t.textContent).then(ok,selectIt);}catch(e){selectIt();}});
+
+  if(!window.THREE)return;
+
+  /* ===== HERO: floating mesh network ===== */
+  (function(){
+    var cv=document.getElementById('scene'),hero=cv.parentElement;
+    var R=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));
+    var S=new THREE.Scene(),C=new THREE.PerspectiveCamera(55,1,.1,100);C.position.set(0,0,16);
+    var N=70,pos=[],vel=[],cols=[];
+    var pal=[new THREE.Color('#1a8fe0'),new THREE.Color('#5b48e8'),new THREE.Color('#f2a900'),new THREE.Color('#0f9d8a')];
+    for(var i=0;i<N;i++){pos.push(new THREE.Vector3((Math.random()-.5)*22,(Math.random()-.5)*12,(Math.random()-.5)*8));vel.push(new THREE.Vector3((Math.random()-.5)*.01,(Math.random()-.5)*.01,(Math.random()-.5)*.01));cols.push(pal[i%4]);}
+    var sph=new THREE.SphereGeometry(.14,12,12);
+    var nodes=pos.map(function(p,i){var m=new THREE.Mesh(sph,new THREE.MeshBasicMaterial({color:cols[i]}));m.position.copy(p);S.add(m);
+      var glow=new THREE.Mesh(new THREE.SphereGeometry(.4,10,10),new THREE.MeshBasicMaterial({color:cols[i],transparent:true,opacity:.22}));m.add(glow);return m;});
+    var lineGeo=new THREE.BufferGeometry(),maxL=N*6;
+    lineGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(maxL*6),3));
+    lineGeo.setAttribute('color',new THREE.BufferAttribute(new Float32Array(maxL*6),3));
+    var lines=new THREE.LineSegments(lineGeo,new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:.75}));S.add(lines);
+    var pk=[];for(var k=0;k<14;k++){var pm=new THREE.Mesh(new THREE.SphereGeometry(.09,8,8),new THREE.MeshBasicMaterial({color:'#17153a'}));S.add(pm);pk.push({m:pm,a:0,b:1,t:Math.random()});}
+    var torus=new THREE.Mesh(new THREE.TorusKnotGeometry(2.2,.5,160,16,2,3),new THREE.MeshBasicMaterial({color:'#5b48e8',wireframe:true,transparent:true,opacity:.18}));torus.position.set(7,2,-4);S.add(torus);
+    /* floating components */
+    S.add(new THREE.AmbientLight(0xffffff,.9));var dl=new THREE.DirectionalLight(0xffffff,.8);dl.position.set(5,8,6);S.add(dl);
+    var floaters=[];
+    function addF(geo,color,x,y,z,wire){var m=new THREE.Mesh(geo,wire?new THREE.MeshBasicMaterial({color:color,wireframe:true,transparent:true,opacity:.5}):new THREE.MeshStandardMaterial({color:color,metalness:.35,roughness:.35,flatShading:true}));m.position.set(x,y,z);m.userData={bx:x,by:y,bz:z,s:.3+Math.random()*.6,ph:Math.random()*6};S.add(m);floaters.push(m);return m;}
+    addF(new THREE.IcosahedronGeometry(1.1,0),'#1a8fe0',-10,3,-3);
+    addF(new THREE.OctahedronGeometry(.9,0),'#ee6a3c',-9,-4,-1);
+    addF(new THREE.TorusGeometry(1.2,.32,12,40),'#f2a900',10,-3,-3);
+    addF(new THREE.BoxGeometry(2.6,.12,1.8),'#0f9d8a',6,5,-5);      /* PCB slab */
+    addF(new THREE.BoxGeometry(1.8,.12,1.2),'#5b48e8',-5,-5.5,-3);
+    addF(new THREE.DodecahedronGeometry(.8,0),'#5b48e8',11,3.5,-1);
+    addF(new THREE.IcosahedronGeometry(1.6,1),'#1a8fe0',-11,-1,-6,true);
+    addF(new THREE.TorusGeometry(2.4,.06,8,60),'#ee6a3c',9,0,-8,true);
+    var chip=addF(new THREE.BoxGeometry(1.4,.25,1.4),'#15172e',8,-1.5,-2);
+    for(var p=0;p<8;p++){var pin=new THREE.Mesh(new THREE.BoxGeometry(.08,.08,.35),new THREE.MeshStandardMaterial({color:'#f2a900',metalness:.8,roughness:.2}));pin.position.set(-.6+p*.17,-.05,(p%2?.85:-.85));chip.add(pin);}
+    var visible=true;if('IntersectionObserver' in window)new IntersectionObserver(function(en){visible=en[0].isIntersecting;}).observe(hero);
+    var mouse={x:0,y:0};hero.addEventListener('mousemove',function(e){var r=hero.getBoundingClientRect();mouse.x=(e.clientX-r.left)/r.width*2-1;mouse.y=-((e.clientY-r.top)/r.height*2-1);});
+    function size(){var w=hero.clientWidth,hh=hero.clientHeight;R.setSize(w,hh,false);C.aspect=w/hh;C.updateProjectionMatrix();}
+    size();addEventListener('resize',size);
+    var mx=0,my=0,t0=performance.now();
+    function frame(now){var dt=reduce?0:1;
+      mx+=(mouse.x-mx)*.05;my+=(mouse.y-my)*.05;
+      var pp=lineGeo.attributes.position.array,cc=lineGeo.attributes.color.array,L=0;
+      for(var i=0;i<N;i++){var p=pos[i];if(dt){p.add(vel[i]);if(Math.abs(p.x)>11)vel[i].x*=-1;if(Math.abs(p.y)>6)vel[i].y*=-1;if(Math.abs(p.z)>4)vel[i].z*=-1;
+        var dx=p.x-mx*11,dy=p.y-my*6,d=Math.hypot(dx,dy);if(d<3){p.x+=dx/d*.04;p.y+=dy/d*.04;}}
+        nodes[i].position.copy(p);}
+      for(var i=0;i<N;i++)for(var j=i+1;j<N;j++){var d=pos[i].distanceTo(pos[j]);if(d<3.2&&L<maxL){var a=1-d/3.2;
+        pp[L*6]=pos[i].x;pp[L*6+1]=pos[i].y;pp[L*6+2]=pos[i].z;pp[L*6+3]=pos[j].x;pp[L*6+4]=pos[j].y;pp[L*6+5]=pos[j].z;
+        var w=1-a;cc[L*6]=cols[i].r*a+w;cc[L*6+1]=cols[i].g*a+w;cc[L*6+2]=cols[i].b*a+w;cc[L*6+3]=cols[j].r*a+w;cc[L*6+4]=cols[j].g*a+w;cc[L*6+5]=cols[j].b*a+w;L++;}}
+      lineGeo.setDrawRange(0,L*2);lineGeo.attributes.position.needsUpdate=true;lineGeo.attributes.color.needsUpdate=true;
+      pk.forEach(function(q){q.t+=.012*dt;if(q.t>=1){q.t=0;q.a=q.b;var best=-1,bd=9;for(var j=0;j<N;j++){var d=pos[q.a].distanceTo(pos[j]);if(j!==q.a&&d<bd&&d>.5){bd=d;best=j;}}q.b=best<0?Math.floor(Math.random()*N):best;}
+        q.m.position.lerpVectors(pos[q.a],pos[q.b],q.t);});
+      torus.rotation.x+=.004*dt;torus.rotation.y+=.006*dt;
+      var tt=now*.001;floaters.forEach(function(f){var u=f.userData;f.position.y=u.by+Math.sin(tt*u.s+u.ph)*.6;f.position.x=u.bx+Math.cos(tt*u.s*.7+u.ph)*.3;f.rotation.x+=.004*u.s*dt;f.rotation.y+=.006*u.s*dt;});
+      S.rotation.y=mx*.12;S.rotation.x=-my*.08;
+      if(visible)R.render(S,C);requestAnimationFrame(frame);}
+    requestAnimationFrame(frame);
+  })();
+
+  /* ===== LORA: 869 MHz propagation over terrain ===== */
+  (function(){
+    var cv=document.getElementById('lora3d'),box=cv.parentElement;
+    var R=new THREE.WebGLRenderer({canvas:cv,antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));R.setClearColor('#0f1230');
+    var S=new THREE.Scene(),C=new THREE.PerspectiveCamera(45,1,.1,200);
+    S.fog=new THREE.Fog(0x0f1230,20,60);
+    S.add(new THREE.AmbientLight(0xffffff,.5));var dl=new THREE.DirectionalLight(0xffffff,.9);dl.position.set(5,12,6);S.add(dl);
+    /* terrain */
+    var W=40,seg=60,tg=new THREE.PlaneGeometry(W,W,seg,seg);tg.rotateX(-Math.PI/2);
+    var tp=tg.attributes.position;for(var i=0;i<tp.count;i++){var x=tp.getX(i),z=tp.getZ(i);var h=Math.sin(x*.35)*Math.cos(z*.28)*1.1+Math.sin(x*.9+z*.6)*.35+Math.cos(z*1.3)*.2;var r=Math.hypot(x,z);if(r<3)h*=r/3;tp.setY(i,h);}
+    tg.computeVertexNormals();
+    var terr=new THREE.Mesh(tg,new THREE.MeshStandardMaterial({color:0x1b2150,roughness:.9,metalness:.05,flatShading:true}));S.add(terr);
+    var wire=new THREE.LineSegments(new THREE.WireframeGeometry(tg),new THREE.LineBasicMaterial({color:0x1a8fe0,transparent:true,opacity:.14}));S.add(wire);
+    function hAt(x,z){var h=Math.sin(x*.35)*Math.cos(z*.28)*1.1+Math.sin(x*.9+z*.6)*.35+Math.cos(z*1.3)*.2;var r=Math.hypot(x,z);if(r<3)h*=r/3;return h;}
+    /* mast */
+    var mast=new THREE.Group();mast.add(new THREE.Mesh(new THREE.CylinderGeometry(.08,.14,4,8),new THREE.MeshStandardMaterial({color:0xcfd3ff,metalness:.7,roughness:.3})));
+    var ant=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,1.6,8),new THREE.MeshStandardMaterial({color:0xee6a3c,emissive:0xee6a3c,emissiveIntensity:.6}));ant.position.y=2.8;mast.add(ant);
+    var panel=new THREE.Mesh(new THREE.BoxGeometry(1.2,.06,.8),new THREE.MeshStandardMaterial({color:0x1a3a6e,metalness:.6,roughness:.2}));panel.position.set(.5,1.4,0);panel.rotation.z=-.4;mast.add(panel);
+    mast.position.y=2;S.add(mast);
+    /* rings */
+    var rings=[];for(var k=0;k<5;k++){var rg=new THREE.Mesh(new THREE.TorusGeometry(1,.05,8,80),new THREE.MeshBasicMaterial({color:0x3fb6ff,transparent:true,opacity:0}));rg.rotation.x=Math.PI/2;rg.position.y=3.6;S.add(rg);rings.push({m:rg,t:k/5});}
+    /* nodes */
+    var nodeData=[[9,-6,'!7c02'],[-11,4,'!a3f1'],[6,12,'!d110'],[-7,-11,'!e5c7'],[14,5,'!29ab'],[-3,9,'!b9e4']],nodes=[];
+    nodeData.forEach(function(n,i){var y=hAt(n[0],n[1]);var g=new THREE.Group();g.position.set(n[0],y,n[1]);
+      var pole=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,1.2,6),new THREE.MeshStandardMaterial({color:0xcfd3ff}));pole.position.y=.6;g.add(pole);
+      var b=new THREE.Mesh(new THREE.SphereGeometry(.22,12,12),new THREE.MeshStandardMaterial({color:0x0f9d8a,emissive:0x0f9d8a,emissiveIntensity:.5}));b.position.y=1.3;g.add(b);
+      var halo=new THREE.Mesh(new THREE.SphereGeometry(.5,10,10),new THREE.MeshBasicMaterial({color:0x4fe0c8,transparent:true,opacity:.0}));halo.position.y=1.3;g.add(halo);
+      S.add(g);nodes.push({g:g,b:b,halo:halo,d:Math.hypot(n[0],n[1])});
+      /* link to mast */
+      var pts=[new THREE.Vector3(0,3.6,0),new THREE.Vector3(n[0],y+1.3,n[1])];var mid=pts[0].clone().lerp(pts[1],.5);mid.y+=2.5;
+      var curve=new THREE.QuadraticBezierCurve3(pts[0],mid,pts[1]);var lg=new THREE.BufferGeometry().setFromPoints(curve.getPoints(30));
+      var ln=new THREE.Line(lg,new THREE.LineBasicMaterial({color:0x4fe0c8,transparent:true,opacity:.35}));S.add(ln);
+      var pkt=new THREE.Mesh(new THREE.SphereGeometry(.12,8,8),new THREE.MeshBasicMaterial({color:0xffffff}));S.add(pkt);nodes[i].pkt=pkt;nodes[i].curve=curve;nodes[i].ph=Math.random();});
+    /* camera orbit + drag */
+    var yaw=.6,pitch=.45,tyaw=.6,tpitch=.45,drag=null,auto=true;
+    function onDown(e){drag={x:e.clientX,y:e.clientY,yaw:tyaw,pitch:tpitch};auto=false;cv.style.cursor='grabbing';}
+    function onMove(e){if(!drag)return;tyaw=drag.yaw+(e.clientX-drag.x)*.008;tpitch=Math.max(.15,Math.min(1.2,drag.pitch+(e.clientY-drag.y)*.005));}
+    function onUp(){drag=null;cv.style.cursor='grab';setTimeout(function(){auto=true;},4000);}
+    cv.addEventListener('pointerdown',onDown);addEventListener('pointermove',onMove);addEventListener('pointerup',onUp);
+    function size(){var w=box.clientWidth,hh=box.clientHeight;R.setSize(w,hh,false);C.aspect=w/hh;C.updateProjectionMatrix();}size();addEventListener('resize',size);
+    var vis=true;if('IntersectionObserver' in window)new IntersectionObserver(function(en){vis=en[0].isIntersecting;}).observe(box);
+    var t=0;function frame(){if(!vis){requestAnimationFrame(frame);return;}if(!reduce){t+=.016;if(auto)tyaw+=.0025;}
+      yaw+=(tyaw-yaw)*.08;pitch+=(tpitch-pitch)*.08;
+      var rad=26;C.position.set(Math.sin(yaw)*Math.cos(pitch)*rad,Math.sin(pitch)*rad+2,Math.cos(yaw)*Math.cos(pitch)*rad);C.lookAt(0,1.5,0);
+      rings.forEach(function(r){if(!reduce)r.t+=.004;if(r.t>1)r.t=0;var s=1+r.t*22;r.m.scale.set(s,s,1);r.m.material.opacity=(1-r.t)*.7;});
+      nodes.forEach(function(n){if(!reduce)n.ph+=.006;if(n.ph>1)n.ph=0;var p=n.curve.getPoint(n.ph);n.pkt.position.copy(p);
+        var hit=rings.some(function(r){return Math.abs((1+r.t*22)-n.d)<.6;});n.halo.material.opacity+=((hit?.5:0)-n.halo.material.opacity)*.15;n.b.material.emissiveIntensity=.5+n.halo.material.opacity;});
+      ant.material.emissiveIntensity=.6+Math.sin(t*6)*.3;
+      R.render(S,C);requestAnimationFrame(frame);}
+    requestAnimationFrame(frame);
+  })();
+
+  /* ===== ART: generative light sculpture ===== */
+  (function(){
+    var cv=document.getElementById('art3d'),box=cv.parentElement;
+    var R=new THREE.WebGLRenderer({canvas:cv,antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));R.setClearColor('#07061a');
+    var S=new THREE.Scene(),C=new THREE.PerspectiveCamera(50,1,.1,100);C.position.set(0,2.5,11);C.lookAt(0,0,0);
+    S.add(new THREE.AmbientLight(0xffffff,.25));
+    var l1=new THREE.PointLight(0x1a8fe0,2,30),l2=new THREE.PointLight(0x5b48e8,2,30),l3=new THREE.PointLight(0xf2a900,1.5,30);S.add(l1,l2,l3);
+    var G=14,cubes=[],geo=new THREE.BoxGeometry(.6,.6,.6);
+    for(var x=0;x<G;x++)for(var z=0;z<G;z++){var m=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0x2a2566,metalness:.6,roughness:.3,emissive:0x000000}));m.position.set((x-G/2+.5)*.8,0,(z-G/2+.5)*.8);S.add(m);cubes.push(m);}
+    var mouse={x:0,y:0};box.addEventListener('mousemove',function(e){var r=box.getBoundingClientRect();mouse.x=(e.clientX-r.left)/r.width*2-1;mouse.y=(e.clientY-r.top)/r.height*2-1;});
+    function size(){var w=box.clientWidth,hh=box.clientHeight;R.setSize(w,hh,false);C.aspect=w/hh;C.updateProjectionMatrix();}size();addEventListener('resize',size);
+    var ca=new THREE.Color(),c1=new THREE.Color('#1a8fe0'),c2=new THREE.Color('#5b48e8'),c3=new THREE.Color('#f2a900');
+    /* orbiting rings + particles */
+    var rings=[];for(var q=0;q<3;q++){var rg=new THREE.Mesh(new THREE.TorusGeometry(7+q*1.2,.05,8,100),new THREE.MeshBasicMaterial({color:[0x1a8fe0,0xee6a3c,0xf2a900][q],transparent:true,opacity:.5}));rg.rotation.x=Math.PI/2+q*.25;S.add(rg);rings.push(rg);}
+    var PN=400,pg=new THREE.BufferGeometry(),pa=new Float32Array(PN*3),pv=[];for(var q=0;q<PN;q++){pa[q*3]=(Math.random()-.5)*14;pa[q*3+1]=Math.random()*8;pa[q*3+2]=(Math.random()-.5)*14;pv.push(.01+Math.random()*.03);}
+    pg.setAttribute('position',new THREE.BufferAttribute(pa,3));var pts=new THREE.Points(pg,new THREE.PointsMaterial({color:0xffffff,size:.08,transparent:true,opacity:.7}));S.add(pts);
+    var vis=true;if('IntersectionObserver' in window)new IntersectionObserver(function(en){vis=en[0].isIntersecting;}).observe(box);
+    var t=0;function frame(){if(!vis){requestAnimationFrame(frame);return;}if(!reduce)t+=.02;
+      rings.forEach(function(r,i){r.rotation.z+=.002*(i+1);r.rotation.y=Math.sin(t*.3+i)*.2;});
+      var A=pg.attributes.position.array;for(var q=0;q<PN;q++){if(!reduce)A[q*3+1]+=pv[q];if(A[q*3+1]>8)A[q*3+1]=0;}pg.attributes.position.needsUpdate=true;
+      l1.position.set(Math.sin(t)*6,3,Math.cos(t)*6);l2.position.set(Math.cos(t*.7)*6,3,Math.sin(t*.7)*6);l3.position.set(mouse.x*6,4,mouse.y*6);
+      cubes.forEach(function(m,i){var x=m.position.x,z=m.position.z;var d=Math.hypot(x-mouse.x*5.5,z-mouse.y*5.5);
+        var hgt=Math.sin(x*.9+t)*Math.cos(z*.9+t*.8)*.8+Math.max(0,2.2-d)*1.2;m.scale.y=1+hgt*2;m.position.y=hgt;
+        var k=(Math.sin(t+x*.5)+1)/2;ca.copy(c1).lerp(c2,k).lerp(c3,Math.max(0,1-d/2.2));m.material.emissive.copy(ca).multiplyScalar(.35+Math.max(0,1-d/2.2)*.8);});
+      S.rotation.y=Math.sin(t*.15)*.3;
+      R.render(S,C);requestAnimationFrame(frame);}
+    requestAnimationFrame(frame);
+  })();
+})();
+</script>
+
+</body></html>
