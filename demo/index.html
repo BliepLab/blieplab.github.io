@@ -236,6 +236,10 @@ footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-bet
 .quiz .note-box b{color:var(--ink)}
 .quiz .note-box ul{margin:.4rem 0 0;padding-left:1.2rem}
 .quiz .rbtns{display:flex;gap:.7rem;flex-wrap:wrap}
+.quiz .qlang{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.quiz .qlang button{font-family:var(--mono);font-size:.78rem;font-weight:600;padding:.35rem .8rem;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--muted);cursor:pointer}
+.quiz .qlang button[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.quiz .qlang button:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
 @media (max-width:560px){.quiz .opt .lbl{font-size:.6rem}.quiz .bar{grid-template-columns:1fr 3rem}.quiz .bar i{grid-column:1/3;order:3}}
 @media print{header,.blobs,.rbtns,footer,section:not(.quiz){display:none!important}}
 </style>
@@ -384,9 +388,9 @@ footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-bet
 <section class="quiz" id="test">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow" style="color:var(--violet)"><span lang="nl">Interessetest · 12–17 jaar · voor jongeren &amp; ouders</span><span lang="en">Interest test · ages 12–17 · for teens &amp; parents</span></span>
-      <h2><span lang="nl">Welke ICT-richting past bij jou? <span class="grad">Geen goed of fout.</span></span><span lang="en">Which ICT direction fits you? <span class="grad">No right or wrong.</span></span></h2>
-      <p><span lang="nl">Van video, bloggen en websites tot programmeren, micro-elektronica en reparatie: ontdek waar je nieuwsgierigheid zit.</span><span lang="en">From video, blogging and websites to programming, microelectronics and repair: find out where your curiosity lies.</span></p>
+      <span class="eyebrow" style="color:var(--violet)" id="q-eye"><span lang="nl">Interessetest · 12–17 jaar · voor jongeren &amp; ouders</span><span lang="en">Interest test · ages 12–17 · for teens &amp; parents</span></span>
+      <h2 id="q-h2"><span lang="nl">Welke ICT-richting past bij jou? <span class="grad">Geen goed of fout.</span></span><span lang="en">Which ICT direction fits you? <span class="grad">No right or wrong.</span></span></h2>
+      <p id="q-lead"><span lang="nl">Van video, bloggen en websites tot programmeren, micro-elektronica en reparatie: ontdek waar je nieuwsgierigheid zit.</span><span lang="en">From video, blogging and websites to programming, microelectronics and repair: find out where your curiosity lies.</span></p>
     </div>
     <div id="quiz-app"></div>
   </div>
@@ -705,141 +709,155 @@ footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-bet
 <script>
 (function(){
   var app=document.getElementById('quiz-app');if(!app)return;
-  function L(nl,en){return '<span lang="nl">'+nl+'</span><span lang="en">'+en+'</span>';}
-  function cur(){return document.documentElement.getAttribute('data-lang')==='en'?'en':'nl';}
+  var LANGS=['nl','uk','pl','en','ru'],LNAME=['Nederlands','Українська','Polski','English','Русский'];
+  var ql=document.documentElement.getAttribute('data-lang')==='en'?'en':'nl';
+  function LI(){return LANGS.indexOf(ql);}
+  function L(nl,uk,pl,en,ru){return [nl,uk,pl,en,ru][LI()];}
+  function g(a){return a[LI()];}
   var D=[
-   {k:'content',e:'🎬',c:'#ee6a3c',nl:'Content & media',en:'Content & media',
-    dn:'Verhalen vertellen met beeld, geluid en tekst: video, social media, podcasts, blogs en streams.',
-    de:'Telling stories with images, sound and text: video, social media, podcasts, blogs and streams.',
-    tn:['Een korte video maken en monteren','Een eigen podcast of blog starten','Een kleine livestream proberen'],
-    te:['Make and edit a short video','Start your own podcast or blog','Try a small livestream'],
-    jn:'videomaker, contentcreator, redacteur, social-mediaspecialist, game-streamer',
-    je:'video maker, content creator, editor, social media specialist, game streamer',
-    q:[['Een korte video filmen en monteren met muziek en effecten','Film a short video and edit it with music and effects'],
-       ['Een eigen kanaal, podcast of blog starten over iets wat ik leuk vind','Start my own channel, podcast or blog about something I like'],
-       ['Bedenken hoe ik een verhaal vertel zodat mensen blijven kijken','Figure out how to tell a story so people keep watching'],
-       ['Foto\'s bewerken en er een mooie reeks van maken','Edit photos and turn them into a nice series'],
-       ['Uitzoeken waarom sommige posts viral gaan','Find out why some posts go viral'],
-       ['Live streamen of een online evenement presenteren','Livestream or host an online event']]},
-   {k:'web',e:'🌐',c:'#1a8fe0',nl:'Websites & app-ontwerp',en:'Websites & app design',
-    dn:'Dingen maken die mensen op een scherm gebruiken: websites, apps en hoe ze eruitzien en aanvoelen.',
-    de:'Making things people use on a screen: websites, apps, and how they look and feel.',
-    tn:['Een eigen website bouwen (HTML en CSS)','Een app-schets maken in een gratis ontwerptool','Een pagina bouwen voor een club of vriend'],
-    te:['Build your own website (HTML and CSS)','Sketch an app in a free design tool','Build a page for a club or friend'],
-    jn:'webdesigner, front-end developer, UX-ontwerper, app-ontwerper',
-    je:'web designer, front-end developer, UX designer, app designer',
-    q:[['Een eigen website maken en zien hoe die in de browser verschijnt','Build my own website and see it appear in the browser'],
-       ['Een app of website mooier en handiger maken voor de gebruiker','Make an app or website nicer and easier to use'],
-       ['Kleuren, lettertypes en logo\'s uitkiezen voor een project','Pick colours, fonts and logos for a project'],
-       ['Een app schetsen en uitleggen hoe die werkt','Sketch an app and explain how it works'],
-       ['Een webshop of pagina bouwen voor een club of vriend(in)','Build a webshop or page for a club or a friend'],
-       ['Animaties en kleine effecten op een pagina maken','Create animations and small effects on a page']]},
-   {k:'code',e:'💻',c:'#5b48e8',nl:'Programmeren & games',en:'Programming & games',
-    dn:'Met logica en code dingen laten gebeuren: spellen, programma\'s, automatisering en bots.',
-    de:'Making things happen with logic and code: games, programs, automation and bots.',
-    tn:['Een eenvoudig spel maken in Scratch of Python','Een bot voor Discord schrijven','Een saai klusje automatiseren met een scriptje'],
-    te:['Make a simple game in Scratch or Python','Write a Discord bot','Automate a boring chore with a small script'],
-    jn:'softwareontwikkelaar, gameontwikkelaar, app-bouwer, automatiseringsspecialist',
-    je:'software developer, game developer, app builder, automation specialist',
-    q:[['Een eenvoudig spel programmeren','Program a simple game'],
-       ['Een puzzel oplossen door stap voor stap een regel te bedenken','Solve a puzzle by working out a rule step by step'],
-       ['Een fout (bug) in een programma opsporen en herstellen','Track down and fix an error (bug) in a program'],
-       ['Een programma schrijven dat een saai klusje voor mij doet','Write a program that does a boring chore for me'],
-       ['Leren hoe apps en games van binnen werken','Learn how apps and games work on the inside'],
-       ['Een eigen bot maken voor Discord of een chatapp','Make my own bot for Discord or a chat app']]},
-   {k:'maker',e:'🔌',c:'#f2a900',nl:'Micro-elektronica & maken',en:'Microelectronics & making',
-    dn:'Elektronica en techniek die je kunt vastpakken: schakelingen, sensoren, robots en slimme objecten.',
-    de:'Electronics and technology you can hold: circuits, sensors, robots and smart objects.',
-    tn:['Een LED-schakeling solderen of op een breadboard bouwen','Een sensor aan een Arduino of ESP32 koppelen','Een slimme plantenmeter of lamp bouwen'],
-    te:['Solder an LED circuit or build one on a breadboard','Connect a sensor to an Arduino or ESP32','Build a smart plant monitor or lamp'],
-    jn:'elektronicatechnicus, embedded engineer, robotica-ingenieur, IoT-ontwikkelaar, productontwerper',
-    je:'electronics technician, embedded engineer, robotics engineer, IoT developer, product designer',
-    q:[['Een LED-schakeling bouwen en laten knipperen','Build an LED circuit and make it blink'],
-       ['Solderen: onderdelen vastmaken op een printplaat','Soldering: attach parts to a circuit board'],
-       ['Een kleine robot bouwen die zelf rijdt of reageert','Build a small robot that drives or reacts on its own'],
-       ['Sensoren gebruiken om licht, temperatuur, beweging of afstand te meten','Use sensors to measure light, temperature, motion or distance'],
-       ['Iets slims voor thuis maken, zoals een plantenmeter of slimme lamp','Make something smart for home, like a plant monitor or smart lamp'],
-       ['Een eigen ontwerp 3D-printen of lasersnijden en er elektronica in bouwen','3D-print or laser-cut my own design and put electronics inside']]},
-   {k:'repair',e:'🛠️',c:'#0f9d8a',nl:'Techniek & reparatie',en:'Hardware & repair',
-    dn:'Uitzoeken hoe apparaten werken en ze weer aan de praat krijgen: computers, telefoons en randapparatuur.',
-    de:'Finding out how devices work and getting them going again: computers, phones and peripherals.',
-    tn:['Een oude computer openmaken en de onderdelen benoemen','Een pc uit losse onderdelen bouwen','Een oud apparaat repareren in een repair-café'],
-    te:['Open an old computer and name the parts','Build a PC from separate parts','Repair an old device at a repair cafe'],
-    jn:'ICT-beheerder, servicetechnicus, hardwareontwikkelaar, repair-specialist, systeembeheerder',
-    je:'IT support technician, service engineer, hardware developer, repair specialist, system administrator',
-    q:[['Een kapot apparaat openmaken om te zien wat er mis is','Open up a broken device to see what is wrong'],
-       ['Een computer uit losse onderdelen in elkaar zetten','Put a computer together from separate parts'],
-       ['Een telefoonscherm of batterij vervangen','Replace a phone screen or battery'],
-       ['Uitzoeken waarom een laptop traag is en dat oplossen','Figure out why a laptop is slow and fix it'],
-       ['Oude apparaten weer aan de praat krijgen in plaats van weggooien','Get old devices working again instead of throwing them away'],
-       ['Kabels, printers of wifi bij familie en vrienden aan de praat krijgen','Get cables, printers or wifi working for family and friends']]},
-   {k:'data',e:'📊',c:'#d1478c',nl:'Data & AI',en:'Data & AI',
-    dn:'Patronen vinden in cijfers en computers dingen leren: grafieken, onderzoek en kunstmatige intelligentie.',
-    de:'Finding patterns in numbers and teaching computers things: charts, research and artificial intelligence.',
-    tn:['Eigen data verzamelen (bijv. temperatuur) en er een grafiek van maken','Een beeldherkenningsmodel trainen met een gratis tool','Een vraag onderzoeken met echte data'],
-    te:['Collect your own data (e.g. temperature) and chart it','Train an image recognition model with a free tool','Investigate a question with real data'],
-    jn:'data-analist, data scientist, AI-ontwikkelaar, onderzoeker, statisticus',
-    je:'data analyst, data scientist, AI developer, researcher, statistician',
-    q:[['Cijfers verzamelen en er grafieken van maken','Collect numbers and turn them into charts'],
-       ['Patronen vinden, bijvoorbeeld in sportuitslagen of weerdata','Find patterns, for example in sports results or weather data'],
-       ['Uitproberen hoe een AI-chatbot of beeldgenerator werkt','Try out how an AI chatbot or image generator works'],
-       ['Een computer leren om foto\'s of geluiden te herkennen','Teach a computer to recognise pictures or sounds'],
-       ['Een onderzoek doen en met bewijs een vraag beantwoorden','Do an investigation and answer a question with evidence'],
-       ['Voorspellen wat er gaat gebeuren op basis van eerdere gegevens','Predict what will happen based on earlier data']]},
-   {k:'secure',e:'🛡️',c:'#2a6f97',nl:'Security & netwerken',en:'Security & networks',
-    dn:'Begrijpen hoe verbindingen werken en hoe je ze veilig houdt: netwerken, codes, privacy en beveiliging.',
-    de:'Understanding how connections work and how to keep them safe: networks, codes, privacy and security.',
-    tn:['Een eigen thuisnetwerkkaart tekenen','Een sterk wachtwoord- en 2FA-plan voor het gezin maken','Meedoen aan een beginners-CTF (puzzelwedstrijd)'],
-    te:['Draw a map of your home network','Make a strong password and 2FA plan for the family','Join a beginner CTF (puzzle contest)'],
-    jn:'security-specialist, netwerkbeheerder, ethisch hacker, privacy-adviseur, cloudengineer',
-    je:'security specialist, network administrator, ethical hacker, privacy adviser, cloud engineer',
-    q:[['Geheime codes bedenken of kraken','Invent or crack secret codes'],
-       ['Uitzoeken hoe een wifi-netwerk of het internet precies werkt','Find out exactly how a wifi network or the internet works'],
-       ['Mijn accounts en wachtwoorden zo veilig mogelijk maken','Make my accounts and passwords as safe as possible'],
-       ['Meedoen aan een puzzelwedstrijd waarin je zwakke plekken zoekt (in een veilige oefenomgeving)','Take part in a puzzle contest where you look for weak spots (in a safe practice environment)'],
-       ['Nadenken over privacy: wie ziet welke gegevens van mij?','Think about privacy: who sees which of my data?'],
-       ['Zorgen dat apparaten thuis veilig met elkaar kunnen praten','Make sure devices at home can talk to each other safely']]},
-   {k:'people',e:'🤝',c:'#7a5cc4',nl:'Tech met mensen',en:'Tech with people',
-    dn:'Techniek inzetten voor anderen: uitleggen, helpen, samenwerken en ideeën vertalen naar wat mensen nodig hebben.',
-    de:'Using technology for others: explaining, helping, collaborating and turning ideas into what people need.',
-    tn:['Een buur of grootouder helpen met hun telefoon','Een korte uitleg of workshop geven aan jongere kinderen','Een tech-idee bedenken voor een probleem in de buurt'],
-    te:['Help a neighbour or grandparent with their phone','Give a short explanation or workshop to younger kids','Come up with a tech idea for a neighbourhood problem'],
-    jn:'productmanager, ICT-docent, projectleider, UX-onderzoeker, helpdesk- of communityspecialist',
-    je:'product manager, IT teacher, project lead, UX researcher, helpdesk or community specialist',
-    q:[['Iemand anders uitleggen hoe iets met technologie werkt','Explain to someone else how some technology works'],
-       ['Een groepsproject leiden waarin iedereen een eigen taak heeft','Lead a group project where everyone has their own task'],
-       ['Ouderen of jongere kinderen helpen met hun telefoon of computer','Help older people or younger kids with their phone or computer'],
-       ['Bedenken wat mensen echt nodig hebben en daar een digitale oplossing voor zoeken','Work out what people really need and look for a digital solution'],
-       ['Een workshop of les geven over iets wat ik goed kan','Give a workshop or lesson about something I am good at'],
-       ['In een team een tech-idee uitwerken en presenteren','Develop and present a tech idea in a team']]}
+   {k:'content',e:'🎬',c:'#ee6a3c',
+    n:[`Content & media`,`Контент і медіа`,`Content i media`,`Content & media`,`Контент и медиа`],
+    d:[`Verhalen vertellen met beeld, geluid en tekst: video, social media, podcasts, blogs en streams.`,`Розповідати історії за допомогою зображення, звуку й тексту: відео, соцмережі, подкасти, блоги та стріми.`,`Opowiadanie historii obrazem, dźwiękiem i tekstem: wideo, media społecznościowe, podcasty, blogi i streamy.`,`Telling stories with images, sound and text: video, social media, podcasts, blogs and streams.`,`Рассказывать истории с помощью изображения, звука и текста: видео, соцсети, подкасты, блоги и стримы.`],
+    t:[[`Een korte video maken en monteren`,`Зняти й змонтувати коротке відео`,`Nakręcić i zmontować krótkie wideo`,`Make and edit a short video`,`Снять и смонтировать короткое видео`],
+       [`Een eigen podcast of blog starten`,`Запустити власний подкаст або блог`,`Założyć własny podcast lub blog`,`Start your own podcast or blog`,`Запустить свой подкаст или блог`],
+       [`Een kleine livestream proberen`,`Спробувати невеликий стрим`,`Spróbować małego livestreamu`,`Try a small livestream`,`Попробовать небольшой стрим`]],
+    j:[`videomaker, contentcreator, redacteur, social-mediaspecialist, game-streamer`,`відеомейкер, контент-креатор, редактор, фахівець із соцмереж, стример`,`twórca wideo, content creator, redaktor, specjalista social media, streamer`,`video maker, content creator, editor, social media specialist, game streamer`,`видеомейкер, контент-креатор, редактор, специалист по соцсетям, стример`],
+    q:[[`Een korte video filmen en monteren met muziek en effecten`,`Зняти й змонтувати коротке відео з музикою та ефектами`,`Nakręcić i zmontować krótkie wideo z muzyką i efektami`,`Film a short video and edit it with music and effects`,`Снять и смонтировать короткое видео с музыкой и эффектами`],
+       [`Een eigen kanaal, podcast of blog starten over iets wat ik leuk vind`,`Запустити власний канал, подкаст чи блог про те, що мені подобається`,`Założyć własny kanał, podcast lub blog o tym, co lubię`,`Start my own channel, podcast or blog about something I like`,`Запустить свой канал, подкаст или блог о том, что мне нравится`],
+       [`Bedenken hoe ik een verhaal vertel zodat mensen blijven kijken`,`Придумати, як розповісти історію так, щоб люди дивилися до кінця`,`Wymyślić, jak opowiedzieć historię, żeby ludzie oglądali do końca`,`Figure out how to tell a story so people keep watching`,`Придумать, как рассказать историю так, чтобы люди смотрели до конца`],
+       [`Foto's bewerken en er een mooie reeks van maken`,`Обробляти фото й складати з них гарну серію`,`Edytować zdjęcia i złożyć z nich ładną serię`,`Edit photos and turn them into a nice series`,`Обрабатывать фото и складывать из них красивую серию`],
+       [`Uitzoeken waarom sommige posts viral gaan`,`З'ясувати, чому одні дописи стають вірусними`,`Sprawdzić, dlaczego niektóre posty stają się viralami`,`Find out why some posts go viral`,`Выяснить, почему одни посты становятся вирусными`],
+       [`Live streamen of een online evenement presenteren`,`Вести пряму трансляцію або проводити онлайн-подію`,`Prowadzić transmisję na żywo lub wydarzenie online`,`Livestream or host an online event`,`Вести прямую трансляцию или проводить онлайн-мероприятие`]]},
+   {k:'web',e:'🌐',c:'#1a8fe0',
+    n:[`Websites & app-ontwerp`,`Сайти й дизайн застосунків`,`Strony www i projektowanie aplikacji`,`Websites & app design`,`Сайты и дизайн приложений`],
+    d:[`Dingen maken die mensen op een scherm gebruiken: websites, apps en hoe ze eruitzien en aanvoelen.`,`Створювати те, чим люди користуються на екрані: сайти, застосунки, їхній вигляд і зручність.`,`Tworzenie rzeczy, z których ludzie korzystają na ekranie: strony, aplikacje oraz to, jak wyglądają i jak się ich używa.`,`Making things people use on a screen: websites, apps, and how they look and feel.`,`Создавать то, чем люди пользуются на экране: сайты, приложения, их внешний вид и удобство.`],
+    t:[[`Een eigen website bouwen (HTML en CSS)`,`Створити власний сайт (HTML і CSS)`,`Zbudować własną stronę (HTML i CSS)`,`Build your own website (HTML and CSS)`,`Создать собственный сайт (HTML и CSS)`],
+       [`Een app-schets maken in een gratis ontwerptool`,`Намалювати макет застосунку в безкоштовному редакторі`,`Naszkicować aplikację w darmowym narzędziu`,`Sketch an app in a free design tool`,`Нарисовать макет приложения в бесплатном редакторе`],
+       [`Een pagina bouwen voor een club of vriend`,`Зробити сторінку для клубу чи друга`,`Zrobić stronę dla klubu lub znajomego`,`Build a page for a club or friend`,`Сделать страницу для клуба или друга`]],
+    j:[`webdesigner, front-end developer, UX-ontwerper, app-ontwerper`,`веб-дизайнер, фронтенд-розробник, UX-дизайнер, дизайнер застосунків`,`web designer, front-end developer, projektant UX, projektant aplikacji`,`web designer, front-end developer, UX designer, app designer`,`веб-дизайнер, фронтенд-разработчик, UX-дизайнер, дизайнер приложений`],
+    q:[[`Een eigen website maken en zien hoe die in de browser verschijnt`,`Створити власний сайт і побачити, як він з'являється в браузері`,`Zbudować własną stronę i zobaczyć, jak pojawia się w przeglądarce`,`Build my own website and see it appear in the browser`,`Создать свой сайт и увидеть, как он появляется в браузере`],
+       [`Een app of website mooier en handiger maken voor de gebruiker`,`Зробити застосунок чи сайт гарнішим і зручнішим для користувача`,`Sprawić, żeby aplikacja lub strona była ładniejsza i wygodniejsza dla użytkownika`,`Make an app or website nicer and easier to use`,`Сделать приложение или сайт красивее и удобнее для пользователя`],
+       [`Kleuren, lettertypes en logo's uitkiezen voor een project`,`Обирати кольори, шрифти й логотипи для проєкту`,`Wybierać kolory, czcionki i logotypy do projektu`,`Pick colours, fonts and logos for a project`,`Подбирать цвета, шрифты и логотипы для проекта`],
+       [`Een app schetsen en uitleggen hoe die werkt`,`Намалювати схему застосунку й пояснити, як він працює`,`Naszkicować aplikację i wyjaśnić, jak działa`,`Sketch an app and explain how it works`,`Набросать схему приложения и объяснить, как оно работает`],
+       [`Een webshop of pagina bouwen voor een club of vriend(in)`,`Створити інтернет-магазин або сторінку для клубу чи друга`,`Zbudować sklep internetowy lub stronę dla klubu albo znajomego`,`Build a webshop or page for a club or a friend`,`Создать интернет-магазин или страницу для клуба или друга`],
+       [`Animaties en kleine effecten op een pagina maken`,`Робити анімації та невеликі ефекти на сторінці`,`Tworzyć animacje i małe efekty na stronie`,`Create animations and small effects on a page`,`Делать анимации и небольшие эффекты на странице`]]},
+   {k:'code',e:'💻',c:'#5b48e8',
+    n:[`Programmeren & games`,`Програмування та ігри`,`Programowanie i gry`,`Programming & games`,`Программирование и игры`],
+    d:[`Met logica en code dingen laten gebeuren: spellen, programma's, automatisering en bots.`,`Змушувати речі працювати за допомогою логіки й коду: ігри, програми, автоматизація та боти.`,`Uruchamianie rzeczy za pomocą logiki i kodu: gry, programy, automatyzacja i boty.`,`Making things happen with logic and code: games, programs, automation and bots.`,`Заставлять вещи работать с помощью логики и кода: игры, программы, автоматизация и боты.`],
+    t:[[`Een eenvoudig spel maken in Scratch of Python`,`Зробити просту гру в Scratch або Python`,`Zrobić prostą grę w Scratchu lub Pythonie`,`Make a simple game in Scratch or Python`,`Сделать простую игру в Scratch или Python`],
+       [`Een bot voor Discord schrijven`,`Написати бота для Discord`,`Napisać bota na Discorda`,`Write a Discord bot`,`Написать бота для Discord`],
+       [`Een saai klusje automatiseren met een scriptje`,`Автоматизувати нудну справу скриптом`,`Zautomatyzować nudną czynność skryptem`,`Automate a boring chore with a small script`,`Автоматизировать скучное дело скриптом`]],
+    j:[`softwareontwikkelaar, gameontwikkelaar, app-bouwer, automatiseringsspecialist`,`розробник ПЗ, розробник ігор, розробник застосунків, фахівець з автоматизації`,`programista, twórca gier, twórca aplikacji, specjalista od automatyzacji`,`software developer, game developer, app builder, automation specialist`,`разработчик ПО, разработчик игр, создатель приложений, специалист по автоматизации`],
+    q:[[`Een eenvoudig spel programmeren`,`Запрограмувати просту гру`,`Zaprogramować prostą grę`,`Program a simple game`,`Запрограммировать простую игру`],
+       [`Een puzzel oplossen door stap voor stap een regel te bedenken`,`Розв'язати головоломку, крок за кроком вигадуючи правило`,`Rozwiązać zagadkę, krok po kroku wymyślając regułę`,`Solve a puzzle by working out a rule step by step`,`Решить головоломку, шаг за шагом придумывая правило`],
+       [`Een fout (bug) in een programma opsporen en herstellen`,`Знайти й виправити помилку (баг) у програмі`,`Znaleźć i naprawić błąd (buga) w programie`,`Track down and fix an error (bug) in a program`,`Найти и исправить ошибку (баг) в программе`],
+       [`Een programma schrijven dat een saai klusje voor mij doet`,`Написати програму, яка робить за мене нудну справу`,`Napisać program, który zrobi za mnie nudną czynność`,`Write a program that does a boring chore for me`,`Написать программу, которая делает за меня скучное дело`],
+       [`Leren hoe apps en games van binnen werken`,`Дізнатися, як застосунки й ігри працюють усередині`,`Dowiedzieć się, jak aplikacje i gry działają od środka`,`Learn how apps and games work on the inside`,`Узнать, как приложения и игры устроены внутри`],
+       [`Een eigen bot maken voor Discord of een chatapp`,`Створити власного бота для Discord чи месенджера`,`Stworzyć własnego bota na Discorda lub komunikator`,`Make my own bot for Discord or a chat app`,`Создать собственного бота для Discord или мессенджера`]]},
+   {k:'maker',e:'🔌',c:'#f2a900',
+    n:[`Micro-elektronica & maken`,`Мікроелектроніка й створення речей`,`Mikroelektronika i tworzenie`,`Microelectronics & making`,`Микроэлектроника и создание вещей`],
+    d:[`Elektronica en techniek die je kunt vastpakken: schakelingen, sensoren, robots en slimme objecten.`,`Електроніка й техніка, яку можна потримати в руках: схеми, датчики, роботи та розумні речі.`,`Elektronika i technika, którą można wziąć do ręki: układy, czujniki, roboty i inteligentne przedmioty.`,`Electronics and technology you can hold: circuits, sensors, robots and smart objects.`,`Электроника и техника, которую можно взять в руки: схемы, датчики, роботы и умные вещи.`],
+    t:[[`Een LED-schakeling solderen of op een breadboard bouwen`,`Спаяти світлодіодну схему або зібрати її на макетній платі`,`Zlutować układ z diodą LED lub zbudować go na płytce stykowej`,`Solder an LED circuit or build one on a breadboard`,`Спаять светодиодную схему или собрать её на макетной плате`],
+       [`Een sensor aan een Arduino of ESP32 koppelen`,`Підключити датчик до Arduino чи ESP32`,`Podłączyć czujnik do Arduino lub ESP32`,`Connect a sensor to an Arduino or ESP32`,`Подключить датчик к Arduino или ESP32`],
+       [`Een slimme plantenmeter of lamp bouwen`,`Зробити розумний датчик для рослини або лампу`,`Zbudować inteligentny czujnik do rośliny albo lampę`,`Build a smart plant monitor or lamp`,`Сделать умный датчик для растения или лампу`]],
+    j:[`elektronicatechnicus, embedded engineer, robotica-ingenieur, IoT-ontwikkelaar, productontwerper`,`техник-електронік, інженер вбудованих систем, інженер-робототехнік, розробник IoT, дизайнер продуктів`,`technik elektronik, inżynier systemów wbudowanych, inżynier robotyki, programista IoT, projektant produktów`,`electronics technician, embedded engineer, robotics engineer, IoT developer, product designer`,`техник-электронщик, инженер встраиваемых систем, инженер-робототехник, разработчик IoT, продуктовый дизайнер`],
+    q:[[`Een LED-schakeling bouwen en laten knipperen`,`Зібрати світлодіодну схему й змусити її блимати`,`Zbudować układ z diodą LED i sprawić, żeby migała`,`Build an LED circuit and make it blink`,`Собрать светодиодную схему и заставить её мигать`],
+       [`Solderen: onderdelen vastmaken op een printplaat`,`Паяти: кріпити деталі на друковану плату`,`Lutować: przymocowywać elementy do płytki drukowanej`,`Soldering: attach parts to a circuit board`,`Паять: крепить детали на печатную плату`],
+       [`Een kleine robot bouwen die zelf rijdt of reageert`,`Зробити невеликого робота, який сам їздить або реагує`,`Zbudować małego robota, który sam jeździ lub reaguje`,`Build a small robot that drives or reacts on its own`,`Сделать небольшого робота, который сам ездит или реагирует`],
+       [`Sensoren gebruiken om licht, temperatuur, beweging of afstand te meten`,`Користуватися датчиками, щоб міряти світло, температуру, рух чи відстань`,`Używać czujników do pomiaru światła, temperatury, ruchu lub odległości`,`Use sensors to measure light, temperature, motion or distance`,`Пользоваться датчиками, чтобы измерять свет, температуру, движение или расстояние`],
+       [`Iets slims voor thuis maken, zoals een plantenmeter of slimme lamp`,`Зробити щось розумне для дому, як-от датчик для рослини чи розумну лампу`,`Zrobić coś inteligentnego do domu, na przykład czujnik do rośliny lub inteligentną lampę`,`Make something smart for home, like a plant monitor or smart lamp`,`Сделать что-то умное для дома, например датчик для растения или умную лампу`],
+       [`Een eigen ontwerp 3D-printen of lasersnijden en er elektronica in bouwen`,`Надрукувати власний дизайн на 3D-принтері чи вирізати лазером і вбудувати електроніку`,`Wydrukować własny projekt w 3D lub wyciąć laserem i wbudować w niego elektronikę`,`3D-print or laser-cut my own design and put electronics inside`,`Напечатать свой дизайн на 3D-принтере или вырезать лазером и встроить электронику`]]},
+   {k:'repair',e:'🛠️',c:'#0f9d8a',
+    n:[`Techniek & reparatie`,`Техніка й ремонт`,`Sprzęt i naprawy`,`Hardware & repair`,`Техника и ремонт`],
+    d:[`Uitzoeken hoe apparaten werken en ze weer aan de praat krijgen: computers, telefoons en randapparatuur.`,`З'ясовувати, як працюють пристрої, і повертати їх до життя: комп'ютери, телефони й периферія.`,`Odkrywanie, jak działają urządzenia, i przywracanie ich do życia: komputery, telefony i urządzenia peryferyjne.`,`Finding out how devices work and getting them going again: computers, phones and peripherals.`,`Выяснять, как устроены устройства, и возвращать их к жизни: компьютеры, телефоны и периферия.`],
+    t:[[`Een oude computer openmaken en de onderdelen benoemen`,`Розібрати старий комп'ютер і назвати деталі`,`Otworzyć stary komputer i nazwać części`,`Open an old computer and name the parts`,`Разобрать старый компьютер и назвать детали`],
+       [`Een pc uit losse onderdelen bouwen`,`Зібрати ПК із окремих деталей`,`Złożyć komputer z osobnych części`,`Build a PC from separate parts`,`Собрать ПК из отдельных деталей`],
+       [`Een oud apparaat repareren in een repair-café`,`Полагодити старий пристрій у репейр-кафе`,`Naprawić stare urządzenie w repair cafe`,`Repair an old device at a repair cafe`,`Починить старое устройство в репейр-кафе`]],
+    j:[`ICT-beheerder, servicetechnicus, hardwareontwikkelaar, repair-specialist, systeembeheerder`,`ІТ-адміністратор, сервісний інженер, розробник заліза, спеціаліст із ремонту, системний адміністратор`,`administrator IT, serwisant, inżynier sprzętu, specjalista od napraw, administrator systemów`,`IT support technician, service engineer, hardware developer, repair specialist, system administrator`,`ИТ-администратор, сервисный инженер, разработчик железа, специалист по ремонту, системный администратор`],
+    q:[[`Een kapot apparaat openmaken om te zien wat er mis is`,`Розкрити зламаний пристрій, щоб побачити, що не так`,`Otworzyć zepsute urządzenie, żeby zobaczyć, co jest nie tak`,`Open up a broken device to see what is wrong`,`Вскрыть сломанное устройство, чтобы увидеть, что не так`],
+       [`Een computer uit losse onderdelen in elkaar zetten`,`Зібрати комп'ютер із окремих деталей`,`Złożyć komputer z osobnych części`,`Put a computer together from separate parts`,`Собрать компьютер из отдельных деталей`],
+       [`Een telefoonscherm of batterij vervangen`,`Замінити екран або батарею телефона`,`Wymienić ekran lub baterię w telefonie`,`Replace a phone screen or battery`,`Заменить экран или батарею телефона`],
+       [`Uitzoeken waarom een laptop traag is en dat oplossen`,`З'ясувати, чому ноутбук гальмує, і виправити це`,`Dowiedzieć się, dlaczego laptop jest wolny, i to naprawić`,`Figure out why a laptop is slow and fix it`,`Выяснить, почему ноутбук тормозит, и исправить это`],
+       [`Oude apparaten weer aan de praat krijgen in plaats van weggooien`,`Повертати до життя старі пристрої, а не викидати їх`,`Przywracać do życia stare urządzenia zamiast je wyrzucać`,`Get old devices working again instead of throwing them away`,`Возвращать к жизни старые устройства, а не выбрасывать их`],
+       [`Kabels, printers of wifi bij familie en vrienden aan de praat krijgen`,`Налагодити кабелі, принтери чи Wi-Fi в родини й друзів`,`Ogarnąć kable, drukarki lub Wi-Fi rodzinie i znajomym`,`Get cables, printers or wifi working for family and friends`,`Наладить кабели, принтеры или Wi-Fi родным и друзьям`]]},
+   {k:'data',e:'📊',c:'#d1478c',
+    n:[`Data & AI`,`Дані та ШІ`,`Dane i AI`,`Data & AI`,`Данные и ИИ`],
+    d:[`Patronen vinden in cijfers en computers dingen leren: grafieken, onderzoek en kunstmatige intelligentie.`,`Знаходити закономірності в цифрах і навчати комп'ютери: графіки, дослідження та штучний інтелект.`,`Szukanie wzorców w liczbach i uczenie komputerów: wykresy, badania i sztuczna inteligencja.`,`Finding patterns in numbers and teaching computers things: charts, research and artificial intelligence.`,`Находить закономерности в цифрах и обучать компьютеры: графики, исследования и искусственный интеллект.`],
+    t:[[`Eigen data verzamelen (bijv. temperatuur) en er een grafiek van maken`,`Зібрати власні дані (наприклад, температуру) і побудувати графік`,`Zebrać własne dane (np. temperaturę) i zrobić wykres`,`Collect your own data (e.g. temperature) and chart it`,`Собрать свои данные (например, температуру) и построить график`],
+       [`Een beeldherkenningsmodel trainen met een gratis tool`,`Навчити модель розпізнавати зображення в безкоштовному інструменті`,`Wytrenować model rozpoznawania obrazów w darmowym narzędziu`,`Train an image recognition model with a free tool`,`Обучить модель распознавать изображения в бесплатном инструменте`],
+       [`Een vraag onderzoeken met echte data`,`Дослідити питання на реальних даних`,`Zbadać pytanie na prawdziwych danych`,`Investigate a question with real data`,`Исследовать вопрос на реальных данных`]],
+    j:[`data-analist, data scientist, AI-ontwikkelaar, onderzoeker, statisticus`,`аналітик даних, data scientist, розробник ШІ, дослідник, статистик`,`analityk danych, data scientist, programista AI, badacz, statystyk`,`data analyst, data scientist, AI developer, researcher, statistician`,`аналитик данных, data scientist, разработчик ИИ, исследователь, статистик`],
+    q:[[`Cijfers verzamelen en er grafieken van maken`,`Збирати цифри й перетворювати їх на графіки`,`Zbierać liczby i zamieniać je w wykresy`,`Collect numbers and turn them into charts`,`Собирать цифры и превращать их в графики`],
+       [`Patronen vinden, bijvoorbeeld in sportuitslagen of weerdata`,`Шукати закономірності, наприклад у спортивних результатах чи даних про погоду`,`Szukać wzorców, na przykład w wynikach sportowych lub danych pogodowych`,`Find patterns, for example in sports results or weather data`,`Искать закономерности, например в спортивных результатах или данных о погоде`],
+       [`Uitproberen hoe een AI-chatbot of beeldgenerator werkt`,`Випробувати, як працює ШІ-чатбот чи генератор зображень`,`Wypróbować, jak działa chatbot AI lub generator obrazów`,`Try out how an AI chatbot or image generator works`,`Попробовать, как работает ИИ-чат-бот или генератор изображений`],
+       [`Een computer leren om foto's of geluiden te herkennen`,`Навчити комп'ютер розпізнавати фото чи звуки`,`Nauczyć komputer rozpoznawać zdjęcia lub dźwięki`,`Teach a computer to recognise pictures or sounds`,`Научить компьютер распознавать фото или звуки`],
+       [`Een onderzoek doen en met bewijs een vraag beantwoorden`,`Провести дослідження й відповісти на питання з доказами`,`Przeprowadzić badanie i odpowiedzieć na pytanie z dowodami`,`Do an investigation and answer a question with evidence`,`Провести исследование и ответить на вопрос с доказательствами`],
+       [`Voorspellen wat er gaat gebeuren op basis van eerdere gegevens`,`Передбачати, що станеться, на основі попередніх даних`,`Przewidywać, co się stanie, na podstawie wcześniejszych danych`,`Predict what will happen based on earlier data`,`Предсказывать, что произойдёт, на основе прежних данных`]]},
+   {k:'secure',e:'🛡️',c:'#2a6f97',
+    n:[`Security & netwerken`,`Безпека й мережі`,`Bezpieczeństwo i sieci`,`Security & networks`,`Безопасность и сети`],
+    d:[`Begrijpen hoe verbindingen werken en hoe je ze veilig houdt: netwerken, codes, privacy en beveiliging.`,`Розуміти, як працюють з'єднання і як зберігати їх безпечними: мережі, коди, приватність і захист.`,`Rozumienie, jak działają połączenia i jak je zabezpieczać: sieci, szyfry, prywatność i ochrona.`,`Understanding how connections work and how to keep them safe: networks, codes, privacy and security.`,`Понимать, как работают соединения и как держать их в безопасности: сети, коды, приватность и защита.`],
+    t:[[`Een eigen thuisnetwerkkaart tekenen`,`Намалювати карту своєї домашньої мережі`,`Narysować mapę swojej sieci domowej`,`Draw a map of your home network`,`Нарисовать карту своей домашней сети`],
+       [`Een sterk wachtwoord- en 2FA-plan voor het gezin maken`,`Скласти для родини план сильних паролів і 2FA`,`Ułożyć dla rodziny plan silnych haseł i 2FA`,`Make a strong password and 2FA plan for the family`,`Составить для семьи план надёжных паролей и 2FA`],
+       [`Meedoen aan een beginners-CTF (puzzelwedstrijd)`,`Узяти участь у CTF для початківців (змаганні-головоломці)`,`Wziąć udział w CTF dla początkujących (konkursie zagadek)`,`Join a beginner CTF (puzzle contest)`,`Принять участие в CTF для начинающих (соревновании-головоломке)`]],
+    j:[`security-specialist, netwerkbeheerder, ethisch hacker, privacy-adviseur, cloudengineer`,`спеціаліст із кібербезпеки, мережевий адміністратор, етичний хакер, радник із приватності, хмарний інженер`,`specjalista ds. bezpieczeństwa, administrator sieci, etyczny haker, doradca ds. prywatności, inżynier chmury`,`security specialist, network administrator, ethical hacker, privacy adviser, cloud engineer`,`специалист по кибербезопасности, сетевой администратор, этичный хакер, консультант по приватности, облачный инженер`],
+    q:[[`Geheime codes bedenken of kraken`,`Вигадувати чи розгадувати таємні коди`,`Wymyślać lub łamać tajne szyfry`,`Invent or crack secret codes`,`Придумывать или разгадывать тайные коды`],
+       [`Uitzoeken hoe een wifi-netwerk of het internet precies werkt`,`З'ясувати, як саме працює Wi-Fi чи інтернет`,`Dowiedzieć się, jak dokładnie działa sieć Wi-Fi lub internet`,`Find out exactly how a wifi network or the internet works`,`Выяснить, как именно работает Wi-Fi или интернет`],
+       [`Mijn accounts en wachtwoorden zo veilig mogelijk maken`,`Зробити мої акаунти й паролі максимально безпечними`,`Zabezpieczyć moje konta i hasła tak dobrze, jak się da`,`Make my accounts and passwords as safe as possible`,`Сделать мои аккаунты и пароли максимально безопасными`],
+       [`Meedoen aan een puzzelwedstrijd waarin je zwakke plekken zoekt (in een veilige oefenomgeving)`,`Брати участь у змаганні-головоломці, де шукають слабкі місця (у безпечному тренувальному середовищі)`,`Wziąć udział w konkursie zagadek, w którym szuka się słabych punktów (w bezpiecznym środowisku ćwiczebnym)`,`Take part in a puzzle contest where you look for weak spots (in a safe practice environment)`,`Участвовать в соревновании-головоломке, где ищут слабые места (в безопасной тренировочной среде)`],
+       [`Nadenken over privacy: wie ziet welke gegevens van mij?`,`Замислитися про приватність: хто бачить які мої дані?`,`Zastanowić się nad prywatnością: kto widzi jakie moje dane?`,`Think about privacy: who sees which of my data?`,`Задуматься о приватности: кто видит какие мои данные?`],
+       [`Zorgen dat apparaten thuis veilig met elkaar kunnen praten`,`Подбати, щоб пристрої вдома безпечно спілкувалися між собою`,`Zadbać, żeby urządzenia w domu bezpiecznie ze sobą rozmawiały`,`Make sure devices at home can talk to each other safely`,`Позаботиться, чтобы устройства дома безопасно общались между собой`]]},
+   {k:'people',e:'🤝',c:'#7a5cc4',
+    n:[`Tech met mensen`,`Технології з людьми`,`Technologie z ludźmi`,`Tech with people`,`Технологии с людьми`],
+    d:[`Techniek inzetten voor anderen: uitleggen, helpen, samenwerken en ideeën vertalen naar wat mensen nodig hebben.`,`Використовувати технології для інших: пояснювати, допомагати, працювати разом і перетворювати ідеї на те, що потрібно людям.`,`Wykorzystywanie technologii dla innych: wyjaśnianie, pomaganie, współpraca i zamienianie pomysłów w to, czego ludzie potrzebują.`,`Using technology for others: explaining, helping, collaborating and turning ideas into what people need.`,`Использовать технологии для других: объяснять, помогать, работать вместе и превращать идеи в то, что нужно людям.`],
+    t:[[`Een buur of grootouder helpen met hun telefoon`,`Допомогти сусідові чи бабусі з телефоном`,`Pomóc sąsiadowi lub babci z telefonem`,`Help a neighbour or grandparent with their phone`,`Помочь соседу или бабушке с телефоном`],
+       [`Een korte uitleg of workshop geven aan jongere kinderen`,`Провести коротке пояснення чи майстер-клас для молодших дітей`,`Poprowadzić krótkie wyjaśnienie lub warsztat dla młodszych dzieci`,`Give a short explanation or workshop to younger kids`,`Провести короткое объяснение или мастер-класс для младших детей`],
+       [`Een tech-idee bedenken voor een probleem in de buurt`,`Придумати технологічну ідею для проблеми у вашому районі`,`Wymyślić pomysł technologiczny na problem w okolicy`,`Come up with a tech idea for a neighbourhood problem`,`Придумать технологическую идею для проблемы в вашем районе`]],
+    j:[`productmanager, ICT-docent, projectleider, UX-onderzoeker, helpdesk- of communityspecialist`,`продакт-менеджер, вчитель інформатики, керівник проєктів, UX-дослідник, фахівець служби підтримки чи спільноти`,`product manager, nauczyciel informatyki, kierownik projektu, badacz UX, specjalista ds. wsparcia lub społeczności`,`product manager, IT teacher, project lead, UX researcher, helpdesk or community specialist`,`продакт-менеджер, учитель информатики, руководитель проектов, UX-исследователь, специалист поддержки или сообщества`],
+    q:[[`Iemand anders uitleggen hoe iets met technologie werkt`,`Пояснити комусь, як працює якась технологія`,`Wyjaśnić komuś, jak działa jakaś technologia`,`Explain to someone else how some technology works`,`Объяснить кому-то, как работает какая-то технология`],
+       [`Een groepsproject leiden waarin iedereen een eigen taak heeft`,`Керувати груповим проєктом, де в кожного своє завдання`,`Poprowadzić projekt grupowy, w którym każdy ma swoje zadanie`,`Lead a group project where everyone has their own task`,`Руководить групповым проектом, где у каждого своя задача`],
+       [`Ouderen of jongere kinderen helpen met hun telefoon of computer`,`Допомагати старшим людям чи молодшим дітям із телефоном або комп'ютером`,`Pomagać starszym osobom lub młodszym dzieciom z telefonem albo komputerem`,`Help older people or younger kids with their phone or computer`,`Помогать пожилым людям или младшим детям с телефоном или компьютером`],
+       [`Bedenken wat mensen echt nodig hebben en daar een digitale oplossing voor zoeken`,`З'ясувати, що людям справді потрібно, і шукати для цього цифрове рішення`,`Ustalić, czego ludzie naprawdę potrzebują, i poszukać dla tego cyfrowego rozwiązania`,`Work out what people really need and look for a digital solution`,`Выяснить, что людям действительно нужно, и искать для этого цифровое решение`],
+       [`Een workshop of les geven over iets wat ik goed kan`,`Провести майстер-клас чи урок про те, що я добре вмію`,`Poprowadzić warsztat lub lekcję o tym, co dobrze umiem`,`Give a workshop or lesson about something I am good at`,`Провести мастер-класс или урок о том, что я хорошо умею`],
+       [`In een team een tech-idee uitwerken en presenteren`,`Розробити й презентувати технологічну ідею в команді`,`Opracować i zaprezentować pomysł technologiczny w zespole`,`Develop and present a tech idea in a team`,`Разработать и представить технологическую идею в команде`]]}
   ];
   var N=D.length,PER=6,PAGE=6,TOTAL=N*PER,PAGES=TOTAL/PAGE;
-  var Q=[];for(var i=0;i<PER;i++){for(var j=0;j<N;j++){var d=(j+i*3)%N;Q.push({d:d,i:i});}}
-  var SC=[['😖','Echt niet','No way'],['🙁','Liever niet','Not really'],['😐','Neutraal','Neutral'],['🙂','Wel leuk','Quite fun'],['🤩','Superleuk','Love it']];
+  var Q=[];for(var i=0;i<PER;i++){for(var j=0;j<N;j++){Q.push({d:(j+i*3)%N,i:i});}}
+  var SC=[['😖',[`Echt niet`,`Ні`,`Nie`,`No way`,`Нет`]],['🙁',[`Liever niet`,`Радше ні`,`Raczej nie`,`Not really`,`Скорее нет`]],['😐',[`Neutraal`,`Нейтрально`,`Neutralnie`,`Neutral`,`Нейтрально`]],['🙂',[`Wel leuk`,`Цікаво`,`Fajne`,`Quite fun`,`Интересно`]],['🤩',[`Superleuk`,`Супер`,`Super`,`Love it`,`Супер`]]];
   var st={stage:'intro',page:0,a:new Array(TOTAL).fill(null),msg:false};
 
+  function head(){
+    var e=document.getElementById('q-eye'),h=document.getElementById('q-h2'),p=document.getElementById('q-lead');
+    if(e)e.textContent=L(`Interessetest · 12–17 jaar · voor jongeren & ouders`,`Тест інтересів · 12–17 років · для підлітків і батьків`,`Test zainteresowań · 12–17 lat · dla nastolatków i rodziców`,`Interest test · ages 12–17 · for teens & parents`,`Тест интересов · 12–17 лет · для подростков и родителей`);
+    if(h)h.innerHTML=L(`Welke ICT-richting past bij jou? <span class="grad">Geen goed of fout.</span>`,`Який ІТ-напрям тобі підходить? <span class="grad">Без правильних відповідей.</span>`,`Jaki kierunek IT do Ciebie pasuje? <span class="grad">Bez dobrych i złych odpowiedzi.</span>`,`Which ICT direction fits you? <span class="grad">No right or wrong.</span>`,`Какое направление в IT тебе подходит? <span class="grad">Без правильных ответов.</span>`);
+    if(p)p.textContent=L(`Van video, bloggen en websites tot programmeren, micro-elektronica en reparatie: ontdek waar je nieuwsgierigheid zit.`,`Від відео, блогів і сайтів до програмування, мікроелектроніки та ремонту: дізнайся, де живе твоя цікавість.`,`Od wideo, blogowania i stron www po programowanie, mikroelektronikę i naprawy: sprawdź, gdzie jest Twoja ciekawość.`,`From video, blogging and websites to programming, microelectronics and repair: find out where your curiosity lies.`,`От видео, блогов и сайтов до программирования, микроэлектроники и ремонта: узнай, где живёт твоё любопытство.`);
+    [e,h,p,app].forEach(function(x){if(!x)return;if(ql==='uk'||ql==='pl'||ql==='ru')x.setAttribute('lang',ql);else x.removeAttribute('lang');});
+  }
+  function langbar(){
+    return '<div class="qlang" role="group" aria-label="Taal / Мова / Język / Language / Язык">'+LANGS.map(function(c,i){return '<button type="button" data-ql="'+c+'" aria-pressed="'+(c===ql)+'">'+LNAME[i]+'</button>';}).join('')+'</div>';
+  }
   function scrollTop(){var el=document.getElementById('test');if(el&&el.getBoundingClientRect().top<0){el.scrollIntoView({behavior:'smooth',block:'start'});}var b=app.querySelector('.qbox');if(b){b.setAttribute('tabindex','-1');b.focus({preventScroll:true});}}
   function intro(){
-    return '<div class="qbox"><h3>'+L('Waar word jij blij van in de digitale wereld?','What gets you excited in the digital world?')+'</h3>'
-     +'<p>'+L('48 korte vragen over dingen die je zou kunnen doen. Je zegt steeds hoe leuk je het zou vinden. Er zijn <b>geen goede of foute antwoorden</b>: het gaat om wat jij leuk vindt, niet om wat je al kunt.','48 short questions about things you could do. Each time you say how much you would enjoy it. There are <b>no right or wrong answers</b>: it is about what you like, not what you can already do.')+'</p>'
-     +'<div class="qmeta"><span class="tag c">'+L('± 10 minuten','± 10 minutes')+'</span><span class="tag m">'+L('48 vragen · 8 pagina\'s','48 questions · 8 pages')+'</span><span class="tag l">'+L('voor 12–17 jaar','for ages 12–17')+'</span></div>'
-     +'<p>'+L('Aan het eind zie je in welke richtingen je het meest geïnteresseerd bent, van video en websites tot elektronica en reparatie, met ideeën om thuis uit te proberen. Ouders kunnen meekijken en erover praten.','At the end you see which directions interest you most, from video and websites to electronics and repair, with ideas to try at home. Parents can look along and talk about it.')+'</p>'
-     +'<p style="margin-top:.6rem;font-size:.88rem">'+L('Je antwoorden blijven in je eigen browser: er wordt niets verstuurd of opgeslagen.','Your answers stay in your own browser: nothing is sent or stored.')+'</p>'
-     +'<div class="qnav" style="margin-top:1.4rem"><button type="button" class="btn lime" data-q="start">'+L('Start de test','Start the test')+'</button></div></div>';
+    return '<div class="qbox">'+langbar()+'<h3>'+L(`Waar word jij blij van in de digitale wereld?`,`Що тебе надихає в цифровому світі?`,`Co w cyfrowym świecie naprawdę Cię kręci?`,`What gets you excited in the digital world?`,`Что тебя вдохновляет в цифровом мире?`)+'</h3>'
+     +'<p>'+L(`48 korte vragen over dingen die je zou kunnen doen. Je zegt steeds hoe leuk je het zou vinden. Er zijn <b>geen goede of foute antwoorden</b>: het gaat om wat jij leuk vindt, niet om wat je al kunt.`,`48 коротких запитань про те, чим можна займатися. Щоразу ти відповідаєш, наскільки це було б цікаво. <b>Правильних чи неправильних відповідей немає</b>: важливо, що подобається тобі, а не те, що ти вже вмієш.`,`48 krótkich pytań o rzeczach, które można robić. Za każdym razem zaznaczasz, jak bardzo by Cię to interesowało. <b>Nie ma dobrych ani złych odpowiedzi</b>: liczy się to, co lubisz, a nie to, co już umiesz.`,`48 short questions about things you could do. Each time you say how much you would enjoy it. There are <b>no right or wrong answers</b>: it is about what you like, not what you can already do.`,`48 коротких вопросов о том, чем можно заниматься. Каждый раз ты отмечаешь, насколько тебе было бы интересно. <b>Правильных и неправильных ответов нет</b>: важно, что нравится тебе, а не то, что ты уже умеешь.`)+'</p>'
+     +'<div class="qmeta"><span class="tag c">'+L(`± 10 minuten`,`± 10 хвилин`,`ok. 10 minut`,`± 10 minutes`,`≈ 10 минут`)+'</span><span class="tag m">'+L(`48 vragen · 8 pagina's`,`48 запитань · 8 сторінок`,`48 pytań · 8 stron`,`48 questions · 8 pages`,`48 вопросов · 8 страниц`)+'</span><span class="tag l">'+L(`voor 12–17 jaar`,`для 12–17 років`,`dla 12–17 lat`,`for ages 12–17`,`для 12–17 лет`)+'</span></div>'
+     +'<p>'+L(`Aan het eind zie je in welke richtingen je het meest geïnteresseerd bent, van video en websites tot elektronica en reparatie, met ideeën om thuis uit te proberen. Ouders kunnen meekijken en erover praten.`,`Наприкінці побачиш, які напрями цікавлять тебе найбільше, від відео й сайтів до електроніки та ремонту, з ідеями, що спробувати вдома. Батьки можуть подивитися разом і поговорити про результат.`,`Na końcu zobaczysz, które kierunki interesują Cię najbardziej, od wideo i stron www po elektronikę i naprawy, wraz z pomysłami do wypróbowania w domu. Rodzice mogą zajrzeć razem z Tobą i porozmawiać o wyniku.`,`At the end you see which directions interest you most, from video and websites to electronics and repair, with ideas to try at home. Parents can look along and talk about it.`,`В конце ты увидишь, какие направления интересуют тебя больше всего, от видео и сайтов до электроники и ремонта, с идеями, что попробовать дома. Родители могут посмотреть вместе и обсудить результат.`)+'</p>'
+     +'<p style="margin-top:.6rem;font-size:.88rem">'+L(`Je antwoorden blijven in je eigen browser: er wordt niets verstuurd of opgeslagen.`,`Твої відповіді залишаються в твоєму браузері: нічого не надсилається й не зберігається.`,`Twoje odpowiedzi zostają w Twojej przeglądarce: nic nie jest wysyłane ani zapisywane.`,`Your answers stay in your own browser: nothing is sent or stored.`,`Твои ответы остаются в твоём браузере: ничего не отправляется и не сохраняется.`)+'</p>'
+     +'<div class="qnav" style="margin-top:1.4rem"><button type="button" class="btn lime" data-q="start">'+L(`Start de test`,`Почати тест`,`Zacznij test`,`Start the test`,`Начать тест`)+'</button></div></div>';
   }
+  function leftOnPage(){var left=0;for(var m=st.page*PAGE;m<(st.page+1)*PAGE;m++){if(st.a[m]===null)left++;}return left;}
   function page(){
-    var p=st.page,h='<div class="qbox"><div class="qprog"><span>'+L('Pagina','Page')+' '+(p+1)+'/'+PAGES+'</span><i><b style="width:'+Math.round(p/PAGES*100)+'%"></b></i></div>';
+    var p=st.page,h='<div class="qbox">'+langbar()+'<div class="qprog"><span>'+L(`Pagina`,`Сторінка`,`Strona`,`Page`,`Страница`)+' '+(p+1)+'/'+PAGES+'</span><i><b style="width:'+Math.round(p/PAGES*100)+'%"></b></i></div>';
     for(var n=p*PAGE;n<(p+1)*PAGE;n++){
-      var q=Q[n],dm=D[q.d],t=dm.q[q.i];
-      h+='<fieldset><legend><span class="n">'+(n+1)+'.</span>'+L(t[0],t[1])+'</legend><div class="scale" role="radiogroup">';
+      var q=Q[n],t=D[q.d].q[q.i];
+      h+='<fieldset><legend><span class="n">'+(n+1)+'.</span>'+g(t)+'</legend><div class="scale" role="radiogroup">';
       for(var v=0;v<5;v++){
-        h+='<label class="opt"><input type="radio" name="q'+n+'" value="'+(v+1)+'"'+(st.a[n]===v+1?' checked':'')+' data-n="'+n+'"><span class="box"><span class="emo" aria-hidden="true">'+SC[v][0]+'</span><span class="lbl">'+L(SC[v][1],SC[v][2])+'</span></span></label>';
+        h+='<label class="opt"><input type="radio" name="q'+n+'" value="'+(v+1)+'"'+(st.a[n]===v+1?' checked':'')+' data-n="'+n+'"><span class="box"><span class="emo" aria-hidden="true">'+SC[v][0]+'</span><span class="lbl">'+g(SC[v][1])+'</span></span></label>';
       }
       h+='</div></fieldset>';
     }
-    var left=0;for(var m=p*PAGE;m<(p+1)*PAGE;m++){if(st.a[m]===null)left++;}
-    h+='<div class="qnav"><button type="button" class="btn ghost" data-q="prev">'+L('← Terug','← Back')+'</button><span class="msg" aria-live="polite">'+(st.msg&&left?L('Nog '+left+' vraag/vragen op deze pagina.','Still '+left+' question(s) on this page.'):'')+'</span><span class="sp"></span>'
-      +'<button type="button" class="btn" data-q="next">'+(p===PAGES-1?L('Bekijk mijn uitslag','See my results'):L('Volgende →','Next →'))+'</button></div></div>';
+    var left=leftOnPage();
+    h+='<div class="qnav"><button type="button" class="btn ghost" data-q="prev">'+L(`← Terug`,`← Назад`,`← Wstecz`,`← Back`,`← Назад`)+'</button><span class="msg" aria-live="polite">'+(st.msg&&left?L(`Nog `+left+` te gaan op deze pagina.`,`Ще залишилось відповісти: `+left,`Pozostało na tej stronie: `+left,`Still `+left+` to go on this page.`,`Осталось ответить: `+left):'')+'</span><span class="sp"></span>'
+      +'<button type="button" class="btn" data-q="next">'+(p===PAGES-1?L(`Bekijk mijn uitslag`,`Показати мій результат`,`Zobacz mój wynik`,`See my results`,`Показать мой результат`):L(`Volgende →`,`Далі →`,`Dalej →`,`Next →`,`Далее →`))+'</button></div></div>';
     return h;
   }
   function score(){
@@ -848,44 +866,48 @@ footer .wrap{display:flex;gap:1rem 2rem;flex-wrap:wrap;justify-content:space-bet
     return D.map(function(dm,i){return {i:i,pct:Math.round((sum[i]-PER)/(PER*4)*100),hi:hi[i]};}).sort(function(a,b){return b.pct-a.pct||b.hi-a.hi||a.i-b.i;});
   }
   function results(){
-    var r=score(),top=r.slice(0,3),h='<div class="qbox"><span class="eyebrow" style="color:var(--orange)">'+L('Jouw uitslag','Your results')+'</span><h3 style="margin-top:.5rem">';
+    var r=score(),top=r.slice(0,3);
     var max=r[0].pct,min=r[r.length-1].pct,mix=(r[0].pct-r[1].pct)<=8;
-    h+=L(D[r[0].i].nl+(mix?' + '+D[r[1].i].nl:''),D[r[0].i].en+(mix?' + '+D[r[1].i].en:''))+'</h3>';
+    var h='<div class="qbox">'+langbar()+'<span class="eyebrow" style="color:var(--orange)">'+L(`Jouw uitslag`,`Твій результат`,`Twój wynik`,`Your results`,`Твой результат`)+'</span><h3 style="margin-top:.5rem">'+g(D[r[0].i].n)+(mix?' + '+g(D[r[1].i].n):'')+'</h3>';
     var intro;
-    if(max<40)intro=L('Digitale richtingen springen er nu niet echt uit. Dat is helemaal prima: interesses groeien vaak pas door iets uit te proberen. Kijk hieronder wat het meest in de buurt komt en probeer één klein ding.','No digital direction really stands out right now. That is perfectly fine: interests often grow only by trying something. See what comes closest below and try one small thing.');
-    else if(max-min<=20)intro=L('Je vindt veel richtingen leuk: een brede interesse. Kies niet te snel; probeer van elk van de top drie één klein project en kijk wat blijft hangen.','You like many directions: a broad interest. Do not choose too fast; try one small project from each of the top three and see what sticks.');
-    else if(mix)intro=L('Je hebt meerdere sterke interesses die dicht bij elkaar liggen. Combineren kan ook: bijvoorbeeld elektronica + programmeren, of video + websites.','You have several strong interests close together. Combining works too: for example electronics + programming, or video + websites.');
-    else intro=L('Er is een duidelijke voorkeur. Hieronder zie je de top drie met ideeën om dit thuis te proberen.','There is a clear preference. Below are the top three with ideas to try at home.');
+    if(max<40)intro=L(`Digitale richtingen springen er nu niet echt uit. Dat is helemaal prima: interesses groeien vaak pas door iets uit te proberen. Kijk hieronder wat het meest in de buurt komt en probeer één klein ding.`,`Цифрові напрями поки що нічим особливо не виділяються. І це цілком нормально: інтереси часто з'являються лише тоді, коли щось спробуєш. Подивись нижче, що найближче, і спробуй одну маленьку річ.`,`Żaden kierunek cyfrowy nie wyróżnia się na razie szczególnie. To zupełnie w porządku: zainteresowania często pojawiają się dopiero, gdy czegoś spróbujesz. Zobacz poniżej, co jest najbliżej, i spróbuj jednej małej rzeczy.`,`No digital direction really stands out right now. That is perfectly fine: interests often grow only by trying something. See what comes closest below and try one small thing.`,`Цифровые направления пока ничем особенно не выделяются. Это совершенно нормально: интересы часто появляются только тогда, когда что-то попробуешь. Посмотри ниже, что ближе всего, и попробуй одну маленькую вещь.`);
+    else if(max-min<=20)intro=L(`Je vindt veel richtingen leuk: een brede interesse. Kies niet te snel; probeer van elk van de top drie één klein project en kijk wat blijft hangen.`,`Тобі подобається багато напрямів: широкі інтереси. Не вибирай надто швидко; спробуй по одному маленькому проєкту з кожного з топ-трьох і подивись, що залишиться.`,`Lubisz wiele kierunków: masz szerokie zainteresowania. Nie wybieraj zbyt szybko; spróbuj po jednym małym projekcie z każdego z trzech pierwszych i zobacz, co zostanie.`,`You like many directions: a broad interest. Do not choose too fast; try one small project from each of the top three and see what sticks.`,`Тебе нравится много направлений: широкие интересы. Не выбирай слишком быстро; попробуй по одному маленькому проекту из каждого из топ-трёх и посмотри, что останется.`);
+    else if(mix)intro=L(`Je hebt meerdere sterke interesses die dicht bij elkaar liggen. Combineren kan ook: bijvoorbeeld elektronica + programmeren, of video + websites.`,`У тебе кілька сильних інтересів, які близькі між собою. Їх можна поєднувати: наприклад, електроніка + програмування чи відео + сайти.`,`Masz kilka silnych zainteresowań, które są blisko siebie. Można je łączyć: na przykład elektronika + programowanie albo wideo + strony www.`,`You have several strong interests close together. Combining works too: for example electronics + programming, or video + websites.`,`У тебя несколько сильных интересов, которые близки друг к другу. Их можно сочетать: например, электроника + программирование или видео + сайты.`);
+    else intro=L(`Er is een duidelijke voorkeur. Hieronder zie je de top drie met ideeën om dit thuis te proberen.`,`Є чітка перевага. Нижче топ-три з ідеями, що спробувати вдома.`,`Jest wyraźna preferencja. Poniżej trzy pierwsze kierunki z pomysłami do wypróbowania w domu.`,`There is a clear preference. Below are the top three with ideas to try at home.`,`Есть чёткое предпочтение. Ниже топ-три с идеями, что попробовать дома.`);
     h+='<p>'+intro+'</p><div class="res-top">';
     top.forEach(function(t,k){var dm=D[t.i];
-      h+='<div class="rcard" style="--c:'+dm.c+'"><span class="rk">#'+(k+1)+' · '+t.pct+'%</span><span class="ic" aria-hidden="true">'+dm.e+'</span><h4>'+L(dm.nl,dm.en)+'</h4><p>'+L(dm.dn,dm.de)+'</p>'
-       +'<b class="sm">'+L('Probeer thuis','Try at home')+'</b><ul>'+dm.tn.map(function(x,y){return '<li>'+L(x,dm.te[y])+'</li>';}).join('')+'</ul>'
-       +'<b class="sm">'+L('Beroepen in deze richting','Jobs in this direction')+'</b><p>'+L(dm.jn,dm.je)+'</p></div>';});
-    h+='</div><h3 style="font-size:1.05rem">'+L('Alle richtingen','All directions')+'</h3><div class="bars">';
-    r.forEach(function(t){var dm=D[t.i];h+='<div class="bar" style="--c:'+dm.c+'"><span>'+dm.e+' '+L(dm.nl,dm.en)+'</span><i><b style="width:'+Math.max(t.pct,2)+'%"></b></i><span class="pc">'+t.pct+'%</span></div>';});
-    h+='</div><div class="note-box"><b>'+L('Voor ouders','For parents')+'</b><ul>'
-      +'<li>'+L('Dit is een speelse aanwijzing, geen beroepentest of diagnose. Interesses veranderen sterk tussen 12 en 17 jaar.','This is a playful indication, not a career test or diagnosis. Interests change a lot between ages 12 and 17.')+'</li>'
-      +'<li>'+L('Vraag uw kind: “Wat in je top drie verrast je? Wat wil je als eerste proberen?” Laat het kind kiezen.','Ask your child: "What in your top three surprises you? What do you want to try first?" Let the child choose.')+'</li>'
-      +'<li>'+L('Een laag percentage betekent niet “niet goed in”, alleen dat het nu minder trekt. Een klein project zegt meer dan een vragenlijst.','A low percentage does not mean "not good at", only that it appeals less right now. A small project says more than a questionnaire.')+'</li></ul></div>'
-      +'<div class="rbtns"><a class="btn lime" href="#projecten">'+L('Bekijk projecten','See projects')+'</a><button type="button" class="btn ghost" data-q="copy">'+L('Kopieer uitslag','Copy results')+'</button><button type="button" class="btn ghost" data-q="print">'+L('Print','Print')+'</button><button type="button" class="btn ghost" data-q="again">'+L('Opnieuw','Start over')+'</button></div><p id="q-copied" style="font-size:.85rem;margin-top:.6rem;min-height:1.2em" aria-live="polite"></p></div>';
+      h+='<div class="rcard" style="--c:'+dm.c+'"><span class="rk">#'+(k+1)+' · '+t.pct+'%</span><span class="ic" aria-hidden="true">'+dm.e+'</span><h4>'+g(dm.n)+'</h4><p>'+g(dm.d)+'</p>'
+       +'<b class="sm">'+L(`Probeer thuis`,`Спробуй вдома`,`Wypróbuj w domu`,`Try at home`,`Попробуй дома`)+'</b><ul>'+dm.t.map(function(x){return '<li>'+g(x)+'</li>';}).join('')+'</ul>'
+       +'<b class="sm">'+L(`Beroepen in deze richting`,`Професії в цьому напрямі`,`Zawody w tym kierunku`,`Jobs in this direction`,`Профессии в этом направлении`)+'</b><p>'+g(dm.j)+'</p></div>';});
+    h+='</div><h3 style="font-size:1.05rem">'+L(`Alle richtingen`,`Усі напрями`,`Wszystkie kierunki`,`All directions`,`Все направления`)+'</h3><div class="bars">';
+    r.forEach(function(t){var dm=D[t.i];h+='<div class="bar" style="--c:'+dm.c+'"><span>'+dm.e+' '+g(dm.n)+'</span><i><b style="width:'+Math.max(t.pct,2)+'%"></b></i><span class="pc">'+t.pct+'%</span></div>';});
+    h+='</div><div class="note-box"><b>'+L(`Voor ouders`,`Для батьків`,`Dla rodziców`,`For parents`,`Для родителей`)+'</b><ul>'
+      +'<li>'+L(`Dit is een speelse aanwijzing, geen beroepentest of diagnose. Interesses veranderen sterk tussen 12 en 17 jaar.`,`Це ігрова підказка, а не профорієнтаційний тест чи діагноз. Інтереси сильно змінюються між 12 і 17 роками.`,`To zabawna wskazówka, a nie test zawodowy ani diagnoza. Zainteresowania bardzo się zmieniają między 12. a 17. rokiem życia.`,`This is a playful indication, not a career test or diagnosis. Interests change a lot between ages 12 and 17.`,`Это игровая подсказка, а не профориентационный тест и не диагноз. Интересы сильно меняются между 12 и 17 годами.`)+'</li>'
+      +'<li>'+L(`Vraag uw kind: “Wat in je top drie verrast je? Wat wil je als eerste proberen?” Laat het kind kiezen.`,`Запитайте дитину: «Що з топ-трьох тебе дивує? З чого хочеш почати?» Нехай дитина обирає сама.`,`Zapytaj dziecko: „Co z pierwszej trójki Cię zaskakuje? Od czego chcesz zacząć?” Niech dziecko samo wybierze.`,`Ask your child: “What in your top three surprises you? What do you want to try first?” Let the child choose.`,`Спросите ребёнка: «Что из топ-трёх тебя удивляет? С чего хочешь начать?» Пусть ребёнок выбирает сам.`)+'</li>'
+      +'<li>'+L(`Een laag percentage betekent niet “niet goed in”, alleen dat het nu minder trekt. Een klein project zegt meer dan een vragenlijst.`,`Низький відсоток не означає «не вмію», лише те, що зараз це менш приваблює. Невеликий проєкт скаже більше, ніж анкета.`,`Niski wynik nie oznacza „nie umiem”, tylko że teraz mniej przyciąga. Mały projekt powie więcej niż kwestionariusz.`,`A low percentage does not mean “not good at”, only that it appeals less right now. A small project says more than a questionnaire.`,`Низкий процент не значит «не умею», только то, что сейчас это меньше привлекает. Небольшой проект скажет больше, чем анкета.`)+'</li></ul></div>'
+      +'<div class="rbtns"><a class="btn lime" href="#projecten">'+L(`Bekijk projecten`,`Переглянути проєкти`,`Zobacz projekty`,`See projects`,`Посмотреть проекты`)+'</a><button type="button" class="btn ghost" data-q="copy">'+L(`Kopieer uitslag`,`Копіювати результат`,`Skopiuj wynik`,`Copy results`,`Копировать результат`)+'</button><button type="button" class="btn ghost" data-q="print">'+L(`Print`,`Друк`,`Drukuj`,`Print`,`Печать`)+'</button><button type="button" class="btn ghost" data-q="again">'+L(`Opnieuw`,`Почати знову`,`Zacznij od nowa`,`Start over`,`Пройти заново`)+'</button></div><p id="q-copied" style="font-size:.85rem;margin-top:.6rem;min-height:1.2em" aria-live="polite"></p></div>';
     return h;
   }
-  function render(){app.innerHTML=st.stage==='intro'?intro():st.stage==='quiz'?page():results();}
-  function summary(){var l=cur(),r=score(),s=(l==='nl'?'BliepLab interessetest':'BliepLab interest test')+'\n';
-    r.forEach(function(t,k){var dm=D[t.i];s+=(k+1)+'. '+(l==='nl'?dm.nl:dm.en)+': '+t.pct+'%\n';});return s;}
-  app.addEventListener('change',function(e){var t=e.target;if(t.matches&&t.matches('input[type=radio][data-n]')){st.a[+t.dataset.n]=+t.value;var left=0;for(var m=st.page*PAGE;m<(st.page+1)*PAGE;m++){if(st.a[m]===null)left++;}var ms=app.querySelector('.msg');if(ms&&!left)ms.innerHTML='';}});
-  app.addEventListener('click',function(e){var b=e.target.closest('button[data-q]');if(!b)return;var a=b.dataset.q;
+  function render(){head();app.innerHTML=st.stage==='intro'?intro():st.stage==='quiz'?page():results();}
+  function summary(){var r=score(),s=L(`BliepLab interessetest`,`BliepLab: тест інтересів`,`BliepLab: test zainteresowań`,`BliepLab interest test`,`BliepLab: тест интересов`)+'\n';
+    r.forEach(function(t,k){s+=(k+1)+'. '+g(D[t.i].n)+': '+t.pct+'%\n';});return s;}
+  function setQL(c){if(LANGS.indexOf(c)<0||c===ql)return;ql=c;var keepY=window.scrollY;render();window.scrollTo(0,keepY);}
+  app.addEventListener('change',function(e){var t=e.target;if(t.matches&&t.matches('input[type=radio][data-n]')){st.a[+t.dataset.n]=+t.value;if(!leftOnPage()){var ms=app.querySelector('.msg');if(ms)ms.innerHTML='';}}});
+  app.addEventListener('click',function(e){
+    var lb=e.target.closest('button[data-ql]');if(lb){setQL(lb.dataset.ql);return;}
+    var b=e.target.closest('button[data-q]');if(!b)return;var a=b.dataset.q;
     if(a==='start'){st.stage='quiz';st.page=0;render();scrollTop();}
     else if(a==='prev'){if(st.page===0){st.stage='intro';}else{st.page--;}st.msg=false;render();scrollTop();}
-    else if(a==='next'){var left=false;for(var m=st.page*PAGE;m<(st.page+1)*PAGE;m++){if(st.a[m]===null)left=true;}
-      if(left){st.msg=true;render();var f=app.querySelector('fieldset input:not(:checked)');var first=null;app.querySelectorAll('fieldset').forEach(function(fs){if(!first&&!fs.querySelector('input:checked'))first=fs;});if(first){first.scrollIntoView({block:'center',behavior:'smooth'});}return;}
+    else if(a==='next'){
+      if(leftOnPage()){st.msg=true;render();var first=null;app.querySelectorAll('fieldset').forEach(function(fs){if(!first&&!fs.querySelector('input:checked'))first=fs;});if(first){first.scrollIntoView({block:'center',behavior:'smooth'});}return;}
       st.msg=false;if(st.page===PAGES-1){st.stage='result';}else{st.page++;}render();scrollTop();}
     else if(a==='again'){st.stage='intro';st.page=0;st.a=new Array(TOTAL).fill(null);st.msg=false;render();scrollTop();}
     else if(a==='print'){window.print();}
     else if(a==='copy'){var txt=summary(),p=document.getElementById('q-copied');
-      function ok(){if(p)p.textContent=cur()==='nl'?'Gekopieerd.':'Copied.';}
+      function ok(){if(p)p.textContent=L(`Gekopieerd.`,`Скопійовано.`,`Skopiowano.`,`Copied.`,`Скопировано.`);}
       if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,function(){if(p)p.textContent=txt;});}else if(p){p.textContent=txt;}}
   });
+  document.querySelectorAll('.langsw button').forEach(function(b){b.addEventListener('click',function(){setQL(b.dataset.set);});});
   render();
 })();
 </script>
